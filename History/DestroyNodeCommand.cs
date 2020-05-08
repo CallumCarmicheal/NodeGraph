@@ -6,31 +6,31 @@ using System.Threading.Tasks;
 
 namespace NodeGraph.History
 {
-	public class DestroyNodeCommand : NodeGraphCommand
-	{
-		#region Constructor
+    public class DestroyNodeCommand : NodeGraphCommand
+    {
+        #region Constructor
 
-		public DestroyNodeCommand( string name, object undoParams, object redoParams ) : base( name, undoParams, redoParams )
-		{
+        public DestroyNodeCommand( NodeGraphManager ngm, string name, object undoParams, object redoParams ) : base(ngm, name, undoParams, redoParams)
+        {
+            //
+        }
 
-		}
+        #endregion // Constructor
 
-		#endregion // Constructor
+        #region Overrides NodeGraphCommand
 
-		#region Overrides NodeGraphCommand
+        public override void Undo()
+        {
+            NodeGraphManager.DeserializeNode(UndoParams as string);
+        }
 
-		public override void Undo()
-		{
-			NodeGraphManager.DeserializeNode( UndoParams as string );
-		}
+        public override void Redo()
+        {
+            Guid guid = (Guid)RedoParams;
 
-		public override void Redo()
-		{
-			Guid guid = ( Guid )RedoParams;
+            NodeGraphManager.DestroyNode(guid);
+        }
 
-			NodeGraphManager.DestroyNode( guid );
-		}
-
-		#endregion // Overrides NodeGraphCommand
-	}
+        #endregion // Overrides NodeGraphCommand
+    }
 }

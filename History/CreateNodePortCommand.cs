@@ -7,38 +7,38 @@ using System.Threading.Tasks;
 
 namespace NodeGraph.History
 {
-	public class CreateNodePortCommand : NodeGraphCommand
-	{
-		#region Additional Parameters
+    public class CreateNodePortCommand : NodeGraphCommand
+    {
+        #region Additional Parameters
 
-		public Guid NodeGuid { get; private set; }
+        public Guid NodeGuid { get; private set; }
 
-		public Guid PortGuid { get; private set; }
+        public Guid PortGuid { get; private set; }
 
-		#endregion // Additional Parameters
+        #endregion // Additional Parameters
 
-		#region Constructor
+        #region Constructor
 
-		public CreateNodePortCommand( string name, object undoParams, object redoParams ) : base( name, undoParams, redoParams )
-		{
-		}
+        public CreateNodePortCommand( NodeGraphManager ngm, string name, object undoParams, object redoParams ) : base(ngm, name, undoParams, redoParams)
+        {
+        }
 
-		#endregion // Constructor
+        #endregion // Constructor
 
-		#region Overrides NodeGraphCommand
+        #region Overrides NodeGraphCommand
 
-		public override void Undo()
-		{
-			Guid guid = ( Guid )UndoParams;
+        public override void Undo()
+        {
+            Guid guid = (Guid)UndoParams;
 
-			NodeGraphManager.DestroyNodePort( guid );
-		}
+            NodeGraphManager.DestroyNodePort(guid);
+        }
 
-		public override void Redo()
-		{
-			NodeGraphManager.DeserializeNodePort( RedoParams as string );
-		}
+        public override void Redo()
+        {
+            NodeGraphManager.DeserializeNodePort(RedoParams as string);
+        }
 
-		#endregion // Overrides NodeGraphCommand
-	}
+        #endregion // Overrides NodeGraphCommand
+    }
 }

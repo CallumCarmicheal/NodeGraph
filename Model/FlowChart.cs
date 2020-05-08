@@ -9,209 +9,212 @@ using System.Xml;
 
 namespace NodeGraph.Model
 {
-	[FlowChart()]
-	public class FlowChart : ModelBase
-	{
-		#region Properties
+    [FlowChart()]
+    public class FlowChart : ModelBase
+    {
+        #region Properties
 
-		protected FlowChartViewModel _ViewModel;
-		public FlowChartViewModel ViewModel
-		{
-			get { return _ViewModel; }
-			set
-			{
-				if( value != _ViewModel )
-				{
-					_ViewModel = value;
-					RaisePropertyChanged( "ViewModel" );
-				}
-			}
-		}
+        protected FlowChartViewModel _ViewModel;
+        public FlowChartViewModel ViewModel
+        {
+            get { return _ViewModel; }
+            set
+            {
+                if ( value != _ViewModel )
+                {
+                    _ViewModel = value;
+                    RaisePropertyChanged("ViewModel");
+                }
+            }
+        }
 
-		protected ObservableCollection<Node> _Nodes = new ObservableCollection<Node>();
-		public ObservableCollection<Node> Nodes
-		{
-			get { return _Nodes; }
-			set
-			{
-				if( value != _Nodes )
-				{
-					_Nodes = value;
-					RaisePropertyChanged( "Nodes" );
-				}
-			}
-		}
+        protected ObservableCollection<Node> _Nodes = new ObservableCollection<Node>();
+        public ObservableCollection<Node> Nodes
+        {
+            get { return _Nodes; }
+            set
+            {
+                if ( value != _Nodes )
+                {
+                    _Nodes = value;
+                    RaisePropertyChanged("Nodes");
+                }
+            }
+        }
 
-		protected ObservableCollection<Connector> _Connectors = new ObservableCollection<Connector>();
-		public ObservableCollection<Connector> Connectors
-		{
-			get { return _Connectors; }
-			set
-			{
-				if( value != _Connectors )
-				{
-					_Connectors = value;
-					RaisePropertyChanged( "Connectors" );
-				}
-			}
-		}
+        protected ObservableCollection<Connector> _Connectors = new ObservableCollection<Connector>();
+        public ObservableCollection<Connector> Connectors
+        {
+            get { return _Connectors; }
+            set
+            {
+                if ( value != _Connectors )
+                {
+                    _Connectors = value;
+                    RaisePropertyChanged("Connectors");
+                }
+            }
+        }
 
-		public History.NodeGraphHistory History { get; private set; }
+        public History.NodeGraphHistory History { get; private set; }
 
-		#endregion // Properties
+        public NodeGraphManager NodeGraphManager { get; private set; }
 
-		#region Constructor
+        #endregion // Properties
 
-		/// <summary>
-		/// Never call this constructor directly. Use GraphManager.CreateFlowChart() method.
-		/// </summary>
-		public FlowChart( Guid guid ) : base( guid )
-		{
-			History = new History.NodeGraphHistory( this, 100 );
-		}
+        #region Constructor
 
-		#endregion // Constructor
+        /// <summary>
+        /// Never call this constructor directly. Use GraphManager.CreateFlowChart() method.
+        /// </summary>
+        public FlowChart( NodeGraphManager ngm, Guid guid ) : base(guid)
+        {
+            NodeGraphManager = ngm;
+            History = new History.NodeGraphHistory(ngm, this, 100);
+        }
 
-		#region Callbacks
+        #endregion // Constructor
 
-		public virtual void OnCreate()
-		{
-			if( NodeGraphManager.OutputDebugInfo )
-				System.Diagnostics.Debug.WriteLine( "FlowChart.OnCreate()" );
-			IsInitialized = true;
+        #region Callbacks
 
-			RaisePropertyChanged( "Model" );
-		}
+        public virtual void OnCreate()
+        {
+            if ( NodeGraphManager.OutputDebugInfo )
+                System.Diagnostics.Debug.WriteLine("FlowChart.OnCreate()");
+            IsInitialized = true;
 
-		public virtual void OnPreExecute()
-		{
-			if( NodeGraphManager.OutputDebugInfo )
-				System.Diagnostics.Debug.WriteLine( "FlowChart.OnPreExecute()" );
-		}
+            RaisePropertyChanged("Model");
+        }
 
-		public virtual void OnExecute()
-		{
-			if( NodeGraphManager.OutputDebugInfo )
-				System.Diagnostics.Debug.WriteLine( "FlowChart.OnExecute()" );
-		}
+        public virtual void OnPreExecute()
+        {
+            if ( NodeGraphManager.OutputDebugInfo )
+                System.Diagnostics.Debug.WriteLine("FlowChart.OnPreExecute()");
+        }
 
-		public virtual void OnPostExecute()
-		{
-			if( NodeGraphManager.OutputDebugInfo )
-				System.Diagnostics.Debug.WriteLine( "FlowChart.OnPostExecute()" );
-		}
+        public virtual void OnExecute()
+        {
+            if ( NodeGraphManager.OutputDebugInfo )
+                System.Diagnostics.Debug.WriteLine("FlowChart.OnExecute()");
+        }
 
-		public virtual void OnPreDestroy()
-		{
-			if( NodeGraphManager.OutputDebugInfo )
-				System.Diagnostics.Debug.WriteLine( "FlowChart.OnPreDestroy()" );
-		}
+        public virtual void OnPostExecute()
+        {
+            if ( NodeGraphManager.OutputDebugInfo )
+                System.Diagnostics.Debug.WriteLine("FlowChart.OnPostExecute()");
+        }
 
-		public virtual void OnPostDestroy()
-		{
-			if( NodeGraphManager.OutputDebugInfo )
-				System.Diagnostics.Debug.WriteLine( "FlowChart.OnPostDestroy()" );
-		}
+        public virtual void OnPreDestroy()
+        {
+            if ( NodeGraphManager.OutputDebugInfo )
+                System.Diagnostics.Debug.WriteLine("FlowChart.OnPreDestroy()");
+        }
 
-		public virtual void OnDeserialize()
-		{
-			if( NodeGraphManager.OutputDebugInfo )
-				System.Diagnostics.Debug.WriteLine( "FlowChart.OnDeserialize()" );
+        public virtual void OnPostDestroy()
+        {
+            if ( NodeGraphManager.OutputDebugInfo )
+                System.Diagnostics.Debug.WriteLine("FlowChart.OnPostDestroy()");
+        }
 
-			foreach( var node in Nodes )
-			{
-				node.OnDeserialize();
-			}
+        public virtual void OnDeserialize()
+        {
+            if ( NodeGraphManager.OutputDebugInfo )
+                System.Diagnostics.Debug.WriteLine("FlowChart.OnDeserialize()");
 
-			foreach( var connector in Connectors )
-			{
-				connector.OnDeserialize();
-			}
+            foreach ( var node in Nodes )
+            {
+                node.OnDeserialize();
+            }
 
-			IsInitialized = true;
+            foreach ( var connector in Connectors )
+            {
+                connector.OnDeserialize();
+            }
 
-			RaisePropertyChanged( "Model" );
-		}
+            IsInitialized = true;
 
-		#endregion // Callbacks
+            RaisePropertyChanged("Model");
+        }
 
-		#region Overrides IXmlSerializable
+        #endregion // Callbacks
 
-		public override void WriteXml( XmlWriter writer )
-		{
-			base.WriteXml( writer );
+        #region Overrides IXmlSerializable
 
-			writer.WriteStartElement( "Nodes" );
-			foreach( var node in Nodes )
-			{
-				writer.WriteStartElement( "Node" );
-				node.WriteXml( writer );
-				writer.WriteEndElement();
-			}
-			writer.WriteEndElement();
+        public override void WriteXml( XmlWriter writer )
+        {
+            base.WriteXml(writer);
 
-			writer.WriteStartElement( "Connectors" );
-			foreach( var connector in Connectors )
-			{
-				writer.WriteStartElement( "Connector" );
-				connector.WriteXml( writer );
-				writer.WriteEndElement();
-			}
-		}
+            writer.WriteStartElement("Nodes");
+            foreach ( var node in Nodes )
+            {
+                writer.WriteStartElement("Node");
+                node.WriteXml(writer);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
 
-		public override void ReadXml( XmlReader reader )
-		{
-			base.ReadXml( reader );
+            writer.WriteStartElement("Connectors");
+            foreach ( var connector in Connectors )
+            {
+                writer.WriteStartElement("Connector");
+                connector.WriteXml(writer);
+                writer.WriteEndElement();
+            }
+        }
 
-			bool isNodesEnd = false;
-			bool isConnectorsEnd = false;
+        public override void ReadXml( XmlReader reader )
+        {
+            base.ReadXml(reader);
 
-			while( reader.Read() )
-			{
-				if( XmlNodeType.Element == reader.NodeType )
-				{
-					if( ( "Node" == reader.Name ) ||
-						( "Connector" == reader.Name ) )
-					{
-						string prevReaderName = reader.Name;
+            bool isNodesEnd = false;
+            bool isConnectorsEnd = false;
 
-						Guid guid = Guid.Parse( reader.GetAttribute( "Guid" ) );
-						Type type = Type.GetType( reader.GetAttribute( "Type" ) );
-						FlowChart flowChart = NodeGraphManager.FindFlowChart(
-							Guid.Parse( reader.GetAttribute( "Owner" ) ) );
+            while ( reader.Read() )
+            {
+                if ( XmlNodeType.Element == reader.NodeType )
+                {
+                    if ( ( "Node" == reader.Name ) ||
+                        ( "Connector" == reader.Name ) )
+                    {
+                        string prevReaderName = reader.Name;
 
-						if( "Node" == prevReaderName )
-						{
-							Type vmType = Type.GetType( reader.GetAttribute( "ViewModelType" ) );
+                        Guid guid = Guid.Parse(reader.GetAttribute("Guid"));
+                        Type type = Type.GetType(reader.GetAttribute("Type"));
+                        FlowChart flowChart = NodeGraphManager.FindFlowChart(
+                            Guid.Parse(reader.GetAttribute("Owner")));
 
-							Node node = NodeGraphManager.CreateNode( true, guid, flowChart, type, 0.0, 0.0, 0, vmType );
-							node.ReadXml( reader );
-						}
-						else
-						{
-							Connector connector = NodeGraphManager.CreateConnector( false, guid, flowChart, type );
-							connector.ReadXml( reader );
-						}
-					}
-				}
+                        if ( "Node" == prevReaderName )
+                        {
+                            Type vmType = Type.GetType(reader.GetAttribute("ViewModelType"));
 
-				if( reader.IsEmptyElement || XmlNodeType.EndElement == reader.NodeType )
-				{
-					if( "Nodes" == reader.Name )
-					{
-						isNodesEnd = true;
-					}
-					else if( "Connectors" == reader.Name )
-					{
-						isConnectorsEnd = true;
-					}
-				}
+                            Node node = NodeGraphManager.CreateNode(true, guid, flowChart, type, 0.0, 0.0, 0, vmType);
+                            node.ReadXml(reader);
+                        }
+                        else
+                        {
+                            Connector connector = NodeGraphManager.CreateConnector(false, guid, flowChart, type);
+                            connector.ReadXml(reader);
+                        }
+                    }
+                }
 
-				if( isNodesEnd && isConnectorsEnd )
-					break;
-			}
-		}
+                if ( reader.IsEmptyElement || XmlNodeType.EndElement == reader.NodeType )
+                {
+                    if ( "Nodes" == reader.Name )
+                    {
+                        isNodesEnd = true;
+                    }
+                    else if ( "Connectors" == reader.Name )
+                    {
+                        isConnectorsEnd = true;
+                    }
+                }
 
-		#endregion // Overrides IXmlSerializable
-	}
+                if ( isNodesEnd && isConnectorsEnd )
+                    break;
+            }
+        }
+
+        #endregion // Overrides IXmlSerializable
+    }
 }

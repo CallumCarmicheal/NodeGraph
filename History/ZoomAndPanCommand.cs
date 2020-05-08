@@ -4,47 +4,48 @@ using System.Windows.Media;
 
 namespace NodeGraph.History
 {
-	public class ZoomAndPanCommand : NodeGraphCommand
-	{
-		#region Additional Parameters
+    public class ZoomAndPanCommand : NodeGraphCommand
+    {
+        #region Additional Parameters
 
-		public FlowChart FlowChart { get; private set; }
+        public FlowChart FlowChart { get; private set; }
 
-		#endregion // Additional Parameters
+        #endregion // Additional Parameters
 
-		#region Constructor
+        #region Constructor
 
-		public ZoomAndPanCommand( string name, FlowChart flowChart, object undoParams, object redoParams ) : base( name, undoParams, redoParams )
-		{
-			FlowChart = flowChart;
-		}
+        public ZoomAndPanCommand( NodeGraphManager ngm, string name, FlowChart flowChart, object undoParams, object redoParams )
+            : base(ngm, name, undoParams, redoParams)
+        {
+            FlowChart = flowChart;
+        }
 
-		#endregion // Constructor
+        #endregion // Constructor
 
-		#region Overrides NodeGraphCommand
+        #region Overrides NodeGraphCommand
 
-		public override void Undo()
-		{
-			Matrix matrix = ( Matrix )UndoParams;
+        public override void Undo()
+        {
+            Matrix matrix = (Matrix)UndoParams;
 
-			FlowChartView view = FlowChart.ViewModel.View;
+            FlowChartView view = FlowChart.ViewModel.View;
 
-			view.ZoomAndPan.StartX = -matrix.OffsetX;
-			view.ZoomAndPan.StartY = -matrix.OffsetY;
-			view.ZoomAndPan.Scale = matrix.M11;
-		}
+            view.ZoomAndPan.StartX = -matrix.OffsetX;
+            view.ZoomAndPan.StartY = -matrix.OffsetY;
+            view.ZoomAndPan.Scale = matrix.M11;
+        }
 
-		public override void Redo()
-		{
-			Matrix matrix = ( Matrix )RedoParams;
+        public override void Redo()
+        {
+            Matrix matrix = (Matrix)RedoParams;
 
-			FlowChartView view = FlowChart.ViewModel.View;
+            FlowChartView view = FlowChart.ViewModel.View;
 
-			view.ZoomAndPan.StartX = -matrix.OffsetX;
-			view.ZoomAndPan.StartY = -matrix.OffsetY;
-			view.ZoomAndPan.Scale = matrix.M11;
-		}
+            view.ZoomAndPan.StartX = -matrix.OffsetX;
+            view.ZoomAndPan.StartY = -matrix.OffsetY;
+            view.ZoomAndPan.Scale = matrix.M11;
+        }
 
-		#endregion // Overrides NodeGraphCommand
-	}
+        #endregion // Overrides NodeGraphCommand
+    }
 }

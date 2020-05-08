@@ -7,31 +7,32 @@ using System.Threading.Tasks;
 
 namespace NodeGraph.History
 {
-	public class CreateConnectorCommand : NodeGraphCommand
-	{
-		#region Constructor
+    public class CreateConnectorCommand : NodeGraphCommand
+    {
+        #region Constructor
 
-		public CreateConnectorCommand( string name, object undoParams, object redoParams ) : base( name, undoParams, redoParams )
-		{
+        public CreateConnectorCommand( NodeGraphManager ngm, string name, object undoParams, object redoParams )
+            : base(ngm, name, undoParams, redoParams)
+        {
 
-		}
+        }
 
-		#endregion // Constructor
+        #endregion // Constructor
 
-		#region Overrides NodeGraphCommand
+        #region Overrides NodeGraphCommand
 
-		public override void Undo()
-		{
-			Guid guid = ( Guid )UndoParams;
+        public override void Undo()
+        {
+            Guid guid = (Guid)UndoParams;
 
-			NodeGraphManager.DestroyConnector( guid );
-		}
+            NodeGraphManager.DestroyConnector(guid);
+        }
 
-		public override void Redo()
-		{
-			NodeGraphManager.DeserializeConnector( RedoParams as string );
-		}
+        public override void Redo()
+        {
+            NodeGraphManager.DeserializeConnector(RedoParams as string);
+        }
 
-		#endregion // Overrides NodeGraphCommand
-	}
+        #endregion // Overrides NodeGraphCommand
+    }
 }
