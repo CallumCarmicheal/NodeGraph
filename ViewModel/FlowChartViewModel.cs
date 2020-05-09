@@ -19,6 +19,8 @@ namespace NodeGraph.ViewModel {
 
         #region Properties
 
+        public Guid InstanceGuid { get; private set; } = Guid.NewGuid();
+
         private FlowChart _Model;
         public FlowChart Model {
             get { return _Model; }

@@ -1,190 +1,192 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Graph"
+    xmlns:local="clr-namespace:NodeGraph"
     xmlns:v="clr-namespace:NodeGraph.View"
-	xmlns:c="clr-namespace:NodeGraph.Controls"
-	xmlns:e="clr-namespace:NodeGraph.Externals"
+
 	xmlns:pt="http://propertytools.org/wpf"
 	xmlns:vm="clr-namespace:NodeGraph.ViewModel">
 
-	<!-- Background Colors -->
-	<SolidColorBrush x:Key="FlowChartViewBackGroundColor" Color="#303030"/>
-	<SolidColorBrush x:Key="NodeBackGroundColor" Color="#121212"/>
-	<SolidColorBrush x:Key="NodeBackGroundOverColor" Color="#323232"/>
-	<SolidColorBrush x:Key="NodeBorderColor" Color="#121212"/>
+    <!--xmlns:c="clr-namespace:NodeGraph.Controls"
+	xmlns:e="clr-namespace:NodeGraph.Externals"-->
 
-	<!-- LogTextBlock Style -->
-	<Style x:Key="LogTextBlockStyle" TargetType="TextBlock">
-		<Setter Property="Foreground" Value="White"/>
-		<Setter Property="Effect">
-			<Setter.Value>
-				<DropShadowEffect BlurRadius="3" ShadowDepth="3" Color="Black"/>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <!-- Background Colors -->
+    <SolidColorBrush x:Key="FlowChartViewBackGroundColor" Color="#303030"/>
+    <SolidColorBrush x:Key="NodeBackGroundColor" Color="#121212"/>
+    <SolidColorBrush x:Key="NodeBackGroundOverColor" Color="#323232"/>
+    <SolidColorBrush x:Key="NodeBorderColor" Color="#121212"/>
 
-	<!-- LinedFlowPort Style -->
-	<Style x:Key="LinedFlowPort" TargetType="{x:Type ContentControl}">
-		<Setter Property="Content" Value=""/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate>
-					<Grid>
-						<Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="26" Height="20" Background="Transparent"/>
-						<Polygon VerticalAlignment="Center" HorizontalAlignment="Center"
+    <!-- LogTextBlock Style -->
+    <Style x:Key="LogTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="3" ShadowDepth="3" Color="Black"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- LinedFlowPort Style -->
+    <Style x:Key="LinedFlowPort" TargetType="{x:Type ContentControl}">
+        <Setter Property="Content" Value=""/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="26" Height="20" Background="Transparent"/>
+                        <Polygon VerticalAlignment="Center" HorizontalAlignment="Center"
 								 IsHitTestVisible="False" Stroke="{TemplateBinding Foreground}" Points="0,0 8,0 16,8 8,16 0,16" Fill="Transparent"/>
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!-- FilledFlowPort Style -->
-	<Style x:Key="FilledFlowPort" TargetType="{x:Type ContentControl}">
-		<Setter Property="Content" Value=""/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate>
-					<Grid>
-						<Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="26" Height="20" Background="Transparent"/>
-						<Polygon VerticalAlignment="Center" HorizontalAlignment="Center" 
+    <!-- FilledFlowPort Style -->
+    <Style x:Key="FilledFlowPort" TargetType="{x:Type ContentControl}">
+        <Setter Property="Content" Value=""/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="26" Height="20" Background="Transparent"/>
+                        <Polygon VerticalAlignment="Center" HorizontalAlignment="Center" 
 								 IsHitTestVisible="False" Stroke="{TemplateBinding Foreground}" Points="0,0 8,0 16,8 8,16 0,16" Fill="White"/>
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!-- LinedPort Style -->
-	<Style x:Key="LinedPort" TargetType="{x:Type ContentControl}">
-		<Setter Property="Content" Value=""/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate>
-					<Grid>
-						<Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20" Background="Transparent"/>
-						<Ellipse VerticalAlignment="Center" HorizontalAlignment="Center"
+    <!-- LinedPort Style -->
+    <Style x:Key="LinedPort" TargetType="{x:Type ContentControl}">
+        <Setter Property="Content" Value=""/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20" Background="Transparent"/>
+                        <Ellipse VerticalAlignment="Center" HorizontalAlignment="Center"
 								 IsHitTestVisible="False" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" Width="8" Height="8" Fill="Transparent"/>
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!-- FilledPort Style -->
-	<Style x:Key="FilledPort" TargetType="{x:Type ContentControl}">
-		<Setter Property="Content" Value=""/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate>
-					<Grid>
-						<Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20" Background="Transparent"/>
-						<Ellipse VerticalAlignment="Center" HorizontalAlignment="Center" 
+    <!-- FilledPort Style -->
+    <Style x:Key="FilledPort" TargetType="{x:Type ContentControl}">
+        <Setter Property="Content" Value=""/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20" Background="Transparent"/>
+                        <Ellipse VerticalAlignment="Center" HorizontalAlignment="Center" 
 								 IsHitTestVisible="False" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" Width="8" Height="8" Fill="White"/>
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!-- ConnectorView Style -->
-	<Style x:Key="DefaultConnectorViewStyle" TargetType="{x:Type v:ConnectorView}">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type v:ConnectorView}">
-					<Grid>
-						<Path Stroke="Transparent" StrokeThickness="20" Data="{Binding Path=CurveData, RelativeSource={RelativeSource AncestorType={x:Type v:ConnectorView}}}"/>
-						<Path x:Name="ConnectorCurve" Stroke="White" StrokeThickness="2" Data="{Binding Path=CurveData, RelativeSource={RelativeSource AncestorType={x:Type v:ConnectorView}}}"/>
-					</Grid>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter TargetName="ConnectorCurve" Property="Stroke" Value="DarkOrange"/>
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <!-- ConnectorView Style -->
+    <Style x:Key="DefaultConnectorViewStyle" TargetType="{x:Type v:ConnectorView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type v:ConnectorView}">
+                    <Grid>
+                        <Path Stroke="Transparent" StrokeThickness="20" Data="{Binding Path=CurveData, RelativeSource={RelativeSource AncestorType={x:Type v:ConnectorView}}}"/>
+                        <Path x:Name="ConnectorCurve" Stroke="White" StrokeThickness="2" Data="{Binding Path=CurveData, RelativeSource={RelativeSource AncestorType={x:Type v:ConnectorView}}}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ConnectorCurve" Property="Stroke" Value="DarkOrange"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!-- DefaultNodeFlowPortView Style -->
-	<Style x:Key="DefaultNodeFlowPortViewStyle" TargetType="{x:Type v:NodeFlowPortView}">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type v:NodeFlowPortView}">
-					<Grid Height="25" VerticalAlignment="Center">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition x:Name="_Column0Width" Width="Auto"/>
-							<ColumnDefinition x:Name="_Column2Width" Width="*"/>
-						</Grid.ColumnDefinitions>
-						<ContentControl x:Name="PART_Port" Grid.Column="0" 
+    <!-- DefaultNodeFlowPortView Style -->
+    <Style x:Key="DefaultNodeFlowPortViewStyle" TargetType="{x:Type v:NodeFlowPortView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type v:NodeFlowPortView}">
+                    <Grid Height="25" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="_Column0Width" Width="Auto"/>
+                            <ColumnDefinition x:Name="_Column2Width" Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ContentControl x:Name="PART_Port" Grid.Column="0" 
 										Style="{StaticResource FilledFlowPort}" 
 										VerticalAlignment="Center" HorizontalAlignment="Left"
 										Foreground="White"/>
-						<TextBlock x:Name="PART_PortTextBlock" Grid.Column="1" IsHitTestVisible="False"
+                        <TextBlock x:Name="PART_PortTextBlock" Grid.Column="1" IsHitTestVisible="False"
 								   Text="{Binding Model.DisplayName}" Foreground="White" TextAlignment="Left"
 								   VerticalAlignment="Center" HorizontalAlignment="Left"/>
-						<Popup IsOpen="{TemplateBinding ToolTipVisibility}" IsHitTestVisible="False">
-							<TextBlock IsHitTestVisible="False" Grid.Column="1"
+                        <Popup IsOpen="{TemplateBinding ToolTipVisibility}" IsHitTestVisible="False">
+                            <TextBlock IsHitTestVisible="False" Grid.Column="1"
 									   Foreground="Red" Margin="3" Text="{TemplateBinding ToolTipText}"/>
-						</Popup>
-					</Grid>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsFilledPort" Value="False">
-							<Setter TargetName="PART_Port" Property="Style" Value="{StaticResource LinedFlowPort}"/>
-						</Trigger>
-						<Trigger Property="IsInput" Value="False">
-							<Setter TargetName="_Column0Width" Property="Width" Value="*"/>
-							<Setter TargetName="_Column2Width" Property="Width" Value="Auto"/>
-							<Setter TargetName="PART_Port" Property="Grid.Column" Value="1"/>
-							<Setter TargetName="PART_Port" Property="HorizontalAlignment" Value="Right"/>
-							<Setter TargetName="PART_PortTextBlock" Property="Grid.Column" Value="0"/>
-							<Setter TargetName="PART_PortTextBlock" Property="HorizontalAlignment" Value="Right"/>
-							<Setter TargetName="PART_PortTextBlock" Property="TextAlignment" Value="Left"/>
-						</Trigger>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter TargetName="PART_Port" Property="Foreground" Value="Orange"/>
-							<Setter TargetName="PART_PortTextBlock" Property="Foreground" Value="Orange"/>
-						</Trigger>
-						<Trigger Property="IsConnectorMouseOver" Value="True">
-							<Setter TargetName="PART_Port" Property="Foreground" Value="DarkOrange"/>
-							<Setter TargetName="PART_PortTextBlock" Property="Foreground" Value="DarkOrange"/>
-						</Trigger>
-						<Trigger Property="IsPortEnabled" Value="False">
-							<Setter TargetName="PART_Port" Property="Visibility" Value="Hidden"/>
-							<Setter Property="IsHitTestVisible" Value="False"/>
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFilledPort" Value="False">
+                            <Setter TargetName="PART_Port" Property="Style" Value="{StaticResource LinedFlowPort}"/>
+                        </Trigger>
+                        <Trigger Property="IsInput" Value="False">
+                            <Setter TargetName="_Column0Width" Property="Width" Value="*"/>
+                            <Setter TargetName="_Column2Width" Property="Width" Value="Auto"/>
+                            <Setter TargetName="PART_Port" Property="Grid.Column" Value="1"/>
+                            <Setter TargetName="PART_Port" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="PART_PortTextBlock" Property="Grid.Column" Value="0"/>
+                            <Setter TargetName="PART_PortTextBlock" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="PART_PortTextBlock" Property="TextAlignment" Value="Left"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Port" Property="Foreground" Value="Orange"/>
+                            <Setter TargetName="PART_PortTextBlock" Property="Foreground" Value="Orange"/>
+                        </Trigger>
+                        <Trigger Property="IsConnectorMouseOver" Value="True">
+                            <Setter TargetName="PART_Port" Property="Foreground" Value="DarkOrange"/>
+                            <Setter TargetName="PART_PortTextBlock" Property="Foreground" Value="DarkOrange"/>
+                        </Trigger>
+                        <Trigger Property="IsPortEnabled" Value="False">
+                            <Setter TargetName="PART_Port" Property="Visibility" Value="Hidden"/>
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!-- DefaultNodePropertyPortView Style -->
-	<Style x:Key="DefaultNodePropertyPortViewStyle" TargetType="{x:Type v:NodePropertyPortView}">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type v:NodePropertyPortView}">
-					<Grid Height="25">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition x:Name="_Column0Width" Width="Auto"/>
-							<ColumnDefinition x:Name="_Column1Width" Width="*"/>
-						</Grid.ColumnDefinitions>
-						<ContentControl x:Name="PART_Port" Grid.Column="0"
+    <!-- DefaultNodePropertyPortView Style -->
+    <Style x:Key="DefaultNodePropertyPortViewStyle" TargetType="{x:Type v:NodePropertyPortView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type v:NodePropertyPortView}">
+                    <Grid Height="25">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="_Column0Width" Width="Auto"/>
+                            <ColumnDefinition x:Name="_Column1Width" Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ContentControl x:Name="PART_Port" Grid.Column="0"
 										Style="{StaticResource FilledPort}" 
 										VerticalAlignment="Center" HorizontalAlignment="Left"
 										Foreground="White"/>
-						<ContentControl x:Name="_TextAndEditor" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left">
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition x:Name="_InnerColumn0Width" Width="Auto"/>
-									<ColumnDefinition x:Name="_InnerColumn1Width" Width="*"/>
-								</Grid.ColumnDefinitions>
-								<ContentPresenter x:Name="_PortPropertyEditor" Grid.Column="0"
+                        <ContentControl x:Name="_TextAndEditor" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition x:Name="_InnerColumn0Width" Width="Auto"/>
+                                    <ColumnDefinition x:Name="_InnerColumn1Width" Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter x:Name="_PortPropertyEditor" Grid.Column="0"
 												  Visibility="{TemplateBinding PropertyEditorVisibility}" 
 												  Content="{TemplateBinding PropertyEditor}"
 												  VerticalAlignment="Center" HorizontalAlignment="Left"/>
-								<pt:EditableTextBlock x:Name="PART_Header"
+                                <pt:EditableTextBlock x:Name="PART_Header"
 													  Grid.Column="1"
 													  Text="{Binding Model.DisplayName, Mode=TwoWay}"
 													  Focusable="True"
@@ -193,198 +195,211 @@
 													  Margin="3,0,3,0"
 													  VerticalAlignment="Center"
 													  HorizontalAlignment="Left"/>
-							</Grid>
-						</ContentControl>
-						<Popup IsOpen="{TemplateBinding ToolTipVisibility}" IsHitTestVisible="False">
-							<TextBlock x:Name="PART_ToolTip" IsHitTestVisible="False" Margin="3" Foreground="Red" Text="{TemplateBinding ToolTipText}" />
-						</Popup>
-					</Grid>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsFilledPort" Value="False">
-							<Setter TargetName="PART_Port" Property="Style" Value="{StaticResource LinedPort}"/>
-						</Trigger>
-						<Trigger Property="IsInput" Value="False">
-							<Setter TargetName="_Column0Width" Property="Width" Value="*"/>
-							<Setter TargetName="_Column1Width" Property="Width" Value="Auto"/>
-							<Setter TargetName="PART_Port" Property="Grid.Column" Value="1"/>
-							<Setter TargetName="PART_Port" Property="HorizontalAlignment" Value="Right"/>
-							<Setter TargetName="_TextAndEditor" Property="Grid.Column" Value="0"/>
-							<Setter TargetName="_TextAndEditor" Property="HorizontalAlignment" Value="Right"/>
-							<Setter TargetName="_InnerColumn0Width" Property="Width" Value="*"/>
-							<Setter TargetName="_InnerColumn1Width" Property="Width" Value="Auto"/>
-							<Setter TargetName="_PortPropertyEditor" Property="Grid.Column" Value="1"/>
-							<Setter TargetName="PART_Header" Property="Grid.Column" Value="0"/>
-							<Setter TargetName="_PortPropertyEditor" Property="HorizontalAlignment" Value="Right"/>
-							<Setter TargetName="PART_Header" Property="HorizontalAlignment" Value="Right"/>
-							<Setter TargetName="PART_Header" Property="TextAlignment" Value="Right"/>
+                            </Grid>
+                        </ContentControl>
+                        <Popup IsOpen="{TemplateBinding ToolTipVisibility}" IsHitTestVisible="False">
+                            <TextBlock x:Name="PART_ToolTip" IsHitTestVisible="False" Margin="3" Foreground="Red" Text="{TemplateBinding ToolTipText}" />
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFilledPort" Value="False">
+                            <Setter TargetName="PART_Port" Property="Style" Value="{StaticResource LinedPort}"/>
+                        </Trigger>
+                        <Trigger Property="IsInput" Value="False">
+                            <Setter TargetName="_Column0Width" Property="Width" Value="*"/>
+                            <Setter TargetName="_Column1Width" Property="Width" Value="Auto"/>
+                            <Setter TargetName="PART_Port" Property="Grid.Column" Value="1"/>
+                            <Setter TargetName="PART_Port" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="_TextAndEditor" Property="Grid.Column" Value="0"/>
+                            <Setter TargetName="_TextAndEditor" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="_InnerColumn0Width" Property="Width" Value="*"/>
+                            <Setter TargetName="_InnerColumn1Width" Property="Width" Value="Auto"/>
+                            <Setter TargetName="_PortPropertyEditor" Property="Grid.Column" Value="1"/>
+                            <Setter TargetName="PART_Header" Property="Grid.Column" Value="0"/>
+                            <Setter TargetName="_PortPropertyEditor" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="PART_Header" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="PART_Header" Property="TextAlignment" Value="Right"/>
 
-							<Setter TargetName="PART_Header" Property="TextAlignment" Value="Right"/>
-						</Trigger>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter TargetName="PART_Port" Property="Foreground" Value="Orange"/>
-							<Setter TargetName="PART_Header" Property="Foreground" Value="Orange"/>
-						</Trigger>
-						<Trigger Property="IsConnectorMouseOver" Value="True">
-							<Setter TargetName="PART_Port" Property="Foreground" Value="DarkOrange"/>
-							<Setter TargetName="PART_Header" Property="Foreground" Value="DarkOrange"/>
-						</Trigger>
-						<Trigger Property="IsPortEnabled" Value="False">
-							<Setter TargetName="PART_Port" Property="Visibility" Value="Hidden"/>
-							<Setter Property="IsHitTestVisible" Value="False"/>
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                            <Setter TargetName="PART_Header" Property="TextAlignment" Value="Right"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Port" Property="Foreground" Value="Orange"/>
+                            <Setter TargetName="PART_Header" Property="Foreground" Value="Orange"/>
+                        </Trigger>
+                        <Trigger Property="IsConnectorMouseOver" Value="True">
+                            <Setter TargetName="PART_Port" Property="Foreground" Value="DarkOrange"/>
+                            <Setter TargetName="PART_Header" Property="Foreground" Value="DarkOrange"/>
+                        </Trigger>
+                        <Trigger Property="IsPortEnabled" Value="False">
+                            <Setter TargetName="PART_Port" Property="Visibility" Value="Hidden"/>
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!-- RouterNodeView Style -->
-	<Style x:Key="RouterNodeViewStyle" TargetType="{x:Type v:NodeView}">
-		<Setter Property="Background" Value="{StaticResource NodeBackGroundColor}"/>
-		<Setter Property="BorderBrush" Value="{StaticResource NodeBorderColor}"/>
-		<Setter Property="Canvas.Left" Value="{Binding Model.X}"/>
-		<Setter Property="Canvas.Top" Value="{Binding Model.Y}"/>
-		<Setter Property="Canvas.ZIndex" Value="{Binding Model.ZIndex}"/>
-		<Setter Property="MinWidth" Value="80"/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type v:NodeView}">
-					<Grid>
-						<!-- Background -->
-						<Border Background="{TemplateBinding Background}"
+    <!-- RouterNodeView Style -->
+    <Style x:Key="RouterNodeViewStyle" TargetType="{x:Type v:NodeView}">
+        <Setter Property="Background" Value="{StaticResource NodeBackGroundColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource NodeBorderColor}"/>
+        <Setter Property="Canvas.Left" Value="{Binding Model.X}"/>
+        <Setter Property="Canvas.Top" Value="{Binding Model.Y}"/>
+        <Setter Property="Canvas.ZIndex" Value="{Binding Model.ZIndex}"/>
+        <Setter Property="MinWidth" Value="80"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type v:NodeView}">
+                    <Grid>
+                        <!-- Background 
+								CornerRadius="{TemplateBinding CornerRadius}"
+							-->
+                        <Border Background="{TemplateBinding Background}"
 								Margin="{TemplateBinding Margin}"
 								Padding="{TemplateBinding Padding}"
-								CornerRadius="{TemplateBinding CornerRadius}"
+								CornerRadius="{Binding DataContext.CornerRadius, RelativeSource={RelativeSource TemplatedParent}}"
 								Opacity="0.9">
-							<Border.Effect>
-								<BlurEffect KernelType="Box" Radius="{TemplateBinding CornerRadius}"/>
-							</Border.Effect>
-						</Border>
-						<!-- Selection -->
-						<Border x:Name="BorderSelection"
+                            <Border.Effect>
+                                <BlurEffect KernelType="Box" Radius="{Binding DataContext.CornerRadius, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            </Border.Effect>
+                        </Border>
+                        <!-- Selection -->
+                        <Border x:Name="BorderSelection"
 								Background="Transparent"
 								BorderBrush="{TemplateBinding BorderBrush}"
-								BorderThickness="{TemplateBinding SelectionThickness}"
+								BorderThickness="{Binding DataContext.SelectionThickness, RelativeSource={RelativeSource TemplatedParent}}"
 								Margin="{TemplateBinding Margin}"
 								Padding="{TemplateBinding Padding}"
 								CornerRadius="8">
-							<!-- Content -->
-							<Grid>
-								<!-- Node Properties -->
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition/>
-										<ColumnDefinition/>
-									</Grid.ColumnDefinitions>
-									<!-- Node Input FlowPorts -->
-									<v:NodeFlowPortViewsContainer Visibility="{Binding InputFlowPortsVisibility}" 
+                            <!-- Content -->
+                            <Grid>
+                                <!-- Node Properties -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <!-- Node Input FlowPorts -->
+                                    <v:NodeFlowPortViewsContainer Visibility="{Binding InputFlowPortsVisibility}" 
 																  IsInput="True"
 																  Grid.Column="0"
 																  HorizontalAlignment="Left"
 																  ItemsSource="{Binding InputFlowPortViewModels}">
-										<ItemsControl.ItemsPanel>
-											<ItemsPanelTemplate>
-												<StackPanel Orientation="Vertical" Margin="2"/>
-											</ItemsPanelTemplate>
-										</ItemsControl.ItemsPanel>
-									</v:NodeFlowPortViewsContainer>
-									<!-- Node Output FlowPorts -->
-									<v:NodeFlowPortViewsContainer Visibility="{Binding OutputFlowPortsVisibility}"
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical" Margin="2"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </v:NodeFlowPortViewsContainer>
+                                    <!-- Node Output FlowPorts -->
+                                    <v:NodeFlowPortViewsContainer Visibility="{Binding OutputFlowPortsVisibility}"
 																  IsInput="False"
 																  Grid.Column="1" 
 																  HorizontalAlignment="Right"
 																  ItemsSource="{Binding OutputFlowPortViewModels}">
-										<ItemsControl.ItemsPanel>
-											<ItemsPanelTemplate>
-												<StackPanel Orientation="Vertical" Margin="2"/>
-											</ItemsPanelTemplate>
-										</ItemsControl.ItemsPanel>
-									</v:NodeFlowPortViewsContainer>
-								</Grid>
-								<!-- Node Properites -->
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition/>
-										<ColumnDefinition/>
-									</Grid.ColumnDefinitions>
-									<!-- Node Input PropertyPorts -->
-									<v:NodePropertyPortViewsContainer Visibility="{Binding InputPropertyPortsVisibility}"
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical" Margin="2"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </v:NodeFlowPortViewsContainer>
+                                </Grid>
+                                <!-- Node Properites -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <!-- Node Input PropertyPorts -->
+                                    <v:NodePropertyPortViewsContainer Visibility="{Binding InputPropertyPortsVisibility}"
 																	  Grid.Column="0"
 																	  IsInput="True"
 																	  HorizontalAlignment="Left"
 																	  ItemsSource="{Binding InputPropertyPortViewModels}"/>
-									<!-- Node Output ProperyPorts -->
-									<v:NodePropertyPortViewsContainer Visibility="{Binding OutputPropertyPortsVisibility}" 
+                                    <!-- Node Output ProperyPorts -->
+                                    <v:NodePropertyPortViewsContainer Visibility="{Binding OutputPropertyPortsVisibility}" 
 																	  Grid.Column="1" 
 																	  IsInput="False"
 																	  HorizontalAlignment="Right"
 																	  ItemsSource="{Binding OutputPropertyPortViewModels}"/>
-								</Grid>
-							</Grid>
-						</Border>
-					</Grid>
-					<ControlTemplate.Triggers>
-						<!-- Node Selection Trigger -->
-						<Trigger Property="IsSelected" Value="True">
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- TODO: Figure this one out, I think making it a data trigger or just adding the properties would work. -->
+
+                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                            <Setter TargetName="BorderSelection" Property="BorderBrush" Value="Orange"/>
+                        </DataTrigger>
+
+
+                        <DataTrigger Binding="{Binding IsMouseOver}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource NodeBackGroundOverColor}"/>
+                        </DataTrigger>
+
+                        <!-- Node Selection Trigger -->
+                        <!--<Trigger Property="IsSelected" Value="True">
 							<Setter TargetName="BorderSelection" Property="BorderBrush" Value="Orange"/>
 						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
 							<Setter Property="Background" Value="{StaticResource NodeBackGroundOverColor}"/>
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+						</Trigger>-->
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!-- DefaultNodeView Style -->
-	<Style x:Key="DefaultNodeViewStyle" TargetType="{x:Type v:NodeView}">
-		<Setter Property="Background" Value="{StaticResource NodeBackGroundColor}"/>
-		<Setter Property="BorderBrush" Value="{StaticResource NodeBorderColor}"/>
-		<Setter Property="Canvas.Left" Value="{Binding Model.X}"/>
-		<Setter Property="Canvas.Top" Value="{Binding Model.Y}"/>
-		<Setter Property="Canvas.ZIndex" Value="{Binding Model.ZIndex}"/>
-		<Setter Property="MinWidth" Value="120"/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type v:NodeView}">
-					<Grid>
-						<!-- Background -->
-						<Border Background="{TemplateBinding Background}"
+    <!-- DefaultNodeView Style -->
+    <Style x:Key="DefaultNodeViewStyle" TargetType="{x:Type v:NodeView}">
+        <Setter Property="Background" Value="{StaticResource NodeBackGroundColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource NodeBorderColor}"/>
+        <Setter Property="Canvas.Left" Value="{Binding Model.X}"/>
+        <Setter Property="Canvas.Top" Value="{Binding Model.Y}"/>
+        <Setter Property="Canvas.ZIndex" Value="{Binding Model.ZIndex}"/>
+        <Setter Property="MinWidth" Value="120"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type v:NodeView}">
+                    <Grid>
+                        <!-- Background -->
+                        <Border Background="{TemplateBinding Background}"
 								Margin="{TemplateBinding Margin}"
 								Padding="{TemplateBinding Padding}"
-								CornerRadius="{TemplateBinding CornerRadius}"
+								CornerRadius="{Binding DataContext.CornerRadius, RelativeSource={RelativeSource TemplatedParent}}"
 								Opacity="0.9">
-							<Border.Effect>
-								<BlurEffect KernelType="Box" Radius="8.0"/>
-							</Border.Effect>
-						</Border>
-						<!-- Selection -->
-						<Border x:Name="BorderSelection"
+                            <Border.Effect>
+                                <BlurEffect KernelType="Box" Radius="8.0"/>
+                            </Border.Effect>
+                        </Border>
+                        <!-- Selection -->
+                        <Border x:Name="BorderSelection"
 								Background="Transparent"
 								BorderBrush="{TemplateBinding BorderBrush}"
-								BorderThickness="{TemplateBinding SelectionThickness}"
-								CornerRadius="{TemplateBinding CornerRadius}"
+								BorderThickness="{Binding DataContext.SelectionThickness, RelativeSource={RelativeSource TemplatedParent}}"
+								CornerRadius="{Binding DataContext.CornerRadius, RelativeSource={RelativeSource TemplatedParent}}"
 								Margin="{TemplateBinding Margin}"
 								Padding="{TemplateBinding Padding}">
-							<!-- Content -->
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="20"/>
-									<RowDefinition Height="Auto"/>
-									<RowDefinition Height="Auto"/>
-								</Grid.RowDefinitions>
-								<!-- Node Header -->
-								<Grid Grid.Row="0" Background="{Binding Model.HeaderBackgroundColor}">
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="25"/>
-										<ColumnDefinition Width="*"/>
-										<ColumnDefinition Width="25"/>
-									</Grid.ColumnDefinitions>
-									<!-- Node Header Image -->
-									<Image Grid.Column="0" Height="20" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-									<!-- Node Header Text -->
-									<pt:EditableTextBlock x:Name="PART_Header"
+                            <!-- Content -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <!-- Node Header -->
+                                <Grid Grid.Row="0" Background="{Binding Model.HeaderBackgroundColor}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="25"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="25"/>
+                                    </Grid.ColumnDefinitions>
+                                    <!-- Node Header Image -->
+                                    <Image Grid.Column="0" Height="20" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <!-- Node Header Text -->
+                                    <pt:EditableTextBlock x:Name="PART_Header"
 														  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
 														  Text="{Binding Model.Header, Mode=TwoWay}"
 														  Focusable="True"
@@ -392,148 +407,158 @@
 														  FontWeight="Bold"
 														  FontSize="12"
 														  IsEnabled="{Binding Model.AllowEditingHeader}"/>
-								</Grid>
-								<!-- Node Properties -->
-								<Grid Grid.Row="1">
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition/>
-										<ColumnDefinition Width="50"/>
-										<ColumnDefinition/>
-									</Grid.ColumnDefinitions>
-									<!-- Node Input FlowPorts -->
-									<v:NodeFlowPortViewsContainer Visibility="{Binding InputFlowPortsVisibility}" 
+                                </Grid>
+                                <!-- Node Properties -->
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <!-- Node Input FlowPorts -->
+                                    <v:NodeFlowPortViewsContainer Visibility="{Binding InputFlowPortsVisibility}" 
 																  IsInput="True"
 																  Grid.Column="0"
 																  HorizontalAlignment="Left"
 																  ItemsSource="{Binding InputFlowPortViewModels}">
-										<ItemsControl.ItemsPanel>
-											<ItemsPanelTemplate>
-												<StackPanel Orientation="Vertical" Margin="2"/>
-											</ItemsPanelTemplate>
-										</ItemsControl.ItemsPanel>
-									</v:NodeFlowPortViewsContainer>
-									<!-- Node Output FlowPorts -->
-									<v:NodeFlowPortViewsContainer Visibility="{Binding OutputFlowPortsVisibility}"
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical" Margin="2"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </v:NodeFlowPortViewsContainer>
+                                    <!-- Node Output FlowPorts -->
+                                    <v:NodeFlowPortViewsContainer Visibility="{Binding OutputFlowPortsVisibility}"
 																  IsInput="False"
 																  Grid.Column="2" 
 																  HorizontalAlignment="Right"
 																  ItemsSource="{Binding OutputFlowPortViewModels}">
-										<ItemsControl.ItemsPanel>
-											<ItemsPanelTemplate>
-												<StackPanel Orientation="Vertical" Margin="2"/>
-											</ItemsPanelTemplate>
-										</ItemsControl.ItemsPanel>
-									</v:NodeFlowPortViewsContainer>
-								</Grid>
-								<!-- Node Properites -->
-								<Grid Grid.Row="2">
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition/>
-										<ColumnDefinition Width="50"/>
-										<ColumnDefinition/>
-									</Grid.ColumnDefinitions>
-									<!-- Node Input PropertyPorts -->
-									<v:NodePropertyPortViewsContainer Visibility="{Binding InputPropertyPortsVisibility}"
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical" Margin="2"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </v:NodeFlowPortViewsContainer>
+                                </Grid>
+                                <!-- Node Properites -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <!-- Node Input PropertyPorts -->
+                                    <v:NodePropertyPortViewsContainer Visibility="{Binding InputPropertyPortsVisibility}"
 																	  Grid.Column="0"
 																	  IsInput="True"
 																	  HorizontalAlignment="Left"
 																	  ItemsSource="{Binding InputPropertyPortViewModels}"/>
-									<!--<Border Grid.Column="1" Background="White"/>-->
-									<!-- Node Output ProperyPorts -->
-									<v:NodePropertyPortViewsContainer Visibility="{Binding OutputPropertyPortsVisibility}" 
+                                    <!--<Border Grid.Column="1" Background="White"/>-->
+                                    <!-- Node Output ProperyPorts -->
+                                    <v:NodePropertyPortViewsContainer Visibility="{Binding OutputPropertyPortsVisibility}" 
 																	  Grid.Column="2" 
 																	  IsInput="False"
 																	  HorizontalAlignment="Right"
 																	  ItemsSource="{Binding OutputPropertyPortViewModels}"/>
-								</Grid>
-							</Grid>
-						</Border>
-						<!-- Execution State -->
-						<Image Source="{TemplateBinding ExecutionStateImage}" 
+                                </Grid>
+                            </Grid>
+                        </Border>
+                        <!-- Execution State -->
+                        <Image Source="{Binding DataContext.ExecutionStateImage, RelativeSource={RelativeSource TemplatedParent}}"
 							   HorizontalAlignment="Left" VerticalAlignment="Top" 
 							   Width="16" Height="16"
 							   IsHitTestVisible="False"/>
-					</Grid>
-					<ControlTemplate.Triggers>
-						<!-- Node Selection Trigger -->
-						<Trigger Property="IsSelected" Value="True">
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                            <Setter TargetName="BorderSelection" Property="BorderBrush" Value="Orange"/>
+                        </DataTrigger>
+
+
+                        <DataTrigger Binding="{Binding IsMouseOver}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource NodeBackGroundOverColor}"/>
+                        </DataTrigger>
+                        <!-- Node Selection Trigger -->
+                        <!--
+                        <Trigger Property="IsSelected" Value="True">
 							<Setter TargetName="BorderSelection" Property="BorderBrush" Value="Orange"/>
 						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
 							<Setter Property="Background" Value="{StaticResource NodeBackGroundOverColor}"/>
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+						</Trigger> 
+                        -->
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!-- FlowChartView style -->
-	<Style TargetType="{x:Type v:FlowChartView}">
-		<Setter Property="Background" Value="{StaticResource FlowChartViewBackGroundColor}"/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type v:FlowChartView}">
-					<Border x:Name="PART_Background"
+    <!-- FlowChartView style -->
+    <Style TargetType="{x:Type v:FlowChartView}">
+        <Setter Property="Background" Value="{StaticResource FlowChartViewBackGroundColor}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type v:FlowChartView}">
+                    <Border x:Name="PART_Background"
 							Background="{TemplateBinding Background}"
                             BorderThickness="0"
                             Margin="{TemplateBinding Margin}"
                             Padding="0">
-						<Grid ClipToBounds="True">
-							<!-- Connections -->
-							<v:ConnectorViewsContainer x:Name="PART_ConnectorViewsContainer"
+                        <Grid ClipToBounds="True">
+                            <!-- Connections -->
+                            <v:ConnectorViewsContainer x:Name="PART_ConnectorViewsContainer"
 													   ItemsSource="{Binding ConnectorViewModels}">
-								<ItemsControl.ItemsPanel>
-									<ItemsPanelTemplate>
-										<Canvas IsHitTestVisible="True"/>
-									</ItemsPanelTemplate>
-								</ItemsControl.ItemsPanel>
-							</v:ConnectorViewsContainer>
-							<!-- Nodes -->
-							<v:NodeViewsContainer x:Name="PART_NodeViewsContainer"
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas IsHitTestVisible="True"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </v:ConnectorViewsContainer>
+                            <!-- Nodes -->
+                            <v:NodeViewsContainer x:Name="PART_NodeViewsContainer"
 												  IsHitTestVisible="True" 
 												  ItemsSource="{Binding NodeViewModels}">
-								<ItemsControl.ItemsPanel>
-									<ItemsPanelTemplate>
-										<Canvas/>
-									</ItemsPanelTemplate>
-								</ItemsControl.ItemsPanel>
-							</v:NodeViewsContainer>
-							<!-- Drag & Selection -->
-							<Canvas Name="PART_DragAndSelectionCanvas" 
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </v:NodeViewsContainer>
+                            <!-- Drag & Selection -->
+                            <Canvas Name="PART_DragAndSelectionCanvas" 
 									Visibility="{Binding SelectionVisibility}"
 									IsHitTestVisible="False"
 									HorizontalAlignment="Left" VerticalAlignment="Top">
-								<Border Canvas.Left="{Binding SelectionStartX}"
+                                <Border Canvas.Left="{Binding SelectionStartX}"
 										Canvas.Top="{Binding SelectionStartY}"
 										Canvas.ZIndex="1"
 										Width="{Binding SelectionWidth}"
 										Height="{Binding SelectionHeight}"
 										BorderBrush="LightBlue"
 										BorderThickness="2"/>
-								<Border Canvas.Left="{Binding SelectionStartX}"
+                                <Border Canvas.Left="{Binding SelectionStartX}"
 										Canvas.Top="{Binding SelectionStartY}"
 										Canvas.ZIndex="0"
 										Width="{Binding SelectionWidth}"
 										Height="{Binding SelectionHeight}"
 										Background="LightBlue"
 										Opacity="0.4"/>
-							</Canvas>
-							<!-- Log -->
-							<Grid>
-								<ListView IsHitTestVisible="False" BorderThickness="0" Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Left" ItemsSource="{TemplateBinding Logs}">
-									<ListView.ItemTemplate>
-										<DataTemplate>
-											<TextBlock Style="{StaticResource LogTextBlockStyle}" Text="{Binding}"/>
-										</DataTemplate>
-									</ListView.ItemTemplate>
-								</ListView>
-							</Grid>
+                            </Canvas>
+                            <!-- Log -->
+                            <Grid>
+                                <ListView IsHitTestVisible="False" BorderThickness="0" Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Left" ItemsSource="{TemplateBinding Logs}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Style="{StaticResource LogTextBlockStyle}" Text="{Binding}"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
 
-						</Grid>
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

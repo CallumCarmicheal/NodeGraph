@@ -35,47 +35,14 @@ namespace NodeGraph.View {
             }
         }
 
-        public bool IsSelected {
-            get { return (bool)GetValue(IsSelectedProperty); }
-            set { SetValue(IsSelectedProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsSelectedProperty =
-            DependencyProperty.Register("IsSelected", typeof(bool), typeof(NodeView), new PropertyMetadata(false));
-
-        public bool HasConnection {
-            get { return (bool)GetValue(HasConnectionProperty); }
-            set { SetValue(HasConnectionProperty, value); }
-        }
-
-        public static readonly DependencyProperty HasConnectionProperty =
-            DependencyProperty.Register("HasConnection", typeof(bool), typeof(NodeView), new PropertyMetadata(false));
-
-        public Thickness SelectionThickness {
-            get { return (Thickness)GetValue(SelectionThicknessProperty); }
-            set { SetValue(SelectionThicknessProperty, value); }
-        }
-
-        public static readonly DependencyProperty SelectionThicknessProperty =
-            DependencyProperty.Register("SelectionThickness", typeof(Thickness), typeof(NodeView), new PropertyMetadata(new Thickness(2.0)));
-
-        public double CornerRadius {
-            get { return (double)GetValue(CornerRadiusProperty); }
-            set { SetValue(CornerRadiusProperty, value); }
-        }
-        public static readonly DependencyProperty CornerRadiusProperty =
-            DependencyProperty.Register("CornerRadius", typeof(double), typeof(NodeView), new PropertyMetadata(8.0));
-
-        public BitmapImage ExecutionStateImage {
-            get { return (BitmapImage)GetValue(ExecutionStateImageProperty); }
-            set { SetValue(ExecutionStateImageProperty, value); }
-        }
-        public static readonly DependencyProperty ExecutionStateImageProperty =
-            DependencyProperty.Register("ExecutionStateImage", typeof(BitmapImage), typeof(NodeView),
-                new PropertyMetadata(null));
-
         public NodeGraphManager NodeGraphManager { get; internal set; }
 
+
+        // View properties
+
+        public Thickness SelectionThickness { get => ViewModel.SelectionThickness; set => ViewModel.SelectionThickness = value; }
+        public double CornerRadius { get => ViewModel.CornerRadius; set => ViewModel.CornerRadius = value; }
+        public double CornerRadiusProperty { get => CornerRadius; set => CornerRadius = value; }
         #endregion // Properties
 
         #region Constructors
@@ -147,13 +114,18 @@ namespace NodeGraph.View {
                 return;
             }
 
-            IsSelected = ViewModel.IsSelected;
-            HasConnection = (0 < ViewModel.InputFlowPortViewModels.Count) ||
+            //IsSelected = ViewModel.IsSelected;
+
+            ViewModel.PropertyChanged -= ViewModelPropertyChanged;
+
+            ViewModel.HasConnection = (0 < ViewModel.InputFlowPortViewModels.Count) ||
                 (0 < ViewModel.OutputFlowPortViewModels.Count) ||
                 (0 < ViewModel.InputPropertyPortViewModels.Count) ||
                 (0 < ViewModel.OutputPropertyPortViewModels.Count);
 
-            ExecutionStateImage = _ExecutionStateImages[(int)ViewModel.Model.ExecutionState];
+            ViewModel.ExecutionStateImage = _ExecutionStateImages[(int)ViewModel.Model.ExecutionState];
+
+            ViewModel.PropertyChanged += ViewModelPropertyChanged;
         }
 
         protected virtual void ViewModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -302,7 +274,7 @@ namespace NodeGraph.View {
             base.OnMouseMove(e);
 
             if (NodeGraphManager.IsNodeDragging && (NodeGraphManager.MouseLeftDownNode == ViewModel.Model) &&
-                !IsSelected) {
+                !ViewModel.IsSelected) {
                 Node node = ViewModel.Model;
                 FlowChart flowChart = node.Owner;
                 NodeGraphManager.TrySelection(flowChart, node, false, false, false);
@@ -341,4 +313,6 @@ namespace NodeGraph.View {
 
         #endregion // RenderTransform
     }
+
+    
 }

@@ -132,6 +132,7 @@
     <Compile Include="View\NodePropertyPortViewsContainer.cs" />
     <Compile Include="View\NodeView.cs" />
     <Compile Include="View\NodeViewsContainer.cs" />
+    <Compile Include="View\ViewModels\NodeViewViewModel.cs" />
     <Compile Include="View\ViewUtil.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

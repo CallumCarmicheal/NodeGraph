@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace NodeGraph.ViewModel {
     [NodeViewModel()]
@@ -131,5 +132,48 @@ namespace NodeGraph.ViewModel {
         }
 
         #endregion // Events
+
+
+        #region DependancyProperty Extracted
+
+        protected bool _HasConnection;
+        public bool HasConnection {
+            get { return _HasConnection; }
+            set {
+                if (value != _HasConnection) _HasConnection = value;
+                RaisePropertyChanged("HasConnection");
+            }
+        }
+
+
+        protected Thickness _SelectionThickness;
+        public Thickness SelectionThickness {
+            get { return _SelectionThickness; }
+            set {
+                if (value != null || value != _SelectionThickness) _SelectionThickness = value;
+                RaisePropertyChanged("SelectionThickness");
+            }
+        }
+
+
+        protected double _CornerRadius;
+        public double CornerRadius {
+            get { return _CornerRadius; }
+            set {
+                if (value != _CornerRadius) _CornerRadius = value;
+                RaisePropertyChanged("CornerRadius");
+            }
+        }
+
+
+        protected BitmapImage _ExecutionStateImage;
+        public BitmapImage ExecutionStateImage {
+            get { return _ExecutionStateImage; }
+            set {
+                if (value != null || value != _ExecutionStateImage) _ExecutionStateImage = value;
+                RaisePropertyChanged("ExecutionStateImage");
+            }
+        }
+        #endregion
     }
 }
