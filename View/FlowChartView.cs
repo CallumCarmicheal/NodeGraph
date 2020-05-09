@@ -101,20 +101,20 @@ namespace NodeGraph.View {
             modelType = ModelType.FlowChart;
 
             HitTestResult hitResult = VisualTreeHelper.HitTest(this, mousePos);
-            if ( (null != hitResult) && (null != hitResult.VisualHit) ) {
+            if ((null != hitResult) && (null != hitResult.VisualHit)) {
 
                 DependencyObject hit = hitResult.VisualHit;
                 NodePortView portView = ViewUtil.FindFirstParent<NodePortView>(hit);
-                if ( null != portView ) {
+                if (null != portView) {
                     model = portView.ViewModel.Model;
-                    if ( model is NodeFlowPort ) {
+                    if (model is NodeFlowPort) {
                         modelType = ModelType.PropertyPort;
-                    } else if ( typeof(NodeFlowPort).IsAssignableFrom(portView.ViewModel.Model.GetType()) ) {
+                    } else if (typeof(NodeFlowPort).IsAssignableFrom(portView.ViewModel.Model.GetType())) {
                         modelType = ModelType.FlowPort;
                     }
                 } else {
                     NodeView nodeView = ViewUtil.FindFirstParent<NodeView>(hit);
-                    if ( null != nodeView ) {
+                    if (null != nodeView) {
                         model = nodeView.ViewModel.Model;
                         modelType = ModelType.Node;
                     } else {
@@ -147,15 +147,15 @@ namespace NodeGraph.View {
             base.OnApplyTemplate();
 
             _PartConnectorViewsContainer = GetTemplateChild("PART_ConnectorViewsContainer") as FrameworkElement;
-            if ( null == _PartConnectorViewsContainer )
+            if (null == _PartConnectorViewsContainer)
                 throw new Exception("PART_ConnectorViewsContainer can not be null in FlowChartView");
 
             _PartNodeViewsContainer = GetTemplateChild("PART_NodeViewsContainer") as FrameworkElement;
-            if ( null == _PartNodeViewsContainer )
+            if (null == _PartNodeViewsContainer)
                 throw new Exception("PART_NodeViewsContainer can not be null in FlowChartView");
 
             _PartDragAndSelectionCanvas = GetTemplateChild("PART_DragAndSelectionCanvas") as FrameworkElement;
-            if ( null == _PartDragAndSelectionCanvas )
+            if (null == _PartDragAndSelectionCanvas)
                 throw new Exception("PART_DragAndSelectionCanvas can not be null in FlowChartView");
         }
 
@@ -170,21 +170,21 @@ namespace NodeGraph.View {
 
         private void FlowChartView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             ViewModel = DataContext as FlowChartViewModel;
-            if ( null == ViewModel )
+            if (null == ViewModel)
                 return;
 
             ViewModel.View = this;
             ViewModel.PropertyChanged += ViewModelPropertyChanged;
 
-            if ( null == _ConnectorCanvas ) {
+            if (null == _ConnectorCanvas) {
                 _ConnectorCanvas = ViewUtil.FindChild<Canvas>(_PartNodeViewsContainer);
-                if ( null == _PartDragAndSelectionCanvas )
+                if (null == _PartDragAndSelectionCanvas)
                     throw new Exception("Canvas can not be null in PART_ConnectorViewsContainer");
             }
 
-            if ( null == _NodeCanvas ) {
+            if (null == _NodeCanvas) {
                 _NodeCanvas = ViewUtil.FindChild<Canvas>(_PartNodeViewsContainer);
-                if ( null == _PartDragAndSelectionCanvas )
+                if (null == _PartDragAndSelectionCanvas)
                     throw new Exception("Canvas can not be null in PART_NodeViewsContainer");
             }
 
@@ -192,7 +192,7 @@ namespace NodeGraph.View {
         }
 
         protected virtual void SynchronizeProperties() {
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
         }
@@ -208,7 +208,7 @@ namespace NodeGraph.View {
         private void _ZoomAndPan_UpdateTransform() {
             _NodeCanvas.RenderTransform = new MatrixTransform(_ZoomAndPan.Matrix);
 
-            foreach ( var pair in NodeGraphManager.Nodes ) {
+            foreach (var pair in NodeGraphManager.Nodes) {
                 NodeView nodeView = pair.Value.ViewModel.View;
                 nodeView.OnCanvasRenderTransformChanged();
             }
@@ -222,7 +222,7 @@ namespace NodeGraph.View {
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
             base.OnMouseLeftButtonDown(e);
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
@@ -233,9 +233,9 @@ namespace NodeGraph.View {
             _LeftButtonDownPos = e.GetPosition(this);
             _PrevMousePos = _LeftButtonDownPos;
 
-            if ( !NodeGraphManager.IsNodeDragging &&
+            if (!NodeGraphManager.IsNodeDragging &&
                 !NodeGraphManager.IsConnecting &&
-                !NodeGraphManager.IsSelecting ) {
+                !NodeGraphManager.IsSelecting) {
                 Point mousePos = e.GetPosition(this);
 
                 NodeGraphManager.BeginDragSelection(ViewModel.Model,
@@ -250,7 +250,7 @@ namespace NodeGraph.View {
                 bool bShift = Keyboard.IsKeyDown(Key.LeftShift);
                 bool bAlt = Keyboard.IsKeyDown(Key.LeftAlt);
 
-                if ( !bCtrl && !bShift && !bAlt ) {
+                if (!bCtrl && !bShift && !bAlt) {
                     NodeGraphManager.DeselectAllNodes(ViewModel.Model);
                 }
             }
@@ -259,7 +259,7 @@ namespace NodeGraph.View {
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
             base.OnMouseLeftButtonUp(e);
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
@@ -268,7 +268,7 @@ namespace NodeGraph.View {
             NodeGraphManager.EndConnection();
             NodeGraphManager.EndDragNode();
 
-            if ( NodeGraphManager.IsSelecting ) {
+            if (NodeGraphManager.IsSelecting) {
                 bool bChanged = false;
                 flowChart.History.BeginTransaction("Selecting");
                 {
@@ -277,8 +277,8 @@ namespace NodeGraph.View {
 
                 Point mousePos = e.GetPosition(this);
 
-                if ( (0 != (int)(mousePos.X - _LeftButtonDownPos.X)) ||
-                    (0 != (int)(mousePos.Y - _LeftButtonDownPos.Y)) ) {
+                if ((0 != (int)(mousePos.X - _LeftButtonDownPos.X)) ||
+                    (0 != (int)(mousePos.Y - _LeftButtonDownPos.Y))) {
                     flowChart.History.AddCommand(new History.ZoomAndPanCommand(NodeGraphManager,
                         "ZoomAndPan", ViewModel.Model, _ZoomAndPanStartMatrix, ZoomAndPan.Matrix));
                     bChanged = true;
@@ -292,7 +292,7 @@ namespace NodeGraph.View {
         protected override void OnMouseRightButtonDown(MouseButtonEventArgs e) {
             base.OnMouseRightButtonDown(e);
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
@@ -302,7 +302,7 @@ namespace NodeGraph.View {
 
             _ZoomAndPanStartMatrix = ZoomAndPan.Matrix;
 
-            if ( !NodeGraphManager.IsDragging ) {
+            if (!NodeGraphManager.IsDragging) {
                 _IsDraggingCanvas = true;
 
                 Mouse.Capture(this, CaptureMode.SubTree);
@@ -315,7 +315,7 @@ namespace NodeGraph.View {
         protected override void OnMouseRightButtonUp(MouseButtonEventArgs e) {
             base.OnMouseRightButtonUp(e);
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
@@ -330,12 +330,12 @@ namespace NodeGraph.View {
 
             bool wasDraggingCanvas = (5.0 < diff.X) || (5.0 < diff.Y);
 
-            if ( _IsDraggingCanvas ) {
+            if (_IsDraggingCanvas) {
                 _IsDraggingCanvas = false;
                 Mouse.Capture(null);
 
                 History.NodeGraphHistory history = ViewModel.Model.History;
-                if ( wasDraggingCanvas ) {
+                if (wasDraggingCanvas) {
                     history.AddCommand(new History.ZoomAndPanCommand(NodeGraphManager,
                         "ZoomAndPan", ViewModel.Model, _ZoomAndPanStartMatrix, ZoomAndPan.Matrix));
 
@@ -345,13 +345,13 @@ namespace NodeGraph.View {
                 }
             }
 
-            if ( !wasDraggingCanvas ) {
+            if (!wasDraggingCanvas) {
                 Point viewSpacePos;
                 Point modelSpacePos;
                 ModelType modelType;
                 ModelBase model = FindModelUnderMouse(mousePos, out viewSpacePos, out modelSpacePos, out modelType);
 
-                if ( null != model ) {
+                if (null != model) {
                     BuildContextMenuArgs args = new BuildContextMenuArgs();
                     args.ViewSpaceMouseLocation = viewSpacePos;
                     args.ModelSpaceMouseLocation = modelSpacePos;
@@ -360,7 +360,7 @@ namespace NodeGraph.View {
                     ContextMenu.Closed += ContextMenu_Closed;
                     args.ContextMenu = ContextMenu;
 
-                    if ( !NodeGraphManager.InvokeBuildContextMenu(model, args) ) {
+                    if (!NodeGraphManager.InvokeBuildContextMenu(model, args)) {
                         ContextMenu = null;
                     }
                 }
@@ -372,12 +372,12 @@ namespace NodeGraph.View {
         }
 
         private void UpdateDragging(Point mousePos, Point delta) {
-            if ( NodeGraphManager.IsConnecting ) {
+            if (NodeGraphManager.IsConnecting) {
                 NodeGraphManager.UpdateConnection(mousePos);
-            } else if ( NodeGraphManager.IsNodeDragging ) {
+            } else if (NodeGraphManager.IsNodeDragging) {
                 double invScale = 1.0f / _ZoomAndPan.Scale;
                 NodeGraphManager.DragNode(new Point(delta.X * invScale, delta.Y * invScale));
-            } else if ( NodeGraphManager.IsSelecting ) {
+            } else if (NodeGraphManager.IsSelecting) {
                 // gather nodes in area.
 
                 bool bCtrl = Keyboard.IsKeyDown(Key.LeftCtrl);
@@ -402,7 +402,7 @@ namespace NodeGraph.View {
         protected override void OnMouseMove(MouseEventArgs e) {
             base.OnMouseMove(e);
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
@@ -412,10 +412,10 @@ namespace NodeGraph.View {
             Point delta = new Point(mousePos.X - _PrevMousePos.X,
                 mousePos.Y - _PrevMousePos.Y);
 
-            if ( NodeGraphManager.IsDragging ) {
+            if (NodeGraphManager.IsDragging) {
                 UpdateDragging(mousePos, delta);
             } else {
-                if ( _IsDraggingCanvas ) {
+                if (_IsDraggingCanvas) {
                     _ZoomAndPan.StartX -= delta.X;
                     _ZoomAndPan.StartY -= delta.Y;
                 }
@@ -429,7 +429,7 @@ namespace NodeGraph.View {
         protected override void OnMouseLeave(MouseEventArgs e) {
             base.OnMouseLeave(e);
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
@@ -445,7 +445,7 @@ namespace NodeGraph.View {
         protected override void OnLostFocus(RoutedEventArgs e) {
             base.OnLostFocus(e);
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
@@ -453,7 +453,7 @@ namespace NodeGraph.View {
             NodeGraphManager.EndDragNode();
             NodeGraphManager.EndDragSelection(true);
 
-            if ( _IsDraggingCanvas ) {
+            if (_IsDraggingCanvas) {
                 _IsDraggingCanvas = false;
                 Mouse.Capture(null);
 
@@ -468,11 +468,11 @@ namespace NodeGraph.View {
         protected override void OnMouseWheel(MouseWheelEventArgs e) {
             base.OnMouseWheel(e);
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
-            if ( !_IsWheeling ) {
+            if (!_IsWheeling) {
                 History.NodeGraphHistory history = ViewModel.Model.History;
                 history.BeginTransaction("Zooming");
                 _ZoomAndPanStartMatrix = ZoomAndPan.Matrix;
@@ -504,22 +504,22 @@ namespace NodeGraph.View {
         private void Timer_Tick(object sender, EventArgs e) {
             _CurrentTime += _Timer.Interval.Milliseconds;
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
-            if ( NodeGraphManager.IsDragging ) {
+            if (NodeGraphManager.IsDragging) {
                 MouseArea area = CheckMouseArea();
 
-                if ( MouseArea.None != area ) {
+                if (MouseArea.None != area) {
                     Point delta = new Point(0.0, 0.0);
-                    if ( MouseArea.Left == (area & MouseArea.Left) )
+                    if (MouseArea.Left == (area & MouseArea.Left))
                         delta.X = -10.0;
-                    if ( MouseArea.Right == (area & MouseArea.Right) )
+                    if (MouseArea.Right == (area & MouseArea.Right))
                         delta.X = 10.0;
-                    if ( MouseArea.Top == (area & MouseArea.Top) )
+                    if (MouseArea.Top == (area & MouseArea.Top))
                         delta.Y = -10.0;
-                    if ( MouseArea.Bottom == (area & MouseArea.Bottom) )
+                    if (MouseArea.Bottom == (area & MouseArea.Bottom))
                         delta.Y = 10.0;
 
                     Point mousePos = Mouse.GetPosition(this);
@@ -530,8 +530,8 @@ namespace NodeGraph.View {
                     _ZoomAndPan.StartX += delta.X;
                     _ZoomAndPan.StartY += delta.Y;
                 }
-            } else if ( _IsWheeling ) {
-                if ( 200 < (_CurrentTime - _WheelStartTime) ) {
+            } else if (_IsWheeling) {
+                if (200 < (_CurrentTime - _WheelStartTime)) {
                     _IsWheeling = false;
 
                     History.NodeGraphHistory history = ViewModel.Model.History;
@@ -553,40 +553,40 @@ namespace NodeGraph.View {
         protected override void OnKeyDown(KeyEventArgs e) {
             base.OnKeyDown(e);
 
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
-            if ( IsFocused ) {
-                if ( Key.Delete == e.Key ) {
+            if (IsFocused) {
+                if (Key.Delete == e.Key) {
                     FlowChart flowChart = ViewModel.Model;
                     flowChart.History.BeginTransaction("Destroy Selected Nodes");
                     {
                         NodeGraphManager.DestroySelectedNodes(ViewModel.Model);
                     }
                     flowChart.History.EndTransaction(false);
-                } else if ( Key.Escape == e.Key ) {
+                } else if (Key.Escape == e.Key) {
                     FlowChart flowChart = ViewModel.Model;
                     flowChart.History.BeginTransaction("Destroy Selected Nodes");
                     {
                         NodeGraphManager.DeselectAllNodes(ViewModel.Model);
                     }
                     flowChart.History.EndTransaction(false);
-                } else if ( Key.A == e.Key ) {
-                    if ( Keyboard.IsKeyDown(Key.LeftCtrl) ) {
+                } else if (Key.A == e.Key) {
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
                         NodeGraphManager.SelectAllNodes(ViewModel.Model);
                     } else {
                         FitNodesToView(false);
                     }
-                } else if ( Key.F == e.Key ) {
+                } else if (Key.F == e.Key) {
                     FitNodesToView(true);
-                } else if ( Key.Z == e.Key ) {
-                    if ( Keyboard.IsKeyDown(Key.LeftCtrl) ) {
+                } else if (Key.Z == e.Key) {
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
                         History.NodeGraphHistory history = ViewModel.Model.History;
                         history.Undo();
                     }
-                } else if ( Key.Y == e.Key ) {
-                    if ( Keyboard.IsKeyDown(Key.LeftCtrl) ) {
+                } else if (Key.Y == e.Key) {
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
                         History.NodeGraphHistory history = ViewModel.Model.History;
                         history.Redo();
                     }
@@ -613,13 +613,13 @@ namespace NodeGraph.View {
 
             MouseArea area = MouseArea.None;
 
-            if ( absPosition.X < (absTopLeft.X + 4.0) )
+            if (absPosition.X < (absTopLeft.X + 4.0))
                 area |= MouseArea.Left;
-            if ( absPosition.X > (absBottomRight.X - 4.0) )
+            if (absPosition.X > (absBottomRight.X - 4.0))
                 area |= MouseArea.Right;
-            if ( absPosition.Y < (absTopLeft.Y + 4.0) )
+            if (absPosition.Y < (absTopLeft.Y + 4.0))
                 area |= MouseArea.Top;
-            if ( absPosition.Y > (absBottomRight.Y - 4.0) )
+            if (absPosition.Y > (absBottomRight.Y - 4.0))
                 area |= MouseArea.Bottom;
 
             return area;
@@ -635,7 +635,7 @@ namespace NodeGraph.View {
             double minY;
             double maxY;
             NodeGraphManager.CalculateContentSize(ViewModel.Model, bOnlySelected, out minX, out maxX, out minY, out maxY);
-            if ( (minX == maxX) || (minY == maxY) ) {
+            if ((minX == maxX) || (minY == maxY)) {
                 return;
             }
 
@@ -672,8 +672,8 @@ namespace NodeGraph.View {
                 _ZoomAndPan.StartX -= vsDelta.X;
                 _ZoomAndPan.StartY -= vsDelta.Y;
 
-                if ( 0 != (int)(_ZoomAndPan.Matrix.OffsetX - _ZoomAndPanStartMatrix.OffsetX) ||
-                    0 != (int)(_ZoomAndPan.Matrix.OffsetX - _ZoomAndPanStartMatrix.OffsetX) ) {
+                if (0 != (int)(_ZoomAndPan.Matrix.OffsetX - _ZoomAndPanStartMatrix.OffsetX) ||
+                    0 != (int)(_ZoomAndPan.Matrix.OffsetX - _ZoomAndPanStartMatrix.OffsetX)) {
                     flowChart.History.AddCommand(new History.ZoomAndPanCommand(NodeGraphManager,
                         "ZoomAndPan", ViewModel.Model, _ZoomAndPanStartMatrix, ZoomAndPan.Matrix));
                 }
@@ -693,7 +693,7 @@ namespace NodeGraph.View {
 
             eventArgs = null;
 
-            if ( null != model ) {
+            if (null != model) {
                 eventArgs = new NodeGraphDragEventArgs();
                 eventArgs.ViewSpaceMouseLocation = viewSpacePos;
                 eventArgs.ModelSpaceMouseLocation = modelSpacePos;
@@ -707,7 +707,7 @@ namespace NodeGraph.View {
         private void FlowChartView_Drop(object sender, DragEventArgs args) {
             NodeGraphDragEventArgs eventArgs;
             ModelBase model = BuidNodeGraphDragEventArgs(args, out eventArgs);
-            if ( null != model ) {
+            if (null != model) {
                 NodeGraphManager.InvokeDrop(model, eventArgs);
             }
         }
@@ -715,7 +715,7 @@ namespace NodeGraph.View {
         private void FlowChartView_DragOver(object sender, DragEventArgs args) {
             NodeGraphDragEventArgs eventArgs;
             ModelBase model = BuidNodeGraphDragEventArgs(args, out eventArgs);
-            if ( null != model ) {
+            if (null != model) {
                 NodeGraphManager.InvokeDragOver(model, eventArgs);
             }
         }
@@ -723,7 +723,7 @@ namespace NodeGraph.View {
         private void FlowChartView_DragLeave(object sender, DragEventArgs args) {
             NodeGraphDragEventArgs eventArgs;
             ModelBase model = BuidNodeGraphDragEventArgs(args, out eventArgs);
-            if ( null != model ) {
+            if (null != model) {
                 NodeGraphManager.InvokeDragLeave(model, eventArgs);
             }
         }
@@ -731,7 +731,7 @@ namespace NodeGraph.View {
         private void FlowChartView_DragEnter(object sender, DragEventArgs args) {
             NodeGraphDragEventArgs eventArgs;
             ModelBase model = BuidNodeGraphDragEventArgs(args, out eventArgs);
-            if ( null != model ) {
+            if (null != model) {
                 NodeGraphManager.InvokeDragEnter(model, eventArgs);
             }
         }
@@ -746,7 +746,7 @@ namespace NodeGraph.View {
         public double ViewWidth {
             get { return _ViewWidth; }
             set {
-                if ( value != _ViewWidth ) {
+                if (value != _ViewWidth) {
                     _ViewWidth = value;
                 }
             }
@@ -756,7 +756,7 @@ namespace NodeGraph.View {
         public double ViewHeight {
             get { return _ViewHeight; }
             set {
-                if ( value != _ViewHeight ) {
+                if (value != _ViewHeight) {
                     _ViewHeight = value;
                 }
             }
@@ -766,7 +766,7 @@ namespace NodeGraph.View {
         public double StartX {
             get { return _StartX; }
             set {
-                if ( value != _StartX ) {
+                if (value != _StartX) {
                     _StartX = value;
                     _UpdateTransform();
                 }
@@ -777,7 +777,7 @@ namespace NodeGraph.View {
         public double StartY {
             get { return _StartY; }
             set {
-                if ( value != _StartY ) {
+                if (value != _StartY) {
                     _StartY = value;
                     _UpdateTransform();
                 }
@@ -788,7 +788,7 @@ namespace NodeGraph.View {
         public double Scale {
             get { return _Scale; }
             set {
-                if ( value != _Scale ) {
+                if (value != _Scale) {
                     _Scale = value;
                     _UpdateTransform();
                 }
@@ -799,7 +799,7 @@ namespace NodeGraph.View {
         public Matrix Matrix {
             get { return _Matrix; }
             set {
-                if ( value != _Matrix ) {
+                if (value != _Matrix) {
                     _Matrix = value;
                     _MatrixInv = value;
                     _MatrixInv.Invert();

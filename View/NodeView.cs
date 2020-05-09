@@ -109,6 +109,8 @@ namespace NodeGraph.View {
 
             _ExecutionStateImages[3] = LoadBitmapImage(
                 new Uri("pack://application:,,,/NodeGraph;component/Resources/Images/Failed.png"));
+
+
         }
 
         #endregion // Constructors
@@ -129,11 +131,12 @@ namespace NodeGraph.View {
         }
 
         private void NodeView_Unloaded(object sender, RoutedEventArgs e) {
+
         }
 
         private void NodeView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             ViewModel = DataContext as NodeViewModel;
-            if ( null == ViewModel )
+            if (null == ViewModel)
                 throw new Exception("ViewModel must be bound as DataContext in NodeView.");
             ViewModel.View = this;
             ViewModel.PropertyChanged += ViewModelPropertyChanged;
@@ -142,7 +145,7 @@ namespace NodeGraph.View {
         }
 
         protected virtual void SynchronizeProperties() {
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
@@ -167,7 +170,7 @@ namespace NodeGraph.View {
             base.OnApplyTemplate();
 
             _Part_Header = Template.FindName("PART_Header", this) as EditableTextBlock;
-            if ( null != _Part_Header ) {
+            if (null != _Part_Header) {
                 _Part_Header.MouseDown += _Part_Header_MouseDown;
             }
         }
@@ -179,10 +182,10 @@ namespace NodeGraph.View {
         private void _Part_Header_MouseDown(object sender, MouseButtonEventArgs e) {
             Keyboard.Focus(_Part_Header);
 
-            if ( 0 == _ClickCount ) {
+            if (0 == _ClickCount) {
                 _ClickTimer.Start();
                 _ClickCount++;
-            } else if ( 1 == _ClickCount ) {
+            } else if (1 == _ClickCount) {
                 _Part_Header.IsEditing = true;
                 Keyboard.Focus(_Part_Header);
                 _ClickCount = 0;
@@ -201,7 +204,7 @@ namespace NodeGraph.View {
 
             FlowChart flowChart = ViewModel.Model.Owner;
 
-            if ( NodeGraphManager.IsConnecting ) {
+            if (NodeGraphManager.IsConnecting) {
                 bool bConnected;
                 flowChart.History.BeginTransaction("Creating Connection");
                 {
@@ -210,7 +213,7 @@ namespace NodeGraph.View {
                 flowChart.History.EndTransaction(!bConnected);
             }
 
-            if ( NodeGraphManager.IsSelecting ) {
+            if (NodeGraphManager.IsSelecting) {
                 bool bChanged = false;
                 flowChart.History.BeginTransaction("Selecting");
                 {
@@ -219,8 +222,8 @@ namespace NodeGraph.View {
                 flowChart.History.EndTransaction(!bChanged);
             }
 
-            if ( !NodeGraphManager.AreNodesReallyDragged &&
-                NodeGraphManager.MouseLeftDownNode == ViewModel.Model ) {
+            if (!NodeGraphManager.AreNodesReallyDragged &&
+                NodeGraphManager.MouseLeftDownNode == ViewModel.Model) {
                 flowChart.History.BeginTransaction("Selection");
                 {
                     NodeGraphManager.TrySelection(flowChart, ViewModel.Model,
@@ -268,16 +271,16 @@ namespace NodeGraph.View {
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e) {
             base.OnPreviewMouseLeftButtonUp(e);
 
-            if ( NodeGraphManager.IsNodeDragging ) {
+            if (NodeGraphManager.IsNodeDragging) {
                 FlowChart flowChart = ViewModel.Model.Owner;
 
                 Node node = ViewModel.Model;
                 Point delta = new Point(node.X - _DraggingStartPos.X, node.Y - _DraggingStartPos.Y);
 
-                if ( (0 != (int)delta.X) &&
-                    (0 != (int)delta.Y) ) {
+                if ((0 != (int)delta.X) &&
+                    (0 != (int)delta.Y)) {
                     ObservableCollection<Guid> selectionList = NodeGraphManager.GetSelectionList(node.Owner);
-                    foreach ( var guid in selectionList ) {
+                    foreach (var guid in selectionList) {
                         Node currentNode = NodeGraphManager.FindNode(guid);
 
                         flowChart.History.AddCommand(new History.NodePropertyCommand(NodeGraphManager,
@@ -300,9 +303,8 @@ namespace NodeGraph.View {
         protected override void OnMouseMove(MouseEventArgs e) {
             base.OnMouseMove(e);
 
-            if ( NodeGraphManager.IsNodeDragging &&
-                (NodeGraphManager.MouseLeftDownNode == ViewModel.Model) &&
-                !IsSelected ) {
+            if (NodeGraphManager.IsNodeDragging && (NodeGraphManager.MouseLeftDownNode == ViewModel.Model) &&
+                !IsSelected) {
                 Node node = ViewModel.Model;
                 FlowChart flowChart = node.Owner;
                 NodeGraphManager.TrySelection(flowChart, node, false, false, false);
@@ -314,11 +316,29 @@ namespace NodeGraph.View {
         #region RenderTrasnform
 
         public void OnCanvasRenderTransformChanged() {
-            Matrix matrix = (VisualParent as Canvas).RenderTransform.Value;
-            double scale = matrix.M11;
+            if (VisualParent != null) {
+                Matrix matrix = (VisualParent as Canvas).RenderTransform.Value;
+                double scale = matrix.M11;
 
-            SelectionThickness = new Thickness(2.0 / scale);
-            CornerRadius = 8.0 / scale;
+                SelectionThickness = new Thickness(2.0 / scale);
+                CornerRadius = 8.0 / scale;
+            } else {
+#if(DEBUG)
+                // This happens when ever you recreate a nodegraphmanager on a view that is already initailized
+                //
+                //MessageBox.Show("NodeGraph failed to render transformed\n" +
+                //    "Path: NodeGraph.View.NodeView.cs @ OnCanvasRenderTransformChanged" +
+                //    "Reason: VisualParent == null");
+#endif
+            }
+        }
+
+        protected override void OnVisualParentChanged(DependencyObject oldParent) {
+            base.OnVisualParentChanged(oldParent);
+
+            if (VisualParent != null) {
+                OnCanvasRenderTransformChanged();
+            }
         }
 
         #endregion // RenderTransform

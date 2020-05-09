@@ -40,9 +40,9 @@ namespace NodeGraph.View {
 
             var attrs = item.GetType().GetCustomAttributes(typeof(NodePropertyPortViewModelAttribute), false) as NodePropertyPortViewModelAttribute[];
 
-            if ( 0 == attrs.Length ) {
+            if (0 == attrs.Length) {
                 throw new Exception("A NodePropertyPortViewModelAttribute must exist for NodePropertyPortViewModel class.");
-            } else if ( 1 < attrs.Length ) {
+            } else if (1 < attrs.Length) {
                 throw new Exception("A NodePropertyPortViewModelAttribute must exist only one.");
             }
 
@@ -56,9 +56,9 @@ namespace NodeGraph.View {
 
             var attrs = item.GetType().GetCustomAttributes(typeof(NodePropertyPortViewModelAttribute), false) as NodePropertyPortViewModelAttribute[];
 
-            if ( 0 == attrs.Length ) {
+            if (0 == attrs.Length) {
                 throw new Exception("A NodePropertyPortViewModelAttribute must exist for NodePropertyPortViewModel class.");
-            } else if ( 1 < attrs.Length ) {
+            } else if (1 < attrs.Length) {
                 throw new Exception("A NodePropertyPortViewModelAttribute must exist only one.");
             }
 
@@ -69,12 +69,12 @@ namespace NodeGraph.View {
             };
 
             Style style = resourceDictionary[attrs[0].ViewStyleName] as Style;
-            if ( null == style ) {
+            if (null == style) {
                 style = Application.Current.TryFindResource(attrs[0].ViewStyleName) as Style;
             }
             fe.Style = style;
 
-            if ( null == fe.Style )
+            if (null == fe.Style)
                 throw new Exception(String.Format("{0} does not exist", attrs[0].ViewStyleName));
         }
 

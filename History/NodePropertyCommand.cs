@@ -31,11 +31,11 @@ namespace NodeGraph.History {
 
         public override void Undo() {
             Node node = NodeGraphManager.FindNode(Guid);
-            if ( null == node ) {
+            if (null == node) {
                 throw new InvalidOperationException("Node does not exist.");
             }
 
-            if ( "IsSelected" == PropertyName ) {
+            if ("IsSelected" == PropertyName) {
                 UpdateSelection((bool)UndoParams);
             } else {
                 Type type = node.GetType();
@@ -46,11 +46,11 @@ namespace NodeGraph.History {
 
         public override void Redo() {
             Node node = NodeGraphManager.FindNode(Guid);
-            if ( null == node ) {
+            if (null == node) {
                 throw new InvalidOperationException("Node does not exist.");
             }
 
-            if ( "IsSelected" == PropertyName ) {
+            if ("IsSelected" == PropertyName) {
                 UpdateSelection((bool)RedoParams);
             } else {
                 Type type = node.GetType();
@@ -70,14 +70,14 @@ namespace NodeGraph.History {
 
             node.ViewModel.IsSelected = isSelected;
 
-            if ( node.ViewModel.IsSelected ) {
+            if (node.ViewModel.IsSelected) {
                 System.Diagnostics.Debug.WriteLine("True");
-                if ( !selectionList.Contains(Guid) ) {
+                if (!selectionList.Contains(Guid)) {
                     selectionList.Add(Guid);
                 }
             } else {
                 System.Diagnostics.Debug.WriteLine("False");
-                if ( selectionList.Contains(Guid) ) {
+                if (selectionList.Contains(Guid)) {
                     selectionList.Remove(Guid);
                 }
             }

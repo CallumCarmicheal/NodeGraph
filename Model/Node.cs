@@ -23,7 +23,7 @@ namespace NodeGraph.Model {
         public NodeViewModel ViewModel {
             get { return _ViewModel; }
             set {
-                if ( value != _ViewModel ) {
+                if (value != _ViewModel) {
                     _ViewModel = value;
                     RaisePropertyChanged("ViewModel");
                 }
@@ -34,7 +34,7 @@ namespace NodeGraph.Model {
         public string Header {
             get { return _Header; }
             set {
-                if ( value != _Header ) {
+                if (value != _Header) {
                     AddNodePropertyCommand("Header", _Header, value);
                     _Header = value;
                     RaisePropertyChanged("Header");
@@ -46,7 +46,7 @@ namespace NodeGraph.Model {
         public SolidColorBrush HeaderBackgroundColor {
             get { return _HeaderBackgroundColor; }
             set {
-                if ( value != _HeaderBackgroundColor ) {
+                if (value != _HeaderBackgroundColor) {
                     AddNodePropertyCommand("HeaderBackgroundColor", _HeaderBackgroundColor, value);
                     _HeaderBackgroundColor = value;
                     RaisePropertyChanged("HeaderBackgroundColor");
@@ -58,7 +58,7 @@ namespace NodeGraph.Model {
         public SolidColorBrush HeaderFontColor {
             get { return _HeaderFontColor; }
             set {
-                if ( value != _HeaderFontColor ) {
+                if (value != _HeaderFontColor) {
                     AddNodePropertyCommand("HeaderFontColor", _HeaderFontColor, value);
                     _HeaderFontColor = value;
                     RaisePropertyChanged("HeaderFontColor");
@@ -70,7 +70,7 @@ namespace NodeGraph.Model {
         public bool AllowEditingHeader {
             get { return _AllowEditingHeader; }
             set {
-                if ( value != _AllowEditingHeader ) {
+                if (value != _AllowEditingHeader) {
                     AddNodePropertyCommand("AllowEditingHeader", _AllowEditingHeader, value);
                     _AllowEditingHeader = value;
                     RaisePropertyChanged("AllowEditingHeader");
@@ -82,7 +82,7 @@ namespace NodeGraph.Model {
         public bool AllowCircularConnection {
             get { return _AllowCircularConnection; }
             set {
-                if ( value != _AllowCircularConnection ) {
+                if (value != _AllowCircularConnection) {
                     AddNodePropertyCommand("AllowCircularConnection", _AllowCircularConnection, value);
                     _AllowCircularConnection = value;
                     RaisePropertyChanged("AllowCircularConnection");
@@ -94,7 +94,7 @@ namespace NodeGraph.Model {
         public double X {
             get { return _X; }
             set {
-                if ( value != _X ) {
+                if (value != _X) {
                     _X = value;
                     RaisePropertyChanged("X");
                 }
@@ -105,7 +105,7 @@ namespace NodeGraph.Model {
         public double Y {
             get { return _Y; }
             set {
-                if ( value != _Y ) {
+                if (value != _Y) {
                     _Y = value;
                     RaisePropertyChanged("Y");
                 }
@@ -116,7 +116,7 @@ namespace NodeGraph.Model {
         public int ZIndex {
             get { return _ZIndex; }
             set {
-                if ( value != _ZIndex ) {
+                if (value != _ZIndex) {
                     _ZIndex = value;
                     RaisePropertyChanged("ZIndex");
                 }
@@ -127,7 +127,7 @@ namespace NodeGraph.Model {
         public ObservableCollection<NodeFlowPort> InputFlowPorts {
             get { return _InputFlowPorts; }
             set {
-                if ( value != _InputFlowPorts ) {
+                if (value != _InputFlowPorts) {
                     _InputFlowPorts = value;
                     RaisePropertyChanged("InputFlowPorts");
                 }
@@ -138,7 +138,7 @@ namespace NodeGraph.Model {
         public ObservableCollection<NodeFlowPort> OutputFlowPorts {
             get { return _OutputFlowPorts; }
             set {
-                if ( value != _OutputFlowPorts ) {
+                if (value != _OutputFlowPorts) {
                     _OutputFlowPorts = value;
                     RaisePropertyChanged("OutputFlowPorts");
                 }
@@ -149,7 +149,7 @@ namespace NodeGraph.Model {
         public ObservableCollection<NodePropertyPort> InputPropertyPorts {
             get { return _InputPropertyPorts; }
             set {
-                if ( value != _InputPropertyPorts ) {
+                if (value != _InputPropertyPorts) {
                     _InputPropertyPorts = value;
                     RaisePropertyChanged("InputPropertyPorts");
                 }
@@ -160,7 +160,7 @@ namespace NodeGraph.Model {
         public ObservableCollection<NodePropertyPort> OutputPropertyPorts {
             get { return _OutputPropertyPorts; }
             set {
-                if ( value != _OutputPropertyPorts ) {
+                if (value != _OutputPropertyPorts) {
                     _OutputPropertyPorts = value;
                     RaisePropertyChanged("OutputPropertyPorts");
                 }
@@ -171,7 +171,7 @@ namespace NodeGraph.Model {
         public NodeExecutionState ExecutionState {
             get { return _ExecutionState; }
             set {
-                if ( value != _ExecutionState ) {
+                if (value != _ExecutionState) {
                     _ExecutionState = value;
                     RaisePropertyChanged("ExecutionState");
                 }
@@ -205,7 +205,7 @@ namespace NodeGraph.Model {
         #region Callbacks
 
         public virtual void OnCreate() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Node.OnPreExecute()");
 
             IsInitialized = true;
@@ -214,51 +214,51 @@ namespace NodeGraph.Model {
         }
 
         public virtual void OnPreExecute(Connector prevConnector) {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Node.OnPreExecute()");
 
             ExecutionState = NodeExecutionState.Executing;
         }
 
         public virtual void OnExecute(Connector prevConnector) {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Node.OnExecute()");
         }
 
         public virtual void OnPostExecute(Connector prevConnector) {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Node.OnPostExecute()");
 
             ExecutionState = NodeExecutionState.Executed;
         }
 
         public virtual void OnPreDestroy() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Node.OnPreDestroy()");
         }
 
         public virtual void OnPostDestroy() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Node.OnPostDestroy()");
         }
 
         public virtual void OnDeserialize() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Node.OnDeserialize()");
 
-            foreach ( var port in InputFlowPorts ) {
+            foreach (var port in InputFlowPorts) {
                 port.OnDeserialize();
             }
 
-            foreach ( var port in OutputFlowPorts ) {
+            foreach (var port in OutputFlowPorts) {
                 port.OnDeserialize();
             }
 
-            foreach ( var port in InputPropertyPorts ) {
+            foreach (var port in InputPropertyPorts) {
                 port.OnDeserialize();
             }
 
-            foreach ( var port in OutputPropertyPorts ) {
+            foreach (var port in OutputPropertyPorts) {
                 port.OnDeserialize();
             }
 
@@ -292,7 +292,7 @@ namespace NodeGraph.Model {
             writer.WriteAttributeString("ZIndex", ZIndex.ToString());
 
             writer.WriteStartElement("InputFlowPorts");
-            foreach ( var port in InputFlowPorts ) {
+            foreach (var port in InputFlowPorts) {
                 writer.WriteStartElement("FlowPort");
                 port.WriteXml(writer);
                 writer.WriteEndElement();
@@ -300,7 +300,7 @@ namespace NodeGraph.Model {
             writer.WriteEndElement();
 
             writer.WriteStartElement("OutputFlowPorts");
-            foreach ( var port in OutputFlowPorts ) {
+            foreach (var port in OutputFlowPorts) {
                 writer.WriteStartElement("FlowPort");
                 port.WriteXml(writer);
                 writer.WriteEndElement();
@@ -308,7 +308,7 @@ namespace NodeGraph.Model {
             writer.WriteEndElement();
 
             writer.WriteStartElement("InputPropertyPorts");
-            foreach ( var port in InputPropertyPorts ) {
+            foreach (var port in InputPropertyPorts) {
                 writer.WriteStartElement("PropertyPort");
                 port.WriteXml(writer);
                 writer.WriteEndElement();
@@ -316,7 +316,7 @@ namespace NodeGraph.Model {
             writer.WriteEndElement();
 
             writer.WriteStartElement("OutputPropertyPorts");
-            foreach ( var port in OutputPropertyPorts ) {
+            foreach (var port in OutputPropertyPorts) {
                 writer.WriteStartElement("PropertyPort");
                 port.WriteXml(writer);
                 writer.WriteEndElement();
@@ -344,10 +344,10 @@ namespace NodeGraph.Model {
             bool isOutputFlowPortsEnd = false;
             bool isInputPropertyPortsEnd = false;
             bool isOutputPropertyPortsEnd = false;
-            while ( reader.Read() ) {
-                if ( XmlNodeType.Element == reader.NodeType ) {
-                    if ( ("PropertyPort" == reader.Name) ||
-                        ("FlowPort" == reader.Name) ) {
+            while (reader.Read()) {
+                if (XmlNodeType.Element == reader.NodeType) {
+                    if (("PropertyPort" == reader.Name) ||
+                        ("FlowPort" == reader.Name)) {
                         string prevReaderName = reader.Name;
 
                         Guid guid = Guid.Parse(reader.GetAttribute("Guid"));
@@ -358,7 +358,7 @@ namespace NodeGraph.Model {
                         string ownerGuidString = reader.GetAttribute("Owner");
                         Node node = NodeGraphManager.FindNode(Guid.Parse(ownerGuidString));
 
-                        if ( "PropertyPort" == prevReaderName ) {
+                        if ("PropertyPort" == prevReaderName) {
                             string name = reader.GetAttribute("Name");
                             Type valueType = Type.GetType(reader.GetAttribute("ValueType"));
                             bool hasEditor = bool.Parse(reader.GetAttribute("HasEditor"));
@@ -375,20 +375,20 @@ namespace NodeGraph.Model {
 
                 }
 
-                if ( reader.IsEmptyElement || (XmlNodeType.EndElement == reader.NodeType) ) {
-                    if ( "InputFlowPorts" == reader.Name ) {
+                if (reader.IsEmptyElement || (XmlNodeType.EndElement == reader.NodeType)) {
+                    if ("InputFlowPorts" == reader.Name) {
                         isInputFlowPortsEnd = true;
-                    } else if ( "OutputFlowPorts" == reader.Name ) {
+                    } else if ("OutputFlowPorts" == reader.Name) {
                         isOutputFlowPortsEnd = true;
-                    } else if ( "InputPropertyPorts" == reader.Name ) {
+                    } else if ("InputPropertyPorts" == reader.Name) {
                         isInputPropertyPortsEnd = true;
-                    } else if ( "OutputPropertyPorts" == reader.Name ) {
+                    } else if ("OutputPropertyPorts" == reader.Name) {
                         isOutputPropertyPortsEnd = true;
                     }
                 }
 
-                if ( isInputFlowPortsEnd && isOutputFlowPortsEnd &&
-                    isInputPropertyPortsEnd && isOutputPropertyPortsEnd ) {
+                if (isInputFlowPortsEnd && isOutputFlowPortsEnd &&
+                    isInputPropertyPortsEnd && isOutputPropertyPortsEnd) {
                     break;
                 }
             }
@@ -399,7 +399,7 @@ namespace NodeGraph.Model {
         #region History
 
         protected virtual void AddNodePropertyCommand(string propertyName, object prevValue, object newValue) {
-            if ( !IsInitialized ) {
+            if (!IsInitialized) {
                 return;
             }
 
@@ -420,15 +420,15 @@ namespace NodeGraph.Model {
             base.RaisePropertyChanged(propertyName);
 
             NodePropertyPort port = NodeGraphManager.FindNodePropertyPort(this, propertyName);
-            if ( null != port ) {
+            if (null != port) {
                 Type nodeType = GetType();
 
                 PropertyInfo propertyInfo = nodeType.GetProperty(propertyName);
-                if ( null != propertyInfo ) {
+                if (null != propertyInfo) {
                     port.Value = propertyInfo.GetValue(this);
                 } else {
                     FieldInfo fieldInfo = nodeType.GetField(propertyName);
-                    if ( null != fieldInfo ) {
+                    if (null != fieldInfo) {
                         port.Value = fieldInfo.GetValue(this);
                     }
                 }

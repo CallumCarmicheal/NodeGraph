@@ -31,7 +31,7 @@ namespace NodeGraph.Model {
         public object _Value;
         public object Value {
             get {
-                if ( IsDynamic ) {
+                if (IsDynamic) {
                     return _Value;
                 } else {
                     return (null != _FieldInfo) ? _FieldInfo.GetValue(Owner) : _PropertyInfo.GetValue(Owner);
@@ -39,20 +39,20 @@ namespace NodeGraph.Model {
             }
             set {
                 object prevValue;
-                if ( IsDynamic ) {
+                if (IsDynamic) {
                     prevValue = _Value;
                 } else {
                     prevValue = (null != _FieldInfo) ? _FieldInfo.GetValue(Owner) : _PropertyInfo.GetValue(Owner);
                 }
 
-                if ( value != prevValue ) {
-                    if ( IsDynamic ) {
+                if (value != prevValue) {
+                    if (IsDynamic) {
                         _Value = value;
                         OnDynamicPropertyPortValueChanged(prevValue, value);
                     } else {
-                        if ( null != _FieldInfo )
+                        if (null != _FieldInfo)
                             _FieldInfo.SetValue(Owner, value);
-                        else if ( null != _PropertyInfo )
+                        else if (null != _PropertyInfo)
                             _PropertyInfo.SetValue(Owner, value);
                     }
 
@@ -95,7 +95,7 @@ namespace NodeGraph.Model {
             writer.WriteAttributeString("HasEditor", HasEditor.ToString());
 
             Type realValueType = ValueType;
-            if ( null != Value ) {
+            if (null != Value) {
                 realValueType = Value.GetType();
             }
             writer.WriteAttributeString("RealValueType", realValueType.AssemblyQualifiedName);
@@ -109,8 +109,8 @@ namespace NodeGraph.Model {
 
             Type realValueType = Type.GetType(reader.GetAttribute("RealValueType"));
 
-            while ( reader.Read() ) {
-                if ( XmlNodeType.Element == reader.NodeType ) {
+            while (reader.Read()) {
+                if (XmlNodeType.Element == reader.NodeType) {
                     var serializer = new XmlSerializer(realValueType);
                     Value = serializer.Deserialize(reader);
                     break;
@@ -139,23 +139,23 @@ namespace NodeGraph.Model {
         #region Methods
 
         public void CheckValidity() {
-            if ( null != Value ) {
-                if ( !ValueType.IsAssignableFrom(Value.GetType()) ) {
+            if (null != Value) {
+                if (!ValueType.IsAssignableFrom(Value.GetType())) {
                     throw new ArgumentException("Type of value is not same as typeOfvalue.");
                 }
             }
 
-            if ( !ValueType.IsClass && (null == Value) ) {
+            if (!ValueType.IsClass && (null == Value)) {
                 throw new ArgumentNullException("If typeOfValue is not a class, you cannot specify value as null");
             }
 
-            if ( !IsDynamic ) {
+            if (!IsDynamic) {
                 Type nodeType = Owner.GetType();
                 _FieldInfo = nodeType.GetField(Name);
                 _PropertyInfo = nodeType.GetProperty(Name);
 
                 Type propType = (null != _FieldInfo) ? _FieldInfo.GetValue(Owner).GetType() : _PropertyInfo.GetValue(Owner).GetType();
-                if ( propType != ValueType ) {
+                if (propType != ValueType) {
                     throw new ArgumentException(string.Format("ValueType( {0} ) is invalid, becasue a type of property or field is {1}.",
                         ValueType.Name, propType.Name));
                 }

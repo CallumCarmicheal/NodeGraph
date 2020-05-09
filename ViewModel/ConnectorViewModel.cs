@@ -23,7 +23,7 @@ namespace NodeGraph.ViewModel {
         public Connector Model {
             get { return _Model; }
             set {
-                if ( value != _Model ) {
+                if (value != _Model) {
                     _Model = value;
                     RaisePropertyChanged("Model");
                 }

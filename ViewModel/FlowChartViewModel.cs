@@ -23,7 +23,7 @@ namespace NodeGraph.ViewModel {
         public FlowChart Model {
             get { return _Model; }
             set {
-                if ( value != _Model ) {
+                if (value != _Model) {
                     _Model = value;
                     RaisePropertyChanged("Model");
                 }
@@ -34,7 +34,7 @@ namespace NodeGraph.ViewModel {
         public ObservableCollection<NodeViewModel> NodeViewModels {
             get { return _NodeViewModels; }
             set {
-                if ( value != _NodeViewModels ) {
+                if (value != _NodeViewModels) {
                     RaisePropertyChanged("NodeViewModels");
                 }
             }
@@ -44,7 +44,7 @@ namespace NodeGraph.ViewModel {
         public ObservableCollection<ConnectorViewModel> ConnectorViewModels {
             get { return _ConnectorViewModels; }
             set {
-                if ( value != _ConnectorViewModels ) {
+                if (value != _ConnectorViewModels) {
                     RaisePropertyChanged("ConnectorViewModels");
                 }
             }
@@ -54,7 +54,7 @@ namespace NodeGraph.ViewModel {
         public Visibility SelectionVisibility {
             get { return _SelectionVisibility; }
             set {
-                if ( value != _SelectionVisibility ) {
+                if (value != _SelectionVisibility) {
                     _SelectionVisibility = value;
                     RaisePropertyChanged("SelectionVisibility");
                 }
@@ -65,7 +65,7 @@ namespace NodeGraph.ViewModel {
         public double SelectionStartX {
             get { return _SelectionStartX; }
             set {
-                if ( value != _SelectionStartX ) {
+                if (value != _SelectionStartX) {
                     _SelectionStartX = value;
                     RaisePropertyChanged("SelectionStartX");
                 }
@@ -76,7 +76,7 @@ namespace NodeGraph.ViewModel {
         public double SelectionStartY {
             get { return _SelectionStartY; }
             set {
-                if ( value != _SelectionStartY ) {
+                if (value != _SelectionStartY) {
                     _SelectionStartY = value;
                     RaisePropertyChanged("SelectionStartY");
                 }
@@ -87,7 +87,7 @@ namespace NodeGraph.ViewModel {
         public double SelectionWidth {
             get { return _SelectionWidth; }
             set {
-                if ( value != _SelectionWidth ) {
+                if (value != _SelectionWidth) {
                     _SelectionWidth = value;
                     RaisePropertyChanged("SelectionWidth");
                 }
@@ -98,7 +98,7 @@ namespace NodeGraph.ViewModel {
         public double SelectionHeight {
             get { return _SelectionHeight; }
             set {
-                if ( value != _SelectionHeight ) {
+                if (value != _SelectionHeight) {
                     _SelectionHeight = value;
                     RaisePropertyChanged("SelectionHeight");
                 }

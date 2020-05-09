@@ -11,7 +11,7 @@ namespace NodeGraph.Model {
         public Type ViewModelType = typeof(ConnectorViewModel);
 
         public ConnectorAttribute() {
-            if ( !typeof(ConnectorViewModel).IsAssignableFrom(ViewModelType) )
+            if (!typeof(ConnectorViewModel).IsAssignableFrom(ViewModelType))
                 throw new ArgumentException("ViewModelType of ConnectorAttribute must be subclass of ConnectorViewModel");
         }
     }

@@ -55,7 +55,7 @@ namespace NodeGraph.View {
             base.OnApplyTemplate();
 
             _Part_Header = Template.FindName("PART_Header", this) as EditableTextBlock;
-            if ( null != _Part_Header ) {
+            if (null != _Part_Header) {
                 _Part_Header.MouseDown += _Part_Header_MouseDown; ;
             }
         }
@@ -67,10 +67,10 @@ namespace NodeGraph.View {
         private void _Part_Header_MouseDown(object sender, MouseButtonEventArgs e) {
             Keyboard.Focus(_Part_Header);
 
-            if ( 0 == _ClickCount ) {
+            if (0 == _ClickCount) {
                 _ClickTimer.Start();
                 _ClickCount++;
-            } else if ( 1 == _ClickCount ) {
+            } else if (1 == _ClickCount) {
                 _Part_Header.IsEditing = true;
                 Keyboard.Focus(_Part_Header);
                 _ClickCount = 0;
@@ -100,7 +100,7 @@ namespace NodeGraph.View {
         protected override void SynchronizeProperties() {
             base.SynchronizeProperties();
 
-            if ( IsInput ) {
+            if (IsInput) {
                 PropertyEditorVisibility = IsFilledPort ? Visibility.Collapsed : Visibility.Visible;
             }
         }
@@ -111,32 +111,32 @@ namespace NodeGraph.View {
 
         private void CreatePropertyEditor() {
             NodePropertyPort port = ViewModel.Model as NodePropertyPort;
-            if ( port.HasEditor ) {
+            if (port.HasEditor) {
                 Type type = port.ValueType;
 
-                if ( typeof(bool) == type ) {
+                if (typeof(bool) == type) {
                     PropertyEditor = CreateBoolEditor();
-                } else if ( typeof(string) == type ) {
+                } else if (typeof(string) == type) {
                     PropertyEditor = CreateStringEditor();
-                } else if ( typeof(byte) == type ) {
+                } else if (typeof(byte) == type) {
                     PropertyEditor = CreateByteEditor();
-                } else if ( typeof(short) == type ) {
+                } else if (typeof(short) == type) {
                     PropertyEditor = CreateShortEditor();
-                } else if ( typeof(int) == type ) {
+                } else if (typeof(int) == type) {
                     PropertyEditor = CreateIntEditor();
-                } else if ( typeof(long) == type ) {
+                } else if (typeof(long) == type) {
                     PropertyEditor = CreateLongEditor();
-                } else if ( typeof(float) == type ) {
+                } else if (typeof(float) == type) {
                     PropertyEditor = CreateFloatEditor();
-                } else if ( typeof(double) == type ) {
+                } else if (typeof(double) == type) {
                     PropertyEditor = CreateDoubleEditor();
-                } else if ( type.IsEnum ) {
+                } else if (type.IsEnum) {
                     PropertyEditor = CreateEnumEditor();
-                } else if ( typeof(Color) == type ) {
+                } else if (typeof(Color) == type) {
                     PropertyEditor = CreateColorEditor();
                 }
 
-                if ( null != PropertyEditor ) {
+                if (null != PropertyEditor) {
                     PropertyEditorVisibility = Visibility.Visible;
                 }
             }
@@ -147,8 +147,8 @@ namespace NodeGraph.View {
 
             Array array = Enum.GetValues(port.ValueType);
             int selectedIndex = -1;
-            for ( int i = 0; i < array.Length; ++i ) {
-                if ( port.Value.ToString() == array.GetValue(i).ToString() ) {
+            for (int i = 0; i < array.Length; ++i) {
+                if (port.Value.ToString() == array.GetValue(i).ToString()) {
                     selectedIndex = i;
                     break;
                 }
@@ -165,7 +165,7 @@ namespace NodeGraph.View {
             NodePropertyPort port = ViewModel.Model as NodePropertyPort;
 
             ComboBox comboBox = PropertyEditor as ComboBox;
-            if ( null != comboBox ) {
+            if (null != comboBox) {
                 port.Value = comboBox.SelectedItem;
             }
         }

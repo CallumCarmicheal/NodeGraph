@@ -11,7 +11,7 @@ namespace NodeGraph.View {
             base.PrepareContainerForItemOverride(element, item);
 
             var attrs = item.GetType().GetCustomAttributes(typeof(ConnectorViewModelAttribute), false) as ConnectorViewModelAttribute[];
-            if ( 1 != attrs.Length )
+            if (1 != attrs.Length)
                 throw new Exception("A ConnectorViewModelAttribute must exist for ConnectorViewModel class");
 
             FrameworkElement fe = element as FrameworkElement;
@@ -21,12 +21,12 @@ namespace NodeGraph.View {
             };
 
             Style style = resourceDictionary[attrs[0].ViewStyleName] as Style;
-            if ( null == style ) {
+            if (null == style) {
                 style = Application.Current.TryFindResource(attrs[0].ViewStyleName) as Style;
             }
             fe.Style = style;
 
-            if ( null == fe.Style )
+            if (null == fe.Style)
                 throw new Exception(String.Format("{0} does not exist", attrs[0].ViewStyleName));
         }
 

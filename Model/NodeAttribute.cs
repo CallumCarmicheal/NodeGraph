@@ -7,7 +7,7 @@ namespace NodeGraph.Model {
         public Type ViewModelType = typeof(NodeViewModel);
 
         public NodeAttribute() {
-            if ( !typeof(NodeViewModel).IsAssignableFrom(ViewModelType) )
+            if (!typeof(NodeViewModel).IsAssignableFrom(ViewModelType))
                 throw new ArgumentException("ViewModelType of NodeAttribute must be subclass of NodeViewModel");
         }
     }

@@ -16,7 +16,7 @@ namespace NodeGraph.Model {
         public FlowChartViewModel ViewModel {
             get { return _ViewModel; }
             set {
-                if ( value != _ViewModel ) {
+                if (value != _ViewModel) {
                     _ViewModel = value;
                     RaisePropertyChanged("ViewModel");
                 }
@@ -27,7 +27,7 @@ namespace NodeGraph.Model {
         public ObservableCollection<Node> Nodes {
             get { return _Nodes; }
             set {
-                if ( value != _Nodes ) {
+                if (value != _Nodes) {
                     _Nodes = value;
                     RaisePropertyChanged("Nodes");
                 }
@@ -38,7 +38,7 @@ namespace NodeGraph.Model {
         public ObservableCollection<Connector> Connectors {
             get { return _Connectors; }
             set {
-                if ( value != _Connectors ) {
+                if (value != _Connectors) {
                     _Connectors = value;
                     RaisePropertyChanged("Connectors");
                 }
@@ -66,7 +66,7 @@ namespace NodeGraph.Model {
         #region Callbacks
 
         public virtual void OnCreate() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("FlowChart.OnCreate()");
             IsInitialized = true;
 
@@ -74,39 +74,39 @@ namespace NodeGraph.Model {
         }
 
         public virtual void OnPreExecute() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("FlowChart.OnPreExecute()");
         }
 
         public virtual void OnExecute() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("FlowChart.OnExecute()");
         }
 
         public virtual void OnPostExecute() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("FlowChart.OnPostExecute()");
         }
 
         public virtual void OnPreDestroy() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("FlowChart.OnPreDestroy()");
         }
 
         public virtual void OnPostDestroy() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("FlowChart.OnPostDestroy()");
         }
 
         public virtual void OnDeserialize() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("FlowChart.OnDeserialize()");
 
-            foreach ( var node in Nodes ) {
+            foreach (var node in Nodes) {
                 node.OnDeserialize();
             }
 
-            foreach ( var connector in Connectors ) {
+            foreach (var connector in Connectors) {
                 connector.OnDeserialize();
             }
 
@@ -123,7 +123,7 @@ namespace NodeGraph.Model {
             base.WriteXml(writer);
 
             writer.WriteStartElement("Nodes");
-            foreach ( var node in Nodes ) {
+            foreach (var node in Nodes) {
                 writer.WriteStartElement("Node");
                 node.WriteXml(writer);
                 writer.WriteEndElement();
@@ -131,7 +131,7 @@ namespace NodeGraph.Model {
             writer.WriteEndElement();
 
             writer.WriteStartElement("Connectors");
-            foreach ( var connector in Connectors ) {
+            foreach (var connector in Connectors) {
                 writer.WriteStartElement("Connector");
                 connector.WriteXml(writer);
                 writer.WriteEndElement();
@@ -144,10 +144,10 @@ namespace NodeGraph.Model {
             bool isNodesEnd = false;
             bool isConnectorsEnd = false;
 
-            while ( reader.Read() ) {
-                if ( XmlNodeType.Element == reader.NodeType ) {
-                    if ( ("Node" == reader.Name) ||
-                        ("Connector" == reader.Name) ) {
+            while (reader.Read()) {
+                if (XmlNodeType.Element == reader.NodeType) {
+                    if (("Node" == reader.Name) ||
+                        ("Connector" == reader.Name)) {
                         string prevReaderName = reader.Name;
 
                         Guid guid = Guid.Parse(reader.GetAttribute("Guid"));
@@ -155,7 +155,7 @@ namespace NodeGraph.Model {
                         FlowChart flowChart = NodeGraphManager.FindFlowChart(
                             Guid.Parse(reader.GetAttribute("Owner")));
 
-                        if ( "Node" == prevReaderName ) {
+                        if ("Node" == prevReaderName) {
                             Type vmType = Type.GetType(reader.GetAttribute("ViewModelType"));
 
                             Node node = NodeGraphManager.CreateNode(true, guid, flowChart, type, 0.0, 0.0, 0, vmType);
@@ -167,15 +167,15 @@ namespace NodeGraph.Model {
                     }
                 }
 
-                if ( reader.IsEmptyElement || XmlNodeType.EndElement == reader.NodeType ) {
-                    if ( "Nodes" == reader.Name ) {
+                if (reader.IsEmptyElement || XmlNodeType.EndElement == reader.NodeType) {
+                    if ("Nodes" == reader.Name) {
                         isNodesEnd = true;
-                    } else if ( "Connectors" == reader.Name ) {
+                    } else if ("Connectors" == reader.Name) {
                         isConnectorsEnd = true;
                     }
                 }
 
-                if ( isNodesEnd && isConnectorsEnd )
+                if (isNodesEnd && isConnectorsEnd)
                     break;
             }
         }

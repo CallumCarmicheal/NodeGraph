@@ -40,9 +40,9 @@ namespace NodeGraph.View {
 
             var attrs = item.GetType().GetCustomAttributes(typeof(NodeFlowPortViewModelAttribute), false) as NodeFlowPortViewModelAttribute[];
 
-            if ( 0 == attrs.Length ) {
+            if (0 == attrs.Length) {
                 throw new Exception("A NodeFlowPortViewModelAttribute must exist for NodeFlowPortViewModel class.");
-            } else if ( 1 < attrs.Length ) {
+            } else if (1 < attrs.Length) {
                 throw new Exception("A NodeFlowPortViewModelAttribute must exist only one.");
             }
 
@@ -55,7 +55,7 @@ namespace NodeGraph.View {
             base.PrepareContainerForItemOverride(element, item);
 
             var attrs = item.GetType().GetCustomAttributes(typeof(NodeFlowPortViewModelAttribute), false) as NodeFlowPortViewModelAttribute[];
-            if ( 1 != attrs.Length )
+            if (1 != attrs.Length)
                 throw new Exception("A NodeFlowPortViewModelAttribute must exist for NodeFlowPortViewModel class");
 
             FrameworkElement fe = element as FrameworkElement;
@@ -65,12 +65,12 @@ namespace NodeGraph.View {
             };
 
             Style style = resourceDictionary[attrs[0].ViewStyleName] as Style;
-            if ( null == style ) {
+            if (null == style) {
                 style = Application.Current.TryFindResource(attrs[0].ViewStyleName) as Style;
             }
             fe.Style = style;
 
-            if ( null == fe.Style )
+            if (null == fe.Style)
                 throw new Exception(String.Format("{0} does not exist", attrs[0].ViewStyleName));
         }
 

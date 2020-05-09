@@ -42,12 +42,12 @@ namespace NodeGraph.Controls {
 
         protected override void OnTextChanged(TextChangedEventArgs e) {
             Regex regex = new Regex("^[0-9]+[.]?[0-9]*$");
-            if ( !IsInteger && !regex.IsMatch(Text) ) {
+            if (!IsInteger && !regex.IsMatch(Text)) {
                 string[] tokens = Text.Split('.');
                 string newText = "";
-                for ( int i = 0; i < tokens.Length; ++i ) {
+                for (int i = 0; i < tokens.Length; ++i) {
                     newText += tokens[i];
-                    if ( (0 == i) && (1 < tokens.Length) ) {
+                    if ((0 == i) && (1 < tokens.Length)) {
                         newText += ".";
                     }
                 }

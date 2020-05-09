@@ -30,7 +30,7 @@ namespace NodeGraph.ViewModel {
         public Node Model {
             get { return _Model; }
             set {
-                if ( value != _Model ) {
+                if (value != _Model) {
                     _Model = value;
                     RaisePropertyChanged("Model");
                 }
@@ -49,7 +49,7 @@ namespace NodeGraph.ViewModel {
         public ObservableCollection<NodeFlowPortViewModel> InputFlowPortViewModels {
             get { return _InputFlowPortViewModels; }
             set {
-                if ( value != _InputFlowPortViewModels ) {
+                if (value != _InputFlowPortViewModels) {
                     _InputFlowPortViewModels = value;
                     RaisePropertyChanged("InputFlowPortViewModels");
                 }
@@ -60,7 +60,7 @@ namespace NodeGraph.ViewModel {
         public ObservableCollection<NodeFlowPortViewModel> OutputFlowPortViewModels {
             get { return _OutputFlowPortViewModels; }
             set {
-                if ( value != _OutputFlowPortViewModels ) {
+                if (value != _OutputFlowPortViewModels) {
                     _OutputFlowPortViewModels = value;
                     RaisePropertyChanged("OutputFlowPortViewModels");
                 }
@@ -71,7 +71,7 @@ namespace NodeGraph.ViewModel {
         public bool IsSelected {
             get { return _IsSelected; }
             set {
-                if ( value != _IsSelected ) {
+                if (value != _IsSelected) {
                     _IsSelected = value;
                     RaisePropertyChanged("IsSelected");
                 }
@@ -94,7 +94,7 @@ namespace NodeGraph.ViewModel {
         public ObservableCollection<NodePropertyPortViewModel> InputPropertyPortViewModels {
             get { return _InputPropertyPortViewModels; }
             set {
-                if ( value != _InputPropertyPortViewModels ) {
+                if (value != _InputPropertyPortViewModels) {
                     _InputPropertyPortViewModels = value;
                     RaisePropertyChanged("InputPropertyPortViewModels");
                 }
@@ -105,7 +105,7 @@ namespace NodeGraph.ViewModel {
         public ObservableCollection<NodePropertyPortViewModel> OutputPropertyPortViewModels {
             get { return _OutputPropertyPortViewModels; }
             set {
-                if ( value != _OutputPropertyPortViewModels ) {
+                if (value != _OutputPropertyPortViewModels) {
                     _OutputPropertyPortViewModels = value;
                     RaisePropertyChanged("OutputPropertyPortViewModels");
                 }

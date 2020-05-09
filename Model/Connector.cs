@@ -13,7 +13,7 @@ namespace NodeGraph.Model {
         public ConnectorViewModel ViewModel {
             get { return _ViewModel; }
             set {
-                if ( value != _ViewModel ) {
+                if (value != _ViewModel) {
                     _ViewModel = value;
                     RaisePropertyChanged("ViewModel");
                 }
@@ -24,7 +24,7 @@ namespace NodeGraph.Model {
         public NodePort StartPort {
             get { return _StartPort; }
             set {
-                if ( value != _StartPort ) {
+                if (value != _StartPort) {
                     _StartPort = value;
                     RaisePropertyChanged("StartPort");
                 }
@@ -35,7 +35,7 @@ namespace NodeGraph.Model {
         public NodePort EndPort {
             get { return _EndPort; }
             set {
-                if ( value != _EndPort ) {
+                if (value != _EndPort) {
                     _EndPort = value;
                     RaisePropertyChanged("EndPort");
                 }
@@ -76,7 +76,7 @@ namespace NodeGraph.Model {
         #region Callbacks
 
         public virtual void OnCreate() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Connector.OnCreate()");
             IsInitialized = true;
 
@@ -84,20 +84,20 @@ namespace NodeGraph.Model {
         }
 
         public virtual void OnPreExecute() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Connector.OnPreExecute()");
         }
 
         public virtual void OnExecute() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Connector.OnExecute()");
         }
 
         public virtual void OnPostExecute() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Connector.OnPostExecute()");
 
-            if ( null != EndPort ) {
+            if (null != EndPort) {
                 Node node = EndPort.Owner;
                 node.OnPreExecute(this);
                 node.OnExecute(this);
@@ -106,27 +106,27 @@ namespace NodeGraph.Model {
         }
 
         public virtual void OnPreDestroy() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Connector.OnPreDestroy()");
         }
 
         public virtual void OnPostDestroy() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Connector.OnPostDestroy()");
         }
 
         public virtual void OnConnect(NodePort port) {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Connector.OnConnect()");
         }
 
         public virtual void OnDisconnect(NodePort port) {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Connector.OnDisconnect()");
         }
 
         public virtual void OnDeserialize() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("Connector.OnDeserialize()");
 
             NodeGraphManager.ConnectTo(StartPort, this);
@@ -149,9 +149,9 @@ namespace NodeGraph.Model {
             writer.WriteAttributeString("Owner", FlowChart.Guid.ToString());
             //} End Creation Info.
 
-            if ( null != StartPort )
+            if (null != StartPort)
                 writer.WriteAttributeString("StartPort", StartPort.Guid.ToString());
-            if ( null != EndPort )
+            if (null != EndPort)
                 writer.WriteAttributeString("EndPort", EndPort.Guid.ToString());
         }
 
@@ -159,11 +159,11 @@ namespace NodeGraph.Model {
             base.ReadXml(reader);
 
             StartPort = NodeGraphManager.FindNodePort(Guid.Parse(reader.GetAttribute("StartPort")));
-            if ( null == StartPort )
+            if (null == StartPort)
                 throw new InvalidOperationException("StartPort can not be null in Connector.ReadXml().");
 
             EndPort = NodeGraphManager.FindNodePort(Guid.Parse(reader.GetAttribute("EndPort")));
-            if ( null == EndPort )
+            if (null == EndPort)
                 throw new InvalidOperationException("EndPort can not be null in Connector.ReadXml().");
         }
 

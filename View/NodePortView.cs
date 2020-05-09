@@ -83,7 +83,7 @@ namespace NodeGraph.View {
             base.OnApplyTemplate();
 
             PartPort = Template.FindName("PART_Port", this) as FrameworkElement;
-            if ( null == PartPort )
+            if (null == PartPort)
                 throw new Exception("PART_Port is not instantiated in NodePortView");
         }
 
@@ -106,7 +106,7 @@ namespace NodeGraph.View {
 
         private void NodePortView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             ViewModel = DataContext as NodePortViewModel;
-            if ( null == ViewModel )
+            if (null == ViewModel)
                 throw new Exception("ViewModel must be bound as DataContext in NodePortView.");
             ViewModel.View = this;
             ViewModel.PropertyChanged += ViewModelPropertyChanged;
@@ -115,7 +115,7 @@ namespace NodeGraph.View {
         }
 
         protected virtual void SynchronizeProperties() {
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
 
@@ -142,9 +142,9 @@ namespace NodeGraph.View {
             FlowChart flowChart = node.Owner;
             Keyboard.Focus(flowChart.ViewModel.View);
 
-            if ( Keyboard.IsKeyDown(Key.LeftCtrl) ) {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
                 NodeGraphManager.DisconnectAll(ViewModel.Model);
-            } else if ( !NodeGraphManager.IsConnecting ) {
+            } else if (!NodeGraphManager.IsConnecting) {
                 IsFilledPort = true;
                 NodeGraphManager.BeginConnection(ViewModel.Model);
             }
@@ -155,15 +155,15 @@ namespace NodeGraph.View {
         protected override void OnMouseEnter(MouseEventArgs e) {
             base.OnMouseEnter(e);
 
-            if ( MouseButtonState.Pressed == e.LeftButton ) {
-                if ( NodeGraphManager.IsConnecting ) {
+            if (MouseButtonState.Pressed == e.LeftButton) {
+                if (NodeGraphManager.IsConnecting) {
                     string error;
                     bool connectable = NodeGraphManager.CheckIfConnectable(ViewModel.Model, out error);
-                    if ( connectable ) {
+                    if (connectable) {
                         NodeGraphManager.SetOtherConnectionPort(ViewModel.Model);
                         ToolTipVisibility = false;
                     } else {
-                        if ( string.IsNullOrEmpty(error) ) {
+                        if (string.IsNullOrEmpty(error)) {
                             ToolTipVisibility = false;
                         } else {
                             ToolTipText = error;
@@ -177,7 +177,7 @@ namespace NodeGraph.View {
         protected override void OnMouseLeave(MouseEventArgs e) {
             base.OnMouseLeave(e);
 
-            if ( NodeGraphManager.IsConnecting ) {
+            if (NodeGraphManager.IsConnecting) {
                 NodeGraphManager.SetOtherConnectionPort(null);
             }
 
@@ -187,7 +187,7 @@ namespace NodeGraph.View {
         protected override void OnLostFocus(RoutedEventArgs e) {
             base.OnLostFocus(e);
 
-            if ( NodeGraphManager.IsConnecting ) {
+            if (NodeGraphManager.IsConnecting) {
                 NodeGraphManager.SetOtherConnectionPort(null);
             }
 
@@ -199,7 +199,7 @@ namespace NodeGraph.View {
         #region HitTest
 
         protected override HitTestResult HitTestCore(PointHitTestParameters hitTestParameters) {
-            if ( VisualTreeHelper.GetDescendantBounds(this).Contains(hitTestParameters.HitPoint) )
+            if (VisualTreeHelper.GetDescendantBounds(this).Contains(hitTestParameters.HitPoint))
                 return new PointHitTestResult(this, hitTestParameters.HitPoint);
 
             return null;

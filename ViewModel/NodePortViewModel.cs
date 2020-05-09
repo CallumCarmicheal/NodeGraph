@@ -23,7 +23,7 @@ namespace NodeGraph.ViewModel {
         public NodePort Model {
             get { return _Model; }
             set {
-                if ( value != _Model ) {
+                if (value != _Model) {
                     _Model = value;
                     RaisePropertyChanged("Model");
                 }
@@ -46,20 +46,20 @@ namespace NodeGraph.ViewModel {
         private void _ConnectorViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             Node node = Model.Owner;
 
-            if ( null != e.OldItems ) {
-                foreach ( var item in e.OldItems ) {
+            if (null != e.OldItems) {
+                foreach (var item in e.OldItems) {
                     node.ViewModel.RaisePropertyChanged("Connectors");
                 }
             }
 
-            if ( null != e.NewItems ) {
-                foreach ( var item in e.NewItems ) {
+            if (null != e.NewItems) {
+                foreach (var item in e.NewItems) {
                     var addedConnector = item as Connector;
                     node.ViewModel.RaisePropertyChanged("Connectors");
                 }
             }
 
-            if ( null != View ) {
+            if (null != View) {
                 RaisePropertyChanged("Connectors");
             }
         }

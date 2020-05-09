@@ -51,7 +51,7 @@ namespace NodeGraph.View {
 
         private void ConnectorView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             ViewModel = DataContext as ConnectorViewModel;
-            if ( null == ViewModel )
+            if (null == ViewModel)
                 throw new Exception("ViewModel must be bound as DataContext in ConnectorView.");
             ViewModel.View = this;
             ViewModel.PropertyChanged += ViewModelPropertyChanged;
@@ -66,7 +66,7 @@ namespace NodeGraph.View {
         }
 
         protected virtual void SynchronizeProperties() {
-            if ( null == ViewModel ) {
+            if (null == ViewModel) {
                 return;
             }
         }
@@ -91,7 +91,7 @@ namespace NodeGraph.View {
             Point end = (null != endPort) ? ViewUtil.GetRelativeCenterLocation(endPort.ViewModel.View.PartPort, flowChartView) : mousePos;
             Point center = new Point((start.X + end.X) * 0.5, (start.Y + end.Y) * 0.5);
 
-            if ( start.X > end.X ) {
+            if (start.X > end.X) {
                 Point temp = start;
                 start = end;
                 end = temp;
@@ -121,12 +121,12 @@ namespace NodeGraph.View {
 
             Connector connector = ViewModel.Model;
 
-            if ( null != connector.StartPort ) {
+            if (null != connector.StartPort) {
                 NodePortView portView = connector.StartPort.ViewModel.View;
                 portView.IsConnectorMouseOver = true;
             }
 
-            if ( null != connector.EndPort ) {
+            if (null != connector.EndPort) {
                 NodePortView portView = connector.EndPort.ViewModel.View;
                 portView.IsConnectorMouseOver = true;
             }
@@ -137,12 +137,12 @@ namespace NodeGraph.View {
 
             Connector connector = ViewModel.Model;
 
-            if ( null != connector.StartPort ) {
+            if (null != connector.StartPort) {
                 NodePortView portView = connector.StartPort.ViewModel.View;
                 portView.IsConnectorMouseOver = false;
             }
 
-            if ( null != connector.EndPort ) {
+            if (null != connector.EndPort) {
                 NodePortView portView = connector.EndPort.ViewModel.View;
                 portView.IsConnectorMouseOver = false;
             }
@@ -151,7 +151,7 @@ namespace NodeGraph.View {
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e) {
             base.OnMouseDoubleClick(e);
 
-            if ( MouseButton.Left == e.ChangedButton ) {
+            if (MouseButton.Left == e.ChangedButton) {
                 Connector connector = ViewModel.Model;
                 FlowChart flowChart = connector.FlowChart;
                 FlowChartView flowChartView = flowChart.ViewModel.View;

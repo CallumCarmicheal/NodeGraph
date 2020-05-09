@@ -11,7 +11,7 @@ namespace NodeGraph.Model {
         public Type ViewModelType = typeof(FlowChartViewModel);
 
         public FlowChartAttribute() {
-            if ( !typeof(FlowChartViewModel).IsAssignableFrom(ViewModelType) )
+            if (!typeof(FlowChartViewModel).IsAssignableFrom(ViewModelType))
                 throw new ArgumentException("ViewModelType of FlowChartAttribute must be subclass of FlowChartViewModel");
         }
     }

@@ -21,7 +21,7 @@ namespace NodeGraph.Model {
         public string Name {
             get { return _Name; }
             set {
-                if ( value != _Name ) {
+                if (value != _Name) {
                     _Name = value;
                     RaisePropertyChanged("Name");
                 }
@@ -32,7 +32,7 @@ namespace NodeGraph.Model {
         public bool AllowMultipleInput {
             get { return _AllowMultipleInput; }
             set {
-                if ( value != _AllowMultipleInput ) {
+                if (value != _AllowMultipleInput) {
                     _AllowMultipleInput = value;
                     RaisePropertyChanged("AllowMultipleInput");
                 }
@@ -43,7 +43,7 @@ namespace NodeGraph.Model {
         public bool AllowMultipleOutput {
             get { return _AllowMultipleOutput; }
             set {
-                if ( value != _AllowMultipleOutput ) {
+                if (value != _AllowMultipleOutput) {
                     _AllowMultipleOutput = value;
                     RaisePropertyChanged("AllowMultipleOutput");
                 }
@@ -54,7 +54,7 @@ namespace NodeGraph.Model {
         public string DisplayName {
             get { return _DisplayName; }
             set {
-                if ( value != _DisplayName ) {
+                if (value != _DisplayName) {
                     _DisplayName = value;
                     RaisePropertyChanged("DisplayName");
                 }
@@ -65,7 +65,7 @@ namespace NodeGraph.Model {
         public ObservableCollection<Connector> Connectors {
             get { return _Connectors; }
             set {
-                if ( value != _Connectors ) {
+                if (value != _Connectors) {
                     _Connectors = value;
                     RaisePropertyChanged("Connectors");
                 }
@@ -76,7 +76,7 @@ namespace NodeGraph.Model {
         public bool IsPortEnabled {
             get { return _IsPortEnabled; }
             set {
-                if ( value != _IsPortEnabled ) {
+                if (value != _IsPortEnabled) {
                     _IsPortEnabled = value;
                     RaisePropertyChanged("IsPortEnabled");
                 }
@@ -87,7 +87,7 @@ namespace NodeGraph.Model {
         public bool IsEnabled {
             get { return _IsEnabled; }
             set {
-                if ( value != _IsEnabled ) {
+                if (value != _IsEnabled) {
                     _IsEnabled = value;
                     RaisePropertyChanged("IsEnabled");
                 }
@@ -129,7 +129,7 @@ namespace NodeGraph.Model {
         #region Callbacks
 
         public virtual void OnCreate() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("NodePort.OnCreate()");
 
             IsInitialized = true;
@@ -138,27 +138,27 @@ namespace NodeGraph.Model {
         }
 
         public virtual void OnPreDestroy() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("NodePort.OnPreDestroy()");
         }
 
         public virtual void OnPostDestroy() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("NodePort.OnPostDestroy()");
         }
 
         public virtual void OnConnect(Connector connector) {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("NodePort.OnConnect()");
         }
 
         public virtual void OnDisconnect(Connector connector) {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("NodePort.OnDisconnect()");
         }
 
         public virtual void OnDeserialize() {
-            if ( NodeGraphManager.OutputDebugInfo )
+            if (NodeGraphManager.OutputDebugInfo)
                 System.Diagnostics.Debug.WriteLine("NodePort.OnDeserialize()");
 
             IsInitialized = true;
