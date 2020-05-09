@@ -15,16 +15,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NodeGraph.View
-{
-    public class ConnectorView : ContentControl
-    {
+namespace NodeGraph.View {
+    public class ConnectorView : ContentControl {
         #region Properties
 
         public ConnectorViewModel ViewModel { get; private set; }
 
-        public string CurveData
-        {
+        public string CurveData {
             get { return (string)GetValue(CurveDataProperty); }
             set { SetValue(CurveDataProperty, value); }
         }
@@ -36,8 +33,7 @@ namespace NodeGraph.View
 
         #region Constructor
 
-        public ConnectorView( NodeGraphManager ngm )
-        {
+        public ConnectorView(NodeGraphManager ngm) {
             NodeGraphManager = ngm;
 
             LayoutUpdated += ConnectorView_LayoutUpdated;
@@ -49,13 +45,11 @@ namespace NodeGraph.View
 
         #region Events
 
-        private void ConnectorView_Loaded( object sender, RoutedEventArgs e )
-        {
+        private void ConnectorView_Loaded(object sender, RoutedEventArgs e) {
             SynchronizeProperties();
         }
 
-        private void ConnectorView_DataContextChanged( object sender, DependencyPropertyChangedEventArgs e )
-        {
+        private void ConnectorView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             ViewModel = DataContext as ConnectorViewModel;
             if ( null == ViewModel )
                 throw new Exception("ViewModel must be bound as DataContext in ConnectorView.");
@@ -65,23 +59,19 @@ namespace NodeGraph.View
             SynchronizeProperties();
         }
 
-        private void ConnectorView_LayoutUpdated( object sender, EventArgs e )
-        {
+        private void ConnectorView_LayoutUpdated(object sender, EventArgs e) {
             FlowChart flowChart = ViewModel.Model.FlowChart;
             FlowChartView flowChartView = flowChart.ViewModel.View;
             BuildCurveData(Mouse.GetPosition(flowChartView));
         }
 
-        protected virtual void SynchronizeProperties()
-        {
-            if ( null == ViewModel )
-            {
+        protected virtual void SynchronizeProperties() {
+            if ( null == ViewModel ) {
                 return;
             }
         }
 
-        protected virtual void ViewModelPropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
-        {
+        protected virtual void ViewModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             SynchronizeProperties();
         }
 
@@ -89,8 +79,7 @@ namespace NodeGraph.View
 
         #region Curve
 
-        public void BuildCurveData( Point mousePos )
-        {
+        public void BuildCurveData(Point mousePos) {
             Connector connector = ViewModel.Model;
             FlowChart flowChart = connector.FlowChart;
             FlowChartView flowChartView = flowChart.ViewModel.View;
@@ -98,18 +87,17 @@ namespace NodeGraph.View
             NodePort startPort = connector.StartPort;
             NodePort endPort = connector.EndPort;
 
-            Point start = ( null != startPort ) ? ViewUtil.GetRelativeCenterLocation(startPort.ViewModel.View.PartPort, flowChartView) : mousePos;
-            Point end = ( null != endPort ) ? ViewUtil.GetRelativeCenterLocation(endPort.ViewModel.View.PartPort, flowChartView) : mousePos;
-            Point center = new Point(( start.X + end.X ) * 0.5, ( start.Y + end.Y ) * 0.5);
+            Point start = (null != startPort) ? ViewUtil.GetRelativeCenterLocation(startPort.ViewModel.View.PartPort, flowChartView) : mousePos;
+            Point end = (null != endPort) ? ViewUtil.GetRelativeCenterLocation(endPort.ViewModel.View.PartPort, flowChartView) : mousePos;
+            Point center = new Point((start.X + end.X) * 0.5, (start.Y + end.Y) * 0.5);
 
-            if ( start.X > end.X )
-            {
+            if ( start.X > end.X ) {
                 Point temp = start;
                 start = end;
                 end = temp;
             }
 
-            double ratio = Math.Min(1.0, ( center.X - start.X ) / 100.0);
+            double ratio = Math.Min(1.0, (center.X - start.X) / 100.0);
             Point c0 = start;
             Point c1 = end;
             c0.X += 100 * ratio;
@@ -128,50 +116,42 @@ namespace NodeGraph.View
 
         #region Mouse Events
 
-        protected override void OnMouseEnter( MouseEventArgs e )
-        {
+        protected override void OnMouseEnter(MouseEventArgs e) {
             base.OnMouseEnter(e);
 
             Connector connector = ViewModel.Model;
 
-            if ( null != connector.StartPort )
-            {
+            if ( null != connector.StartPort ) {
                 NodePortView portView = connector.StartPort.ViewModel.View;
                 portView.IsConnectorMouseOver = true;
             }
 
-            if ( null != connector.EndPort )
-            {
+            if ( null != connector.EndPort ) {
                 NodePortView portView = connector.EndPort.ViewModel.View;
                 portView.IsConnectorMouseOver = true;
             }
         }
 
-        protected override void OnMouseLeave( MouseEventArgs e )
-        {
+        protected override void OnMouseLeave(MouseEventArgs e) {
             base.OnMouseLeave(e);
 
             Connector connector = ViewModel.Model;
 
-            if ( null != connector.StartPort )
-            {
+            if ( null != connector.StartPort ) {
                 NodePortView portView = connector.StartPort.ViewModel.View;
                 portView.IsConnectorMouseOver = false;
             }
 
-            if ( null != connector.EndPort )
-            {
+            if ( null != connector.EndPort ) {
                 NodePortView portView = connector.EndPort.ViewModel.View;
                 portView.IsConnectorMouseOver = false;
             }
         }
 
-        protected override void OnMouseDoubleClick( MouseButtonEventArgs e )
-        {
+        protected override void OnMouseDoubleClick(MouseButtonEventArgs e) {
             base.OnMouseDoubleClick(e);
 
-            if ( MouseButton.Left == e.ChangedButton )
-            {
+            if ( MouseButton.Left == e.ChangedButton ) {
                 Connector connector = ViewModel.Model;
                 FlowChart flowChart = connector.FlowChart;
                 FlowChartView flowChartView = flowChart.ViewModel.View;

@@ -13,16 +13,13 @@ using System.Windows;
 using System.Windows.Media;
 using System.Xml;
 
-namespace NodeGraph
-{
-    public enum SelectionMode
-    {
+namespace NodeGraph {
+    public enum SelectionMode {
         Overlap,
         Include,
     }
 
-    public class NodeGraphManager
-    {
+    public class NodeGraphManager {
         #region Fields
 
         public readonly Dictionary<Guid, FlowChart> FlowCharts = new Dictionary<Guid, FlowChart>();
@@ -46,8 +43,7 @@ namespace NodeGraph
         /// <param name="guid">Guid of this FlowChart.</param>
         /// <param name="flowChartModelType">Type of FlowChart to be created.</param>
         /// <returns>Created FlowChart instance</returns>
-        public FlowChart CreateFlowChart( bool isDeserializing, Guid guid, Type flowChartModelType )
-        {
+        public FlowChart CreateFlowChart(bool isDeserializing, Guid guid, Type flowChartModelType) {
             //------ create FlowChart.
 
             var flowChartAttrs = flowChartModelType.GetCustomAttributes(typeof(FlowChartAttribute), false) as FlowChartAttribute[];
@@ -70,8 +66,7 @@ namespace NodeGraph
 
             //----- invocke create callback.
 
-            if ( !isDeserializing )
-            {
+            if ( !isDeserializing ) {
                 flowChart.OnCreate();
             }
 
@@ -80,29 +75,24 @@ namespace NodeGraph
             return flowChart;
         }
 
-        public void DestroyFlowChart( Guid guid )
-        {
+        public void DestroyFlowChart(Guid guid) {
             FlowChart flowChart;
-            if ( !FlowCharts.TryGetValue(guid, out flowChart) )
-            {
+            if ( !FlowCharts.TryGetValue(guid, out flowChart) ) {
                 return;
             }
 
             flowChart.OnPreDestroy();
 
             ObservableCollection<Guid> guids = new ObservableCollection<Guid>();
-            foreach ( var node in flowChart.Nodes )
-            {
+            foreach ( var node in flowChart.Nodes ) {
                 guids.Add(node.Guid);
             }
 
-            foreach ( var nodeGuid in guids )
-            {
+            foreach ( var nodeGuid in guids ) {
                 DestroyNode(nodeGuid);
             }
 
-            if ( 0 < flowChart.Connectors.Count )
-            {
+            if ( 0 < flowChart.Connectors.Count ) {
                 throw new InvalidOperationException("Connectors are not removed.");
             }
 
@@ -112,8 +102,7 @@ namespace NodeGraph
             FlowCharts.Remove(guid);
         }
 
-        public FlowChart FindFlowChart( Guid guid )
-        {
+        public FlowChart FindFlowChart(Guid guid) {
             FlowChart flowChart;
             FlowCharts.TryGetValue(guid, out flowChart);
             return flowChart;
@@ -141,9 +130,8 @@ namespace NodeGraph
         /// <param name="flowPortViewModelTypeOverride">FlowPortViewModel to override.</param>
         /// <param name="propertyPortViewModelTypeOverride">PropertyPortViewmodel to override.</param>
         /// <returns>Created node instance.</returns>
-        public Node CreateNode( bool isDeserializing, Guid guid, FlowChart flowChart, Type nodeType, double x, double y, int ZIndex,
-                Type nodeViewModelTypeOverride = null, Type flowPortViewModelTypeOverride = null, Type propertyPortViewModelTypeOverride = null )
-        {
+        public Node CreateNode(bool isDeserializing, Guid guid, FlowChart flowChart, Type nodeType, double x, double y, int ZIndex,
+                Type nodeViewModelTypeOverride = null, Type flowPortViewModelTypeOverride = null, Type propertyPortViewModelTypeOverride = null) {
             //----- exceptions.
 
             if ( null == flowChart )
@@ -168,7 +156,7 @@ namespace NodeGraph
 
             // create node viewmodel.
             var vm = node.ViewModel = Activator.CreateInstance(
-                ( null != nodeViewModelTypeOverride ) ? nodeViewModelTypeOverride : nodeAttr.ViewModelType,
+                (null != nodeViewModelTypeOverride) ? nodeViewModelTypeOverride : nodeAttr.ViewModelType,
                 new object[] { node }) as NodeViewModel;
 
             // TODO: Check if vm = node view
@@ -184,32 +172,27 @@ namespace NodeGraph
 
             //----- create ports.
 
-            if ( !isDeserializing )
-            {
+            if ( !isDeserializing ) {
                 //----- create flowPorts from NodeFlowPortAttribute.
 
                 var flowPortAttrs = nodeType.GetCustomAttributes(typeof(NodeFlowPortAttribute), false) as NodeFlowPortAttribute[];
-                foreach ( var attr in flowPortAttrs )
-                {
+                foreach ( var attr in flowPortAttrs ) {
                     NodeFlowPort port = CreateNodeFlowPort(false,
                         Guid.NewGuid(), node, attr.IsInput,
-                        ( null != flowPortViewModelTypeOverride ) ? flowPortViewModelTypeOverride : attr.ViewModelType,
+                        (null != flowPortViewModelTypeOverride) ? flowPortViewModelTypeOverride : attr.ViewModelType,
                         attr.Name, attr.DisplayName, attr.AllowMultipleInput, attr.AllowMultipleOutput, attr.IsPortEnabled, attr.IsEnabled);
                 }
 
                 //----- create nodePropertyPorts( property ) from NodePropertyAttribute.
 
                 var propertyInfos = nodeType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                foreach ( var propertyInfo in propertyInfos )
-                {
+                foreach ( var propertyInfo in propertyInfos ) {
                     var nodePropertyAttrs = propertyInfo.GetCustomAttributes(typeof(NodePropertyPortAttribute), false) as NodePropertyPortAttribute[];
-                    if ( null != nodePropertyAttrs )
-                    {
-                        foreach ( var attr in nodePropertyAttrs )
-                        {
+                    if ( null != nodePropertyAttrs ) {
+                        foreach ( var attr in nodePropertyAttrs ) {
                             NodePropertyPort port = CreateNodePropertyPort(false, Guid.NewGuid(), node, attr.IsInput,
                                 attr.ValueType, attr.DefaultValue, propertyInfo.Name, attr.HasEditor,
-                                ( null != propertyPortViewModelTypeOverride ) ? propertyPortViewModelTypeOverride : attr.ViewModelType,
+                                (null != propertyPortViewModelTypeOverride) ? propertyPortViewModelTypeOverride : attr.ViewModelType,
                                 attr.DisplayName, attr.AllowMultipleInput, attr.AllowMultipleOutput, attr.IsPortEnabled, attr.IsEnabled);
                         }
                     }
@@ -218,16 +201,13 @@ namespace NodeGraph
                 //----- create nodePropertyPorts( field ) from NodePropertyAttribute.
 
                 var fieldInfos = nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance);
-                foreach ( var fieldInfo in fieldInfos )
-                {
+                foreach ( var fieldInfo in fieldInfos ) {
                     var nodePropertyAttrs = fieldInfo.GetCustomAttributes(typeof(NodePropertyPortAttribute), false) as NodePropertyPortAttribute[];
-                    if ( null != nodePropertyAttrs )
-                    {
-                        foreach ( var attr in nodePropertyAttrs )
-                        {
+                    if ( null != nodePropertyAttrs ) {
+                        foreach ( var attr in nodePropertyAttrs ) {
                             NodePropertyPort port = CreateNodePropertyPort(false, Guid.NewGuid(), node, attr.IsInput,
                                 attr.ValueType, attr.DefaultValue, fieldInfo.Name, attr.HasEditor,
-                                ( null != propertyPortViewModelTypeOverride ) ? propertyPortViewModelTypeOverride : attr.ViewModelType,
+                                (null != propertyPortViewModelTypeOverride) ? propertyPortViewModelTypeOverride : attr.ViewModelType,
                                 attr.DisplayName, attr.AllowMultipleInput, attr.AllowMultipleOutput, attr.IsPortEnabled, attr.IsEnabled);
                         }
                     }
@@ -243,11 +223,9 @@ namespace NodeGraph
             return node;
         }
 
-        public void DestroyNode( Guid guid )
-        {
+        public void DestroyNode(Guid guid) {
             Node node;
-            if ( Nodes.TryGetValue(guid, out node) )
-            {
+            if ( Nodes.TryGetValue(guid, out node) ) {
                 //----- destroy.
 
                 node.OnPreDestroy();
@@ -255,53 +233,43 @@ namespace NodeGraph
                 List<Guid> connectorGuids = new List<Guid>();
                 List<Guid> portGuids = new List<Guid>();
 
-                foreach ( var port in node.InputFlowPorts )
-                {
-                    foreach ( var connector in port.Connectors )
-                    {
+                foreach ( var port in node.InputFlowPorts ) {
+                    foreach ( var connector in port.Connectors ) {
                         if ( !connectorGuids.Contains(connector.Guid) )
                             connectorGuids.Add(connector.Guid);
                     }
                     portGuids.Add(port.Guid);
                 }
 
-                foreach ( var port in node.OutputFlowPorts )
-                {
-                    foreach ( var connector in port.Connectors )
-                    {
+                foreach ( var port in node.OutputFlowPorts ) {
+                    foreach ( var connector in port.Connectors ) {
                         if ( !connectorGuids.Contains(connector.Guid) )
                             connectorGuids.Add(connector.Guid);
                     }
                     portGuids.Add(port.Guid);
                 }
 
-                foreach ( var port in node.InputPropertyPorts )
-                {
-                    foreach ( var connector in port.Connectors )
-                    {
+                foreach ( var port in node.InputPropertyPorts ) {
+                    foreach ( var connector in port.Connectors ) {
                         if ( !connectorGuids.Contains(connector.Guid) )
                             connectorGuids.Add(connector.Guid);
                     }
                     portGuids.Add(port.Guid);
                 }
 
-                foreach ( var port in node.OutputPropertyPorts )
-                {
-                    foreach ( var connector in port.Connectors )
-                    {
+                foreach ( var port in node.OutputPropertyPorts ) {
+                    foreach ( var connector in port.Connectors ) {
                         if ( !connectorGuids.Contains(connector.Guid) )
                             connectorGuids.Add(connector.Guid);
                     }
                     portGuids.Add(port.Guid);
                 }
 
-                foreach ( var connectorGuid in connectorGuids )
-                {
+                foreach ( var connectorGuid in connectorGuids ) {
                     DestroyConnector(connectorGuid);
                 }
 
-                foreach ( var portGuid in portGuids )
-                {
+                foreach ( var portGuid in portGuids ) {
                     DestroyNodePort(portGuid);
                 }
 
@@ -321,22 +289,18 @@ namespace NodeGraph
             }
         }
 
-        public Node FindNode( Guid guid )
-        {
+        public Node FindNode(Guid guid) {
             Node node;
             Nodes.TryGetValue(guid, out node);
             return node;
         }
 
-        public List<Node> FindNode( FlowChart flowChart, string header )
-        {
+        public List<Node> FindNode(FlowChart flowChart, string header) {
             List<Node> nodes = new List<Node>();
 
-            foreach ( var pair in Nodes )
-            {
+            foreach ( var pair in Nodes ) {
                 Node node = pair.Value;
-                if ( ( flowChart == node.Owner ) && ( header == node.Header ) )
-                {
+                if ( (flowChart == node.Owner) && (header == node.Header) ) {
                     nodes.Add(node);
                 }
             }
@@ -348,9 +312,8 @@ namespace NodeGraph
 
         #region RouterNode
 
-        public Node CreateRouterNode( Guid guid, FlowChart flowChart, NodePort referencePort, double X, double Y, int ZIndex,
-            Type nodeViewModelTypeOverride = null, Type flowPortViewModelTypeOverride = null, Type propertyPortViewModelTypeOverride = null )
-        {
+        public Node CreateRouterNode(Guid guid, FlowChart flowChart, NodePort referencePort, double X, double Y, int ZIndex,
+            Type nodeViewModelTypeOverride = null, Type flowPortViewModelTypeOverride = null, Type propertyPortViewModelTypeOverride = null) {
             if ( null == flowChart )
                 throw new ArgumentNullException("flowChart of CreateNode() can not be null");
 
@@ -364,15 +327,12 @@ namespace NodeGraph
                 throw new ArgumentException("CreateRouterNode() is only supported for NodeFlowPort or NodePropertyPort");
 
             Node node = CreateNode(false, guid, flowChart, typeof(Node), X, Y, ZIndex,
-                ( null == nodeViewModelTypeOverride ) ? typeof(RouterNodeViewModel) : nodeViewModelTypeOverride,
+                (null == nodeViewModelTypeOverride) ? typeof(RouterNodeViewModel) : nodeViewModelTypeOverride,
                 flowPortViewModelTypeOverride, propertyPortViewModelTypeOverride);
-            if ( isFlowPort )
-            {
+            if ( isFlowPort ) {
                 CreateNodeFlowPort(false, Guid.NewGuid(), node, true, flowPortViewModelTypeOverride, "Input", "", false, false, true, true);
                 CreateNodeFlowPort(false, Guid.NewGuid(), node, false, flowPortViewModelTypeOverride, "Output", "", false, false, true, true);
-            }
-            else if ( isPropertyPort )
-            {
+            } else if ( isPropertyPort ) {
                 NodePropertyPort propertyPort = referencePort as NodePropertyPort;
                 CreateNodePropertyPort(false, Guid.NewGuid(), node, true, propertyPort.ValueType, propertyPort.Value, "Input", false,
                     propertyPortViewModelTypeOverride,
@@ -385,8 +345,7 @@ namespace NodeGraph
             return node;
         }
 
-        public Node CreateRouterNodeForConnector( Guid guid, FlowChart flowChart, Connector connector, double X, double Y, int ZIndex )
-        {
+        public Node CreateRouterNodeForConnector(Guid guid, FlowChart flowChart, Connector connector, double X, double Y, int ZIndex) {
             NodePort startPort = connector.StartPort;
             NodePort endPort = connector.EndPort;
 
@@ -395,14 +354,11 @@ namespace NodeGraph
             Node node = CreateRouterNode(guid, flowChart, startPort, X, Y, ZIndex);
 
             BeginConnection(startPort);
-            if ( startPort is NodeFlowPort )
-            {
+            if ( startPort is NodeFlowPort ) {
                 EndConnection(node.InputFlowPorts[0]);
 
                 BeginConnection(node.OutputFlowPorts[0]);
-            }
-            else
-            {
+            } else {
                 EndConnection(node.InputPropertyPorts[0]);
 
                 BeginConnection(node.OutputPropertyPorts[0]);
@@ -417,8 +373,7 @@ namespace NodeGraph
 
         #region Connector
 
-        public Connector CreateConnector( bool isDeserializing, Guid guid, FlowChart flowChart, Type connectorType = null )
-        {
+        public Connector CreateConnector(bool isDeserializing, Guid guid, FlowChart flowChart, Type connectorType = null) {
             //----- exceptions.
 
             if ( null == flowChart )
@@ -445,8 +400,7 @@ namespace NodeGraph
 
             //----- invoke Create callback.
 
-            if ( !isDeserializing )
-            {
+            if ( !isDeserializing ) {
                 connector.OnCreate();
             }
 
@@ -455,11 +409,9 @@ namespace NodeGraph
             return connector;
         }
 
-        public void DestroyConnector( Guid guid )
-        {
+        public void DestroyConnector(Guid guid) {
             Connector connector;
-            if ( Connectors.TryGetValue(guid, out connector) )
-            {
+            if ( Connectors.TryGetValue(guid, out connector) ) {
                 //----- history.
 
                 connector.FlowChart.History.AddCommand(new NodeGraph.History.DestroyConnectorCommand(this,
@@ -469,13 +421,11 @@ namespace NodeGraph
 
                 connector.OnPreDestroy();
 
-                if ( null != connector.StartPort )
-                {
+                if ( null != connector.StartPort ) {
                     DisconnectFrom(connector.StartPort, connector);
                 }
 
-                if ( null != connector.EndPort )
-                {
+                if ( null != connector.EndPort ) {
                     DisconnectFrom(connector.EndPort, connector);
                 }
 
@@ -488,8 +438,7 @@ namespace NodeGraph
             }
         }
 
-        public Connector FindConnector( Guid guid )
-        {
+        public Connector FindConnector(Guid guid) {
             Connector connector;
             Connectors.TryGetValue(guid, out connector);
             return connector;
@@ -499,21 +448,18 @@ namespace NodeGraph
 
         #region Port
 
-        public NodePort FindNodePort( Guid guid )
-        {
+        public NodePort FindNodePort(Guid guid) {
             NodePort port = FindNodeFlowPort(guid);
             if ( null == port )
                 port = FindNodePropertyPort(guid);
             return port;
         }
 
-        public void DestroyNodePort( Guid guid )
-        {
+        public void DestroyNodePort(Guid guid) {
             // ---- exception.
 
             NodePort port = FindNodePort(guid);
-            if ( null == port )
-            {
+            if ( null == port ) {
                 return;
             }
 
@@ -526,31 +472,26 @@ namespace NodeGraph
 
             //----- destroy.
 
-            bool isFlowPort = ( port is NodeFlowPort );
+            bool isFlowPort = (port is NodeFlowPort);
 
             port.OnPreDestroy();
 
             List<Guid> guids = new List<Guid>();
-            foreach ( var connector in port.Connectors )
-            {
+            foreach ( var connector in port.Connectors ) {
                 guids.Add(connector.Guid);
             }
 
-            foreach ( var connectorGuid in guids )
-            {
+            foreach ( var connectorGuid in guids ) {
                 DestroyConnector(connectorGuid);
             }
 
-            if ( port.IsInput )
-            {
+            if ( port.IsInput ) {
                 node.ViewModel.InputFlowPortViewModels.Remove(port.ViewModel as NodeFlowPortViewModel);
                 if ( isFlowPort )
                     node.InputFlowPorts.Remove(port as NodeFlowPort);
                 else
                     node.InputPropertyPorts.Remove(port as NodePropertyPort);
-            }
-            else
-            {
+            } else {
                 node.ViewModel.OutputFlowPortViewModels.Remove(port.ViewModel as NodeFlowPortViewModel);
                 if ( isFlowPort )
                     node.OutputFlowPorts.Remove(port as NodeFlowPort);
@@ -566,57 +507,37 @@ namespace NodeGraph
                 NodePropertyPorts.Remove(guid);
         }
 
-        private void FindConnectedPortsInternal( NodePort port, List<NodePort> outConnectedPorts )
-        {
-            if ( null == port )
-            {
+        private void FindConnectedPortsInternal(NodePort port, List<NodePort> outConnectedPorts) {
+            if ( null == port ) {
                 return;
             }
 
-            if ( 0 < port.Connectors.Count )
-            {
-                if ( port.IsInput )
-                {
-                    foreach ( var connector in port.Connectors )
-                    {
+            if ( 0 < port.Connectors.Count ) {
+                if ( port.IsInput ) {
+                    foreach ( var connector in port.Connectors ) {
                         NodePort nextPort = connector.StartPort;
                         Node nextNode = nextPort.Owner;
-                        if ( nextNode.ViewModel is RouterNodeViewModel )
-                        {
-                            if ( nextPort is NodePropertyPort )
-                            {
+                        if ( nextNode.ViewModel is RouterNodeViewModel ) {
+                            if ( nextPort is NodePropertyPort ) {
                                 FindConnectedPortsInternal(nextNode.InputPropertyPorts[0], outConnectedPorts);
-                            }
-                            else if ( nextPort is NodeFlowPort )
-                            {
+                            } else if ( nextPort is NodeFlowPort ) {
                                 FindConnectedPortsInternal(nextNode.InputFlowPorts[0], outConnectedPorts);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             outConnectedPorts.Add(nextPort);
                         }
                     }
-                }
-                else
-                {
-                    foreach ( var connector in port.Connectors )
-                    {
+                } else {
+                    foreach ( var connector in port.Connectors ) {
                         NodePort nextPort = connector.EndPort;
                         Node nextNode = nextPort.Owner;
-                        if ( nextNode.ViewModel is RouterNodeViewModel )
-                        {
-                            if ( nextPort is NodePropertyPort )
-                            {
+                        if ( nextNode.ViewModel is RouterNodeViewModel ) {
+                            if ( nextPort is NodePropertyPort ) {
                                 FindConnectedPortsInternal(nextNode.OutputPropertyPorts[0], outConnectedPorts);
-                            }
-                            else if ( nextPort is NodeFlowPort )
-                            {
+                            } else if ( nextPort is NodeFlowPort ) {
                                 FindConnectedPortsInternal(nextNode.OutputFlowPorts[0], outConnectedPorts);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             outConnectedPorts.Add(nextPort);
                         }
                     }
@@ -624,8 +545,7 @@ namespace NodeGraph
             }
         }
 
-        public void FindConnectedPorts( NodePort port, out List<NodePort> outConnectedPorts )
-        {
+        public void FindConnectedPorts(NodePort port, out List<NodePort> outConnectedPorts) {
             outConnectedPorts = new List<NodePort>();
             FindConnectedPortsInternal(port, outConnectedPorts);
         }
@@ -648,9 +568,8 @@ namespace NodeGraph
         /// <param name="allowMultipleOutput">Multiple outputs are allowed for this port?</param>
         /// <param name="portViewModelTypeOverride">ViewModelType to override.</param>
         /// <returns>Created NodeFlwoPort instance.</returns>
-        public NodeFlowPort CreateNodeFlowPort( bool isDeserializing, Guid guid, Node node, bool isInput, Type portViewModelTypeOverride = null,
-            string name = "None", string displayName = "None", bool allowMultipleInput = true, bool allowMultipleOutput = false, bool isPortEnabled = true, bool isEnabled = true )
-        {
+        public NodeFlowPort CreateNodeFlowPort(bool isDeserializing, Guid guid, Node node, bool isInput, Type portViewModelTypeOverride = null,
+            string name = "None", string displayName = "None", bool allowMultipleInput = true, bool allowMultipleOutput = false, bool isPortEnabled = true, bool isEnabled = true) {
             //----- exceptions.
 
             if ( null == node )
@@ -671,26 +590,22 @@ namespace NodeGraph
             NodeFlowPorts.Add(port.Guid, port);
 
             // create flowPort viewmodel.
-            var portVM = Activator.CreateInstance(( null != portViewModelTypeOverride ) ? portViewModelTypeOverride : typeof(NodeFlowPortViewModel),
+            var portVM = Activator.CreateInstance((null != portViewModelTypeOverride) ? portViewModelTypeOverride : typeof(NodeFlowPortViewModel),
                 new object[] { port }) as NodeFlowPortViewModel;
 
             // add port to node.
             port.ViewModel = portVM;
-            if ( isInput )
-            {
+            if ( isInput ) {
                 node.InputFlowPorts.Add(port);
                 node.ViewModel.InputFlowPortViewModels.Add(portVM);
-            }
-            else
-            {
+            } else {
                 node.OutputFlowPorts.Add(port);
                 node.ViewModel.OutputFlowPortViewModels.Add(portVM);
             }
 
             //----- invoke Create callback.
 
-            if ( !isDeserializing )
-            {
+            if ( !isDeserializing ) {
                 port.OnCreate();
             }
 
@@ -704,20 +619,16 @@ namespace NodeGraph
             return port;
         }
 
-        public NodeFlowPort FindNodeFlowPort( Guid guid )
-        {
+        public NodeFlowPort FindNodeFlowPort(Guid guid) {
             NodeFlowPort port;
             NodeFlowPorts.TryGetValue(guid, out port);
             return port;
         }
 
-        public NodeFlowPort FindNodeFlowPort( Node node, string propertyName )
-        {
-            foreach ( var pair in NodeFlowPorts )
-            {
+        public NodeFlowPort FindNodeFlowPort(Node node, string propertyName) {
+            foreach ( var pair in NodeFlowPorts ) {
                 NodeFlowPort port = pair.Value;
-                if ( ( node == port.Owner ) && ( propertyName == port.Name ) )
-                {
+                if ( (node == port.Owner) && (propertyName == port.Name) ) {
                     return port;
                 }
             }
@@ -745,9 +656,8 @@ namespace NodeGraph
         /// <param name="defaultValue">Default property value.</param>
         // <param name="portViewModelTypeOverride">ViewModelType to override.</param>
         /// <returns>Created NodePropertyPort instance.</returns>
-        public NodePropertyPort CreateNodePropertyPort( bool isDeserializing, Guid guid, Node node, bool isInput, Type valueType, object defaultValue, string name, bool hasEditor,
-            Type portViewModelTypeOverride = null, string displayName = "", bool allowMultipleInput = false, bool allowMultipleOutput = true, bool isPortEnabled = true, bool isEnabled = true )
-        {
+        public NodePropertyPort CreateNodePropertyPort(bool isDeserializing, Guid guid, Node node, bool isInput, Type valueType, object defaultValue, string name, bool hasEditor,
+            Type portViewModelTypeOverride = null, string displayName = "", bool allowMultipleInput = false, bool allowMultipleOutput = true, bool isPortEnabled = true, bool isEnabled = true) {
             //----- exceptions.
             if ( null == node )
                 throw new ArgumentNullException("node of CreateNodePropertyPort() can not be null");
@@ -766,25 +676,21 @@ namespace NodeGraph
             NodePropertyPorts.Add(port.Guid, port);
 
             // create propertyPort viewmodel.
-            var portVM = Activator.CreateInstance(( null != portViewModelTypeOverride ) ? portViewModelTypeOverride : typeof(NodePropertyPortViewModel),
+            var portVM = Activator.CreateInstance((null != portViewModelTypeOverride) ? portViewModelTypeOverride : typeof(NodePropertyPortViewModel),
                 new object[] { port }) as NodePropertyPortViewModel;
             port.ViewModel = portVM;
 
             // add to node.
-            if ( port.IsInput )
-            {
+            if ( port.IsInput ) {
                 node.InputPropertyPorts.Add(port);
                 node.ViewModel.InputPropertyPortViewModels.Add(portVM);
-            }
-            else
-            {
+            } else {
                 node.OutputPropertyPorts.Add(port);
                 node.ViewModel.OutputPropertyPortViewModels.Add(portVM);
             }
 
             //----- invoke Create callback.
-            if ( !isDeserializing )
-            {
+            if ( !isDeserializing ) {
                 port.OnCreate();
             }
 
@@ -796,20 +702,16 @@ namespace NodeGraph
             return port;
         }
 
-        public NodePropertyPort FindNodePropertyPort( Guid guid )
-        {
+        public NodePropertyPort FindNodePropertyPort(Guid guid) {
             NodePropertyPort port;
             NodePropertyPorts.TryGetValue(guid, out port);
             return port;
         }
 
-        public NodePropertyPort FindNodePropertyPort( Node node, string propertyName )
-        {
-            foreach ( var pair in NodePropertyPorts )
-            {
+        public NodePropertyPort FindNodePropertyPort(Node node, string propertyName) {
+            foreach ( var pair in NodePropertyPorts ) {
                 NodePropertyPort port = pair.Value;
-                if ( ( node == port.Owner ) && ( propertyName == port.Name ) )
-                {
+                if ( (node == port.Owner) && (propertyName == port.Name) ) {
                     return port;
                 }
             }
@@ -825,14 +727,10 @@ namespace NodeGraph
         public NodePort FirstConnectionPort { get; private set; }
         public Connector CurrentConnector { get; private set; }
 
-        public void ConnectTo( NodePort port, Connector connector )
-        {
-            if ( port.IsInput )
-            {
+        public void ConnectTo(NodePort port, Connector connector) {
+            if ( port.IsInput ) {
                 connector.EndPort = port;
-            }
-            else
-            {
+            } else {
                 connector.StartPort = port;
             }
             port.Connectors.Add(connector);
@@ -841,41 +739,33 @@ namespace NodeGraph
             connector.OnConnect(port);
         }
 
-        public void DisconnectFrom( NodePort port, Connector connector )
-        {
+        public void DisconnectFrom(NodePort port, Connector connector) {
             if ( null == port )
                 return;
 
             connector.OnDisconnect(port);
             port.OnDisconnect(connector);
 
-            if ( port.IsInput )
-            {
+            if ( port.IsInput ) {
                 connector.EndPort = null;
-            }
-            else
-            {
+            } else {
                 connector.StartPort = null;
             }
             port.Connectors.Remove(connector);
         }
 
-        public void DisconnectAll( NodePort port )
-        {
+        public void DisconnectAll(NodePort port) {
             List<Guid> connectorGuids = new List<Guid>();
-            foreach ( var connection in port.Connectors )
-            {
+            foreach ( var connection in port.Connectors ) {
                 connectorGuids.Add(connection.Guid);
             }
 
-            foreach ( var guid in connectorGuids )
-            {
+            foreach ( var guid in connectorGuids ) {
                 DestroyConnector(guid);
             }
         }
 
-        public void BeginConnection( NodePort port )
-        {
+        public void BeginConnection(NodePort port) {
             if ( IsConnecting )
                 throw new InvalidOperationException("You can not connect node during other connection occurs.");
 
@@ -893,35 +783,25 @@ namespace NodeGraph
             FirstConnectionPort = port;
         }
 
-        public void SetOtherConnectionPort( NodePort port )
-        {
-            if ( null == port )
-            {
-                if ( ( null != CurrentConnector.StartPort ) && ( CurrentConnector.StartPort == FirstConnectionPort ) )
-                {
-                    if ( null != CurrentConnector.EndPort )
-                    {
+        public void SetOtherConnectionPort(NodePort port) {
+            if ( null == port ) {
+                if ( (null != CurrentConnector.StartPort) && (CurrentConnector.StartPort == FirstConnectionPort) ) {
+                    if ( null != CurrentConnector.EndPort ) {
                         DisconnectFrom(CurrentConnector.EndPort, CurrentConnector);
                     }
-                }
-                else if ( ( null != CurrentConnector.EndPort ) && ( CurrentConnector.EndPort == FirstConnectionPort ) )
-                {
-                    if ( null != CurrentConnector.StartPort )
-                    {
+                } else if ( (null != CurrentConnector.EndPort) && (CurrentConnector.EndPort == FirstConnectionPort) ) {
+                    if ( null != CurrentConnector.StartPort ) {
                         DisconnectFrom(CurrentConnector.StartPort, CurrentConnector);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 ConnectTo(port, CurrentConnector);
             }
         }
 
         private List<Node> _AlreadyCheckedNodes;
 
-        public bool CheckIfConnectable( NodePort otherPort, out string error )
-        {
+        public bool CheckIfConnectable(NodePort otherPort, out string error) {
             Type firstType = FirstConnectionPort.GetType();
             Type otherType = otherPort.GetType();
 
@@ -931,63 +811,51 @@ namespace NodeGraph
             error = "";
 
             // same port.
-            if ( FirstConnectionPort == otherPort )
-            {
+            if ( FirstConnectionPort == otherPort ) {
                 //error = "It's a same port.";
                 return false;
             }
 
             // same node.
-            if ( firstNode == otherNode )
-            {
+            if ( firstNode == otherNode ) {
                 error = "It's a port of same node.";
                 return false;
             }
 
-            bool areAllPropertyPorts = ( typeof(NodePropertyPort).IsAssignableFrom(firstType) && typeof(NodePropertyPort).IsAssignableFrom(otherType) );
-            bool areAllFlowPorts = ( typeof(NodeFlowPort).IsAssignableFrom(firstType) && typeof(NodeFlowPort).IsAssignableFrom(otherType) );
+            bool areAllPropertyPorts = (typeof(NodePropertyPort).IsAssignableFrom(firstType) && typeof(NodePropertyPort).IsAssignableFrom(otherType));
+            bool areAllFlowPorts = (typeof(NodeFlowPort).IsAssignableFrom(firstType) && typeof(NodeFlowPort).IsAssignableFrom(otherType));
 
             // different type of ports
-            if ( !areAllPropertyPorts && !areAllFlowPorts )
-            {
+            if ( !areAllPropertyPorts && !areAllFlowPorts ) {
                 error = "Port type is not same with other's.";
                 return false;
             }
 
             // same orientation.
-            if ( FirstConnectionPort.IsInput == otherPort.IsInput )
-            {
+            if ( FirstConnectionPort.IsInput == otherPort.IsInput ) {
                 error = "Ports are all input or output.";
                 return false;
             }
 
             // already connectecd.
-            foreach ( var connector in FirstConnectionPort.Connectors )
-            {
-                if ( connector.StartPort == otherPort )
-                {
+            foreach ( var connector in FirstConnectionPort.Connectors ) {
+                if ( connector.StartPort == otherPort ) {
                     error = "Already connected";
                     return false;
                 }
             }
 
             // different type of value.
-            if ( areAllPropertyPorts )
-            {
+            if ( areAllPropertyPorts ) {
                 NodePropertyPort firstPropPort = FirstConnectionPort as NodePropertyPort;
                 NodePropertyPort otherPropPort = otherPort as NodePropertyPort;
-                if ( !firstPropPort.IsInput )
-                {
-                    if ( !otherPropPort.ValueType.IsAssignableFrom(firstPropPort.ValueType) )
-                    {
+                if ( !firstPropPort.IsInput ) {
+                    if ( !otherPropPort.ValueType.IsAssignableFrom(firstPropPort.ValueType) ) {
                         error = "Value type is not assignable";
                         return false;
                     }
-                }
-                else
-                {
-                    if ( !firstPropPort.ValueType.IsAssignableFrom(otherPropPort.ValueType) )
-                    {
+                } else {
+                    if ( !firstPropPort.ValueType.IsAssignableFrom(otherPropPort.ValueType) ) {
                         error = "Value type is not assignable";
                         return false;
                     }
@@ -995,13 +863,11 @@ namespace NodeGraph
             }
 
             // circular test
-            if ( !otherPort.Owner.AllowCircularConnection )
-            {
+            if ( !otherPort.Owner.AllowCircularConnection ) {
                 _AlreadyCheckedNodes = new List<Node>();
                 if ( IsReachable(
                     FirstConnectionPort.IsInput ? firstNode : otherNode,
-                    FirstConnectionPort.IsInput ? otherNode : firstNode) )
-                {
+                    FirstConnectionPort.IsInput ? otherNode : firstNode) ) {
                     error = "Circular connection";
                     _AlreadyCheckedNodes = null;
                     return false;
@@ -1012,17 +878,14 @@ namespace NodeGraph
             return FirstConnectionPort.IsConnectable(otherPort, out error);
         }
 
-        private bool IsReachable( Node nodeFrom, Node nodeTo )
-        {
+        private bool IsReachable(Node nodeFrom, Node nodeTo) {
             if ( _AlreadyCheckedNodes.Contains(nodeFrom) )
                 return false;
 
             _AlreadyCheckedNodes.Add(nodeFrom);
 
-            foreach ( var port in nodeFrom.OutputFlowPorts )
-            {
-                foreach ( var connector in port.Connectors )
-                {
+            foreach ( var port in nodeFrom.OutputFlowPorts ) {
+                foreach ( var connector in port.Connectors ) {
                     NodePort endPort = connector.EndPort;
                     Node nextNode = endPort.Owner;
                     if ( nextNode == nodeTo )
@@ -1033,10 +896,8 @@ namespace NodeGraph
                 }
             }
 
-            foreach ( var port in nodeFrom.OutputPropertyPorts )
-            {
-                foreach ( var connector in port.Connectors )
-                {
+            foreach ( var port in nodeFrom.OutputPropertyPorts ) {
+                foreach ( var connector in port.Connectors ) {
                     NodePort endPort = connector.EndPort;
                     Node nextNode = endPort.Owner;
                     if ( nextNode == nodeTo )
@@ -1050,61 +911,47 @@ namespace NodeGraph
             return false;
         }
 
-        public bool EndConnection( NodePort endPort = null )
-        {
+        public bool EndConnection(NodePort endPort = null) {
             EndDragging();
 
             bool bResult = false;
 
-            if ( !IsConnecting )
-            {
+            if ( !IsConnecting ) {
                 return false;
             }
 
-            if ( null != endPort )
-            {
+            if ( null != endPort ) {
                 SetOtherConnectionPort(endPort);
             }
 
-            if ( ( null == CurrentConnector.StartPort ) || ( null == CurrentConnector.EndPort ) )
-            {
+            if ( (null == CurrentConnector.StartPort) || (null == CurrentConnector.EndPort) ) {
                 DestroyConnector(CurrentConnector.Guid);
-            }
-            else
-            {
+            } else {
                 NodePort startPort = FindNodePort(CurrentConnector.StartPort.Guid);
                 if ( null == endPort )
                     endPort = FindNodePort(CurrentConnector.EndPort.Guid);
-                if ( !startPort.AllowMultipleOutput )
-                {
+                if ( !startPort.AllowMultipleOutput ) {
                     List<Guid> connectorGuids = new List<Guid>();
-                    foreach ( var connector in startPort.Connectors )
-                    {
-                        if ( CurrentConnector.Guid != connector.Guid )
-                        {
+                    foreach ( var connector in startPort.Connectors ) {
+                        if ( CurrentConnector.Guid != connector.Guid ) {
                             connectorGuids.Add(connector.Guid);
                         }
                     }
 
-                    foreach ( var guid in connectorGuids )
-                    {
+                    foreach ( var guid in connectorGuids ) {
                         DestroyConnector(guid);
                     }
                 }
 
-                if ( !endPort.AllowMultipleInput )
-                {
+                if ( !endPort.AllowMultipleInput ) {
                     List<Guid> connectorGuids = new List<Guid>();
-                    foreach ( var connector in endPort.Connectors )
-                    {
-                        if ( CurrentConnector.Guid != connector.Guid )
-                        {
+                    foreach ( var connector in endPort.Connectors ) {
+                        if ( CurrentConnector.Guid != connector.Guid ) {
                             connectorGuids.Add(connector.Guid);
                         }
                     }
 
-                    foreach ( var guid in connectorGuids )
-                    {
+                    foreach ( var guid in connectorGuids ) {
                         DestroyConnector(guid);
                     }
                 }
@@ -1124,8 +971,7 @@ namespace NodeGraph
             return bResult;
         }
 
-        public void UpdateConnection( Point mousePos )
-        {
+        public void UpdateConnection(Point mousePos) {
             if ( null != CurrentConnector )
                 CurrentConnector.ViewModel.View.BuildCurveData(mousePos);
         }
@@ -1138,8 +984,7 @@ namespace NodeGraph
         public bool AreNodesReallyDragged { get; private set; }
         private Guid _NodeDraggingFlowChartGuid;
 
-        public void BeginDragNode( FlowChart flowChart )
-        {
+        public void BeginDragNode(FlowChart flowChart) {
             BeginDragging(flowChart.ViewModel.View);
 
             if ( IsNodeDragging )
@@ -1149,26 +994,22 @@ namespace NodeGraph
             _NodeDraggingFlowChartGuid = flowChart.Guid;
         }
 
-        public void EndDragNode()
-        {
+        public void EndDragNode() {
             EndDragging();
 
             IsNodeDragging = false;
             AreNodesReallyDragged = false;
         }
 
-        public void DragNode( Point delta )
-        {
+        public void DragNode(Point delta) {
             if ( !IsNodeDragging )
                 return;
 
             AreNodesReallyDragged = true;
 
             ObservableCollection<Guid> selectedNodes;
-            if ( SelectedNodes.TryGetValue(_NodeDraggingFlowChartGuid, out selectedNodes) )
-            {
-                foreach ( var guid in selectedNodes )
-                {
+            if ( SelectedNodes.TryGetValue(_NodeDraggingFlowChartGuid, out selectedNodes) ) {
+                foreach ( var guid in selectedNodes ) {
                     Node node = FindNode(guid);
                     node.X += delta.X;
                     node.Y += delta.Y;
@@ -1181,16 +1022,15 @@ namespace NodeGraph
         #region Mouse Trapping
 
         [DllImport("user32.dll")]
-        public static extern void ClipCursor( ref System.Drawing.Rectangle rect );
+        public static extern void ClipCursor(ref System.Drawing.Rectangle rect);
 
         [DllImport("user32.dll")]
-        public static extern void ClipCursor( IntPtr rect );
+        public static extern void ClipCursor(IntPtr rect);
 
         private FlowChartView _TrappingFlowChartView;
         public bool IsDragging = false;
 
-        public void BeginDragging( FlowChartView flowChartView )
-        {
+        public void BeginDragging(FlowChartView flowChartView) {
             _TrappingFlowChartView = flowChartView;
             IsDragging = true;
 
@@ -1198,15 +1038,13 @@ namespace NodeGraph
 
             System.Drawing.Rectangle rect = new System.Drawing.Rectangle(
                 (int)startLocation.X + 2, (int)startLocation.Y + 2,
-                (int)( startLocation.X + flowChartView.ActualWidth ) - 2,
-                (int)( startLocation.Y + flowChartView.ActualHeight ) - 2);
+                (int)(startLocation.X + flowChartView.ActualWidth) - 2,
+                (int)(startLocation.Y + flowChartView.ActualHeight) - 2);
             ClipCursor(ref rect);
         }
 
-        public void EndDragging()
-        {
-            if ( null != _TrappingFlowChartView )
-            {
+        public void EndDragging() {
+            if ( null != _TrappingFlowChartView ) {
                 IsDragging = false;
                 _TrappingFlowChartView = null;
             }
@@ -1220,49 +1058,35 @@ namespace NodeGraph
 
         public Node MouseLeftDownNode { get; set; }
 
-        public ObservableCollection<Guid> GetSelectionList( FlowChart flowChart )
-        {
+        public ObservableCollection<Guid> GetSelectionList(FlowChart flowChart) {
             ObservableCollection<Guid> selectionList;
             if ( !SelectedNodes.TryGetValue(flowChart.Guid, out selectionList) )
                 return null;
             return selectionList;
         }
 
-        public void TrySelection( FlowChart flowChart, Node node, bool bCtrl, bool bShift, bool bAlt )
-        {
+        public void TrySelection(FlowChart flowChart, Node node, bool bCtrl, bool bShift, bool bAlt) {
             bool bAdd = false;
-            if ( bCtrl )
-            {
+            if ( bCtrl ) {
                 bAdd = !node.ViewModel.IsSelected;
-            }
-            else if ( bShift )
-            {
+            } else if ( bShift ) {
                 bAdd = true;
-            }
-            else if ( bAlt )
-            {
+            } else if ( bAlt ) {
                 bAdd = false;
-            }
-            else
-            {
+            } else {
                 DeselectAllNodes(flowChart);
                 bAdd = true;
             }
 
-            if ( bAdd )
-            {
-                if ( !node.ViewModel.IsSelected )
-                {
+            if ( bAdd ) {
+                if ( !node.ViewModel.IsSelected ) {
                     AddSelection(node);
 
                     flowChart.History.AddCommand(new History.NodePropertyCommand(this,
                         "Selection", node.Guid, "IsSelected", false, true));
                 }
-            }
-            else
-            {
-                if ( node.ViewModel.IsSelected )
-                {
+            } else {
+                if ( node.ViewModel.IsSelected ) {
                     RemoveSelection(node);
 
                     flowChart.History.AddCommand(new History.NodePropertyCommand(this,
@@ -1271,16 +1095,13 @@ namespace NodeGraph
             }
         }
 
-        public void AddSelection( Node node )
-        {
-            if ( node.ViewModel.IsSelected )
-            {
+        public void AddSelection(Node node) {
+            if ( node.ViewModel.IsSelected ) {
                 return;
             }
 
             ObservableCollection<Guid> selectionList = GetSelectionList(node.Owner);
-            if ( !selectionList.Contains(node.Guid) )
-            {
+            if ( !selectionList.Contains(node.Guid) ) {
                 node.ViewModel.IsSelected = true;
                 selectionList.Add(node.Guid);
             }
@@ -1288,19 +1109,16 @@ namespace NodeGraph
             MoveNodeToFront(node);
         }
 
-        public void RemoveSelection( Node node )
-        {
+        public void RemoveSelection(Node node) {
             ObservableCollection<Guid> selectionList = GetSelectionList(node.Owner);
             node.ViewModel.IsSelected = false;
             selectionList.Remove(node.Guid);
         }
 
-        public void DeselectAllNodes( FlowChart flowChart )
-        {
+        public void DeselectAllNodes(FlowChart flowChart) {
             ObservableCollection<Guid> selectionList = GetSelectionList(flowChart);
 
-            foreach ( var guid in selectionList )
-            {
+            foreach ( var guid in selectionList ) {
                 Node node = FindNode(guid);
                 node.ViewModel.IsSelected = false;
 
@@ -1310,32 +1128,27 @@ namespace NodeGraph
             selectionList.Clear();
         }
 
-        public void SelectAllNodes( FlowChart flowChart )
-        {
+        public void SelectAllNodes(FlowChart flowChart) {
             DeselectAllNodes(flowChart);
 
             ObservableCollection<Guid> selectionList = GetSelectionList(flowChart);
-            foreach ( var pair in Nodes )
-            {
+            foreach ( var pair in Nodes ) {
                 Node node = pair.Value;
-                if ( node.Owner == flowChart )
-                {
+                if ( node.Owner == flowChart ) {
                     node.ViewModel.IsSelected = true;
                     selectionList.Add(node.Guid);
                 }
             }
         }
 
-        public bool IsSelecting
-        {
-            get { return ( null != _FlowChartSelecting ); }
+        public bool IsSelecting {
+            get { return (null != _FlowChartSelecting); }
         }
         private FlowChart _FlowChartSelecting;
         public Point SelectingStartPoint { get; private set; }
         private Guid[] _OriginalSelections;
 
-        public void BeginDragSelection( FlowChart flowChart, Point start )
-        {
+        public void BeginDragSelection(FlowChart flowChart, Point start) {
             FlowChartView flowChartView = flowChart.ViewModel.View;
             BeginDragging(flowChartView);
 
@@ -1350,8 +1163,7 @@ namespace NodeGraph
             temp.CopyTo(_OriginalSelections, 0);
         }
 
-        public void UpdateDragSelection( FlowChart flowChart, Point end, bool bCtrl, bool bShift, bool bAlt )
-        {
+        public void UpdateDragSelection(FlowChart flowChart, Point end, bool bCtrl, bool bShift, bool bAlt) {
             FlowChartView flowChartView = flowChart.ViewModel.View;
 
             double startX = SelectingStartPoint.X;
@@ -1361,69 +1173,52 @@ namespace NodeGraph
             Point selectionEnd = new Point(Math.Max(startX, end.X), Math.Max(startY, end.Y));
 
             bool bAdd = false;
-            if ( bCtrl )
-            {
+            if ( bCtrl ) {
                 bAdd = true;
-            }
-            else if ( bShift )
-            {
+            } else if ( bShift ) {
                 bAdd = true;
-            }
-            else if ( bAlt )
-            {
+            } else if ( bAlt ) {
                 bAdd = false;
-            }
-            else
-            {
+            } else {
                 bAdd = true;
             }
 
-            foreach ( var pair in Nodes )
-            {
+            foreach ( var pair in Nodes ) {
                 Node node = pair.Value;
-                if ( node.Owner == _FlowChartSelecting )
-                {
+                if ( node.Owner == _FlowChartSelecting ) {
                     Point nodeStart = new Point(node.X, node.Y);
                     Point nodeEnd = new Point(node.X + node.ViewModel.View.ActualWidth,
                         node.Y + node.ViewModel.View.ActualHeight);
 
                     bool isInOriginalSelection = false;
-                    foreach ( Guid nodeGuid in _OriginalSelections )
-                    {
-                        if ( node.Guid == nodeGuid )
-                        {
+                    foreach ( Guid nodeGuid in _OriginalSelections ) {
+                        if ( node.Guid == nodeGuid ) {
                             isInOriginalSelection = true;
                             break;
                         }
                     }
 
-                    bool isOutside = ( nodeEnd.X < selectionStart.X ) ||
-                        ( nodeEnd.Y < selectionStart.Y ) ||
-                        ( nodeStart.X > selectionEnd.X ) ||
-                        ( nodeStart.Y > selectionEnd.Y );
+                    bool isOutside = (nodeEnd.X < selectionStart.X) ||
+                        (nodeEnd.Y < selectionStart.Y) ||
+                        (nodeStart.X > selectionEnd.X) ||
+                        (nodeStart.Y > selectionEnd.Y);
 
                     bool isIncluded = !isOutside &&
-                        ( nodeStart.X >= selectionStart.X ) &&
-                        ( nodeStart.Y >= selectionStart.Y ) &&
-                        ( nodeEnd.X <= selectionEnd.X ) &&
-                        ( nodeEnd.Y <= selectionEnd.Y );
+                        (nodeStart.X >= selectionStart.X) &&
+                        (nodeStart.Y >= selectionStart.Y) &&
+                        (nodeEnd.X <= selectionEnd.X) &&
+                        (nodeEnd.Y <= selectionEnd.Y);
 
-                    bool isSelected = ( ( SelectionMode.Include == SelectionMode ) && isIncluded ) ||
-                        ( ( SelectionMode.Overlap == SelectionMode ) && !isOutside );
+                    bool isSelected = ((SelectionMode.Include == SelectionMode) && isIncluded) ||
+                        ((SelectionMode.Overlap == SelectionMode) && !isOutside);
 
-                    if ( !isSelected )
-                    {
-                        if ( isInOriginalSelection )
-                        {
-                            if ( bCtrl || !bAdd )
-                            {
+                    if ( !isSelected ) {
+                        if ( isInOriginalSelection ) {
+                            if ( bCtrl || !bAdd ) {
                                 AddSelection(node);
                             }
-                        }
-                        else
-                        {
-                            if ( bCtrl || bAdd )
-                            {
+                        } else {
+                            if ( bCtrl || bAdd ) {
                                 RemoveSelection(node);
                             }
                         }
@@ -1432,62 +1227,46 @@ namespace NodeGraph
                     }
 
                     bool bThisAdd = bAdd;
-                    if ( isInOriginalSelection && bCtrl )
-                    {
+                    if ( isInOriginalSelection && bCtrl ) {
                         bThisAdd = false;
                     }
 
-                    if ( bThisAdd )
-                    {
+                    if ( bThisAdd ) {
                         AddSelection(node);
-                    }
-                    else
-                    {
+                    } else {
                         RemoveSelection(node);
                     }
                 }
             }
         }
 
-        public bool EndDragSelection( bool bCancel )
-        {
+        public bool EndDragSelection(bool bCancel) {
             EndDragging();
 
             bool bChanged = false;
 
-            if ( IsSelecting )
-            {
-                if ( bCancel )
-                {
-                    if ( ( null != _FlowChartSelecting ) && ( null != _OriginalSelections ) )
-                    {
+            if ( IsSelecting ) {
+                if ( bCancel ) {
+                    if ( (null != _FlowChartSelecting) && (null != _OriginalSelections) ) {
                         DeselectAllNodes(_FlowChartSelecting);
 
-                        foreach ( var guid in _OriginalSelections )
-                        {
+                        foreach ( var guid in _OriginalSelections ) {
                             AddSelection(FindNode(guid));
                         }
                     }
-                }
-                else
-                {
-                    if ( null != _FlowChartSelecting )
-                    {
+                } else {
+                    if ( null != _FlowChartSelecting ) {
                         ObservableCollection<Guid> selectionList = GetSelectionList(_FlowChartSelecting);
-                        foreach ( var guid in _OriginalSelections )
-                        {
-                            if ( !selectionList.Contains(guid) )
-                            {
+                        foreach ( var guid in _OriginalSelections ) {
+                            if ( !selectionList.Contains(guid) ) {
                                 _FlowChartSelecting.History.AddCommand(new History.NodePropertyCommand(this,
                                     "Selection", guid, "IsSelected", true, false));
                                 bChanged = true;
                             }
                         }
 
-                        foreach ( var guid in selectionList )
-                        {
-                            if ( -1 == Array.FindIndex(_OriginalSelections, ( currentGuid ) => guid == currentGuid) )
-                            {
+                        foreach ( var guid in selectionList ) {
+                            if ( -1 == Array.FindIndex(_OriginalSelections, (currentGuid) => guid == currentGuid) ) {
                                 _FlowChartSelecting.History.AddCommand(new History.NodePropertyCommand(this,
                                     "Selection", guid, "IsSelected", false, true));
                                 bChanged = true;
@@ -1496,8 +1275,7 @@ namespace NodeGraph
                     }
                 }
 
-                if ( null != _FlowChartSelecting )
-                {
+                if ( null != _FlowChartSelecting ) {
                     _FlowChartSelecting.ViewModel.SelectionVisibility = Visibility.Collapsed;
                 }
                 _FlowChartSelecting = null;
@@ -1511,13 +1289,11 @@ namespace NodeGraph
 
         #region Z-Indexing
 
-        public void MoveNodeToFront( Node node )
-        {
+        public void MoveNodeToFront(Node node) {
             List<Node> nodes = new List<Node>();
 
             int maxZIndex = int.MinValue;
-            foreach ( var pair in Nodes )
-            {
+            foreach ( var pair in Nodes ) {
                 Node currentNode = pair.Value;
                 maxZIndex = Math.Max(maxZIndex, currentNode.ZIndex);
                 nodes.Add(currentNode);
@@ -1525,11 +1301,10 @@ namespace NodeGraph
 
             node.ZIndex = maxZIndex + 1;
 
-            nodes.Sort(( left, right ) => left.ZIndex.CompareTo(right.ZIndex));
+            nodes.Sort((left, right) => left.ZIndex.CompareTo(right.ZIndex));
 
             int zIndex = 0;
-            foreach ( var currentNode in nodes )
-            {
+            foreach ( var currentNode in nodes ) {
                 currentNode.ZIndex = zIndex++;
             }
         }
@@ -1538,20 +1313,17 @@ namespace NodeGraph
 
         #region Delete
 
-        public void DestroySelectedNodes( FlowChart flowChart )
-        {
+        public void DestroySelectedNodes(FlowChart flowChart) {
             List<Guid> guids = new List<Guid>();
 
             ObservableCollection<Guid> selectedNodeGuids;
             SelectedNodes.TryGetValue(flowChart.Guid, out selectedNodeGuids);
 
-            foreach ( var guid in selectedNodeGuids )
-            {
+            foreach ( var guid in selectedNodeGuids ) {
                 guids.Add(guid);
             }
 
-            foreach ( var guid in guids )
-            {
+            foreach ( var guid in guids ) {
                 DestroyNode(guid);
             }
         }
@@ -1560,21 +1332,18 @@ namespace NodeGraph
 
         #region ContentSize
 
-        public void CalculateContentSize( FlowChart flowChart, bool bOnlySelected,
-            out double minX, out double maxX, out double minY, out double maxY )
-        {
+        public void CalculateContentSize(FlowChart flowChart, bool bOnlySelected,
+            out double minX, out double maxX, out double minY, out double maxY) {
             minX = double.MaxValue;
             maxX = double.MinValue;
             minY = double.MaxValue;
             maxY = double.MinValue;
 
             bool hasNodes = false;
-            foreach ( var pair in Nodes )
-            {
+            foreach ( var pair in Nodes ) {
                 Node node = pair.Value;
                 NodeView nodeView = node.ViewModel.View;
-                if ( node.Owner == flowChart )
-                {
+                if ( node.Owner == flowChart ) {
                     if ( bOnlySelected && !node.ViewModel.IsSelected )
                         continue;
 
@@ -1586,8 +1355,7 @@ namespace NodeGraph
                 }
             }
 
-            if ( !hasNodes )
-            {
+            if ( !hasNodes ) {
                 minX = maxX = minY = maxY = 0.0;
             }
         }
@@ -1596,8 +1364,7 @@ namespace NodeGraph
 
         #region Serialization
 
-        private XmlWriter CreateXmlWriter( StringWriter sw )
-        {
+        private XmlWriter CreateXmlWriter(StringWriter sw) {
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.IndentChars = "\t";
@@ -1608,21 +1375,18 @@ namespace NodeGraph
             return writer;
         }
 
-        public void Serialize( string filePath )
-        {
+        public void Serialize(string filePath) {
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.IndentChars = "\t";
             settings.NewLineChars = "\n";
             settings.NewLineHandling = NewLineHandling.Replace;
             settings.NewLineOnAttributes = false;
-            using ( XmlWriter writer = XmlWriter.Create(filePath, settings) )
-            {
+            using ( XmlWriter writer = XmlWriter.Create(filePath, settings) ) {
                 writer.WriteStartDocument();
                 {
                     writer.WriteStartElement("NodeGraphManager");
-                    foreach ( var pair in FlowCharts )
-                    {
+                    foreach ( var pair in FlowCharts ) {
                         writer.WriteStartElement("FlowChart");
                         pair.Value.WriteXml(writer);
                         writer.WriteEndElement();
@@ -1636,23 +1400,17 @@ namespace NodeGraph
             }
         }
 
-        public bool Deserialize( string filePath )
-        {
-            if ( !File.Exists(filePath) )
-            {
+        public bool Deserialize(string filePath) {
+            if ( !File.Exists(filePath) ) {
                 return false;
             }
 
             List<FlowChart> loadedFlowCharts = new List<FlowChart>();
 
-            using ( XmlReader reader = XmlReader.Create(filePath) )
-            {
-                while ( reader.Read() )
-                {
-                    if ( XmlNodeType.Element == reader.NodeType )
-                    {
-                        if ( "FlowChart" == reader.Name )
-                        {
+            using ( XmlReader reader = XmlReader.Create(filePath) ) {
+                while ( reader.Read() ) {
+                    if ( XmlNodeType.Element == reader.NodeType ) {
+                        if ( "FlowChart" == reader.Name ) {
                             Guid guid = Guid.Parse(reader.GetAttribute("Guid"));
                             Type type = Type.GetType(reader.GetAttribute("Type"));
 
@@ -1664,16 +1422,14 @@ namespace NodeGraph
                 }
             }
 
-            foreach ( var flowChart in loadedFlowCharts )
-            {
+            foreach ( var flowChart in loadedFlowCharts ) {
                 flowChart.OnDeserialize();
             }
 
             return true;
         }
 
-        public string SerializeNode( Node node )
-        {
+        public string SerializeNode(Node node) {
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
             StringWriter sw = new StringWriter(builder);
             XmlWriter writer = CreateXmlWriter(sw);
@@ -1688,15 +1444,11 @@ namespace NodeGraph
             return builder.ToString();
         }
 
-        public void DeserializeNode( string xml )
-        {
+        public void DeserializeNode(string xml) {
             XmlReader reader = XmlReader.Create(new StringReader(xml));
-            while ( reader.Read() )
-            {
-                if ( XmlNodeType.Element == reader.NodeType )
-                {
-                    if ( "Node" == reader.Name )
-                    {
+            while ( reader.Read() ) {
+                if ( XmlNodeType.Element == reader.NodeType ) {
+                    if ( "Node" == reader.Name ) {
                         Guid guid = Guid.Parse(reader.GetAttribute("Guid"));
                         Type type = Type.GetType(reader.GetAttribute("Type"));
                         FlowChart flowChart = FindFlowChart(Guid.Parse(reader.GetAttribute("Owner")));
@@ -1713,8 +1465,7 @@ namespace NodeGraph
             }
         }
 
-        public string SerializeConnector( Connector connector )
-        {
+        public string SerializeConnector(Connector connector) {
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
             StringWriter sw = new StringWriter(builder);
             XmlWriter writer = CreateXmlWriter(sw);
@@ -1729,15 +1480,11 @@ namespace NodeGraph
             return builder.ToString();
         }
 
-        public void DeserializeConnector( string xml )
-        {
+        public void DeserializeConnector(string xml) {
             XmlReader reader = XmlReader.Create(new StringReader(xml));
-            while ( reader.Read() )
-            {
-                if ( XmlNodeType.Element == reader.NodeType )
-                {
-                    if ( "Connector" == reader.Name )
-                    {
+            while ( reader.Read() ) {
+                if ( XmlNodeType.Element == reader.NodeType ) {
+                    if ( "Connector" == reader.Name ) {
                         Guid guid = Guid.Parse(reader.GetAttribute("Guid"));
                         Type type = Type.GetType(reader.GetAttribute("Type"));
                         FlowChart flowChart = FindFlowChart(Guid.Parse(reader.GetAttribute("Owner")));
@@ -1753,8 +1500,7 @@ namespace NodeGraph
             }
         }
 
-        public string SerializeNodePort( NodePort port )
-        {
+        public string SerializeNodePort(NodePort port) {
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
             StringWriter sw = new StringWriter(builder);
             XmlWriter writer = CreateXmlWriter(sw);
@@ -1769,15 +1515,11 @@ namespace NodeGraph
             return builder.ToString();
         }
 
-        public void DeserializeNodePort( string xml )
-        {
+        public void DeserializeNodePort(string xml) {
             XmlReader reader = XmlReader.Create(new StringReader(xml));
-            while ( reader.Read() )
-            {
-                if ( XmlNodeType.Element == reader.NodeType )
-                {
-                    if ( ( "NodePort" == reader.Name ) )
-                    {
+            while ( reader.Read() ) {
+                if ( XmlNodeType.Element == reader.NodeType ) {
+                    if ( ("NodePort" == reader.Name) ) {
                         Guid guid = Guid.Parse(reader.GetAttribute("Guid"));
                         Type type = Type.GetType(reader.GetAttribute("Type"));
                         Type vmType = Type.GetType(reader.GetAttribute("ViewModelType"));
@@ -1786,15 +1528,12 @@ namespace NodeGraph
 
                         bool isFlowPort = typeof(NodeFlowPort).IsAssignableFrom(type);
 
-                        if ( isFlowPort )
-                        {
+                        if ( isFlowPort ) {
                             NodeFlowPort port = CreateNodeFlowPort(
                                 true, guid, node, isInput, vmType);
                             port.ReadXml(reader);
                             port.OnDeserialize();
-                        }
-                        else
-                        {
+                        } else {
                             string name = reader.GetAttribute("Name");
                             Type valueType = Type.GetType(reader.GetAttribute("ValueType"));
                             bool hasEditor = bool.Parse(reader.GetAttribute("HasEditor"));
@@ -1815,18 +1554,16 @@ namespace NodeGraph
 
         #region ContextMenu
 
-        public delegate bool BuildContextMenuDelegate( object sender, BuildContextMenuArgs args );
+        public delegate bool BuildContextMenuDelegate(object sender, BuildContextMenuArgs args);
         public event BuildContextMenuDelegate BuildFlowChartContextMenu;
         public event BuildContextMenuDelegate BuildNodeContextMenu;
         public event BuildContextMenuDelegate BuildFlowPortContextMenu;
         public event BuildContextMenuDelegate BuildPropertyPortContextMenu;
 
-        public bool InvokeBuildContextMenu( object sender, BuildContextMenuArgs args )
-        {
+        public bool InvokeBuildContextMenu(object sender, BuildContextMenuArgs args) {
             BuildContextMenuDelegate targetEvent = null;
 
-            switch ( args.ModelType )
-            {
+            switch ( args.ModelType ) {
             case ModelType.FlowChart:
                 targetEvent = BuildFlowChartContextMenu;
                 break;
@@ -1851,16 +1588,13 @@ namespace NodeGraph
 
         #region Selection Events
 
-        public delegate void NodeSelectionChangedDelegate( FlowChart flowChart, ObservableCollection<Guid> nodes, NotifyCollectionChangedEventArgs args );
+        public delegate void NodeSelectionChangedDelegate(FlowChart flowChart, ObservableCollection<Guid> nodes, NotifyCollectionChangedEventArgs args);
         public event NodeSelectionChangedDelegate NodeSelectionChanged;
 
-        private void Node_SelectionList_CollectionChanged( object sender, NotifyCollectionChangedEventArgs args )
-        {
+        private void Node_SelectionList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args) {
             FlowChart flowChart = null;
-            foreach ( var pair in SelectedNodes )
-            {
-                if ( pair.Value == sender )
-                {
+            foreach ( var pair in SelectedNodes ) {
+                if ( pair.Value == sender ) {
                     flowChart = FindFlowChart(pair.Key);
                 }
             }
@@ -1872,30 +1606,26 @@ namespace NodeGraph
 
         #region Drag & Drop Events
 
-        public delegate void NodeGraphDragEventDelegate( object sender, NodeGraphDragEventArgs args );
+        public delegate void NodeGraphDragEventDelegate(object sender, NodeGraphDragEventArgs args);
 
         public event NodeGraphDragEventDelegate DragEnter;
         public event NodeGraphDragEventDelegate DragLeave;
         public event NodeGraphDragEventDelegate DragOver;
         public event NodeGraphDragEventDelegate Drop;
 
-        public void InvokeDragEnter( object sender, NodeGraphDragEventArgs args )
-        {
+        public void InvokeDragEnter(object sender, NodeGraphDragEventArgs args) {
             DragEnter?.Invoke(sender, args);
         }
 
-        public void InvokeDragLeave( object sender, NodeGraphDragEventArgs args )
-        {
+        public void InvokeDragLeave(object sender, NodeGraphDragEventArgs args) {
             DragLeave?.Invoke(sender, args);
         }
 
-        public void InvokeDragOver( object sender, NodeGraphDragEventArgs args )
-        {
+        public void InvokeDragOver(object sender, NodeGraphDragEventArgs args) {
             DragOver?.Invoke(sender, args);
         }
 
-        public void InvokeDrop( object sender, NodeGraphDragEventArgs args )
-        {
+        public void InvokeDrop(object sender, NodeGraphDragEventArgs args) {
             Drop?.Invoke(sender, args);
         }
 
@@ -1903,20 +1633,17 @@ namespace NodeGraph
 
         #region Logs
 
-        public void AddScreenLog( FlowChart flowChart, string log )
-        {
+        public void AddScreenLog(FlowChart flowChart, string log) {
             FlowChartView view = flowChart.ViewModel.View;
             view.AddLog(log);
         }
 
-        public void RemoveScreenLog( FlowChart flowChart, string log )
-        {
+        public void RemoveScreenLog(FlowChart flowChart, string log) {
             FlowChartView view = flowChart.ViewModel.View;
             view.RemoveLog(log);
         }
 
-        public void ClearScreenLogs( FlowChart flowChart )
-        {
+        public void ClearScreenLogs(FlowChart flowChart) {
             FlowChartView view = flowChart.ViewModel.View;
             view.ClearLogs();
         }
@@ -1925,13 +1652,10 @@ namespace NodeGraph
 
         #region Execution
 
-        public void ClearNodeExecutionStates( FlowChart flowChart )
-        {
-            foreach ( var pair in Nodes )
-            {
+        public void ClearNodeExecutionStates(FlowChart flowChart) {
+            foreach ( var pair in Nodes ) {
                 Node node = pair.Value;
-                if ( flowChart == node.Owner )
-                {
+                if ( flowChart == node.Owner ) {
                     node.ExecutionState = NodeExecutionState.None;
                 }
             }
@@ -1940,24 +1664,21 @@ namespace NodeGraph
         #endregion // Execution
     }
 
-    public enum ModelType
-    {
+    public enum ModelType {
         FlowChart,
         Node,
         FlowPort,
         PropertyPort,
     }
 
-    public class BuildContextMenuArgs
-    {
+    public class BuildContextMenuArgs {
         public Point ViewSpaceMouseLocation { get; set; }
         public Point ModelSpaceMouseLocation { get; set; }
         public ModelType ModelType { get; set; }
         public System.Windows.Controls.ContextMenu ContextMenu { get; internal set; }
     }
 
-    public class NodeGraphDragEventArgs
-    {
+    public class NodeGraphDragEventArgs {
         public Point ViewSpaceMouseLocation { get; set; }
         public Point ModelSpaceMouseLocation { get; set; }
         public ModelType ModelType { get; set; }

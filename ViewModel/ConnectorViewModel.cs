@@ -8,53 +8,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NodeGraph.ViewModel
-{
-	[ConnectorViewModel()]
-	public class ConnectorViewModel : ViewModelBase
-	{
-		#region Fields
+namespace NodeGraph.ViewModel {
+    [ConnectorViewModel()]
+    public class ConnectorViewModel : ViewModelBase {
+        #region Fields
 
-		public ConnectorView View;
+        public ConnectorView View;
 
-		#endregion // Fields
+        #endregion // Fields
 
-		#region Properties
+        #region Properties
 
-		private Connector _Model;
-		public Connector Model
-		{
-			get { return _Model; }
-			set
-			{
-				if( value != _Model )
-				{
-					_Model = value;
-					RaisePropertyChanged( "Model" );
-				}
-			}
-		}
+        private Connector _Model;
+        public Connector Model {
+            get { return _Model; }
+            set {
+                if ( value != _Model ) {
+                    _Model = value;
+                    RaisePropertyChanged("Model");
+                }
+            }
+        }
 
-		#endregion // Properties
+        #endregion // Properties
 
-		#region Constructor
+        #region Constructor
 
-		public ConnectorViewModel( Connector connection ) : base( connection )
-		{
-			Model = connection;
-		}
+        public ConnectorViewModel(Connector connection) : base(connection) {
+            Model = connection;
+        }
 
-		#endregion // Constructor
+        #endregion // Constructor
 
-		#region Events
+        #region Events
 
-		protected override void ModelPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			base.ModelPropertyChanged( sender, e );
+        protected override void ModelPropertyChanged(object sender, PropertyChangedEventArgs e) {
+            base.ModelPropertyChanged(sender, e);
 
-			RaisePropertyChanged( e.PropertyName );
-		}
+            RaisePropertyChanged(e.PropertyName);
+        }
 
-		#endregion // Events
-	}
+        #endregion // Events
+    }
 }

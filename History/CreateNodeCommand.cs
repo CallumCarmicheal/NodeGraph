@@ -5,14 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NodeGraph.History
-{
-    public class CreateNodeCommand : NodeGraphCommand
-    {
+namespace NodeGraph.History {
+    public class CreateNodeCommand : NodeGraphCommand {
         #region Constructor
 
-        public CreateNodeCommand( NodeGraphManager ngm, string name, object undoParams, object redoParams ) : base(ngm, name, undoParams, redoParams)
-        {
+        public CreateNodeCommand(NodeGraphManager ngm, string name, object undoParams, object redoParams) : base(ngm, name, undoParams, redoParams) {
 
         }
 
@@ -20,15 +17,13 @@ namespace NodeGraph.History
 
         #region Overrides NodeGraphCommand
 
-        public override void Undo()
-        {
+        public override void Undo() {
             Guid guid = (Guid)UndoParams;
 
             NodeGraphManager.DestroyNode(guid);
         }
 
-        public override void Redo()
-        {
+        public override void Redo() {
             NodeGraphManager.DeserializeNode(RedoParams as string);
         }
 

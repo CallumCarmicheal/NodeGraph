@@ -4,194 +4,164 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace NodeGraph.Model
-{
-	public class NodePropertyPort : NodePort
-	{
-		#region Events
+namespace NodeGraph.Model {
+    public class NodePropertyPort : NodePort {
+        #region Events
 
-		public delegate void DynamicPropertyPortValueChangedDelegate( NodePropertyPort port, object prevValue, object newValue );
-		public event DynamicPropertyPortValueChangedDelegate DynamicPropertyPortValueChanged;
+        public delegate void DynamicPropertyPortValueChangedDelegate(NodePropertyPort port, object prevValue, object newValue);
+        public event DynamicPropertyPortValueChangedDelegate DynamicPropertyPortValueChanged;
 
-		protected virtual void OnDynamicPropertyPortValueChanged( object prevValue, object newValue )
-		{
-			DynamicPropertyPortValueChanged?.Invoke( this, prevValue, newValue );
-		}
+        protected virtual void OnDynamicPropertyPortValueChanged(object prevValue, object newValue) {
+            DynamicPropertyPortValueChanged?.Invoke(this, prevValue, newValue);
+        }
 
-		#endregion // Events
+        #endregion // Events
 
-		#region Fields
+        #region Fields
 
-		public readonly bool IsDynamic;
-		public readonly bool HasEditor;
-		protected FieldInfo _FieldInfo;
-		protected PropertyInfo _PropertyInfo;
+        public readonly bool IsDynamic;
+        public readonly bool HasEditor;
+        protected FieldInfo _FieldInfo;
+        protected PropertyInfo _PropertyInfo;
 
-		#endregion // Fields
+        #endregion // Fields
 
-		#region Properties
+        #region Properties
 
-		public object _Value;
-		public object Value
-		{
-			get
-			{
-				if( IsDynamic )
-				{
-					return _Value;
-				}
-				else
-				{
-					return ( null != _FieldInfo ) ? _FieldInfo.GetValue( Owner ) : _PropertyInfo.GetValue( Owner );
-				}
-			}
-			set
-			{
-				object prevValue;
-				if( IsDynamic )
-				{
-					prevValue = _Value;
-				}
-				else
-				{
-					prevValue = ( null != _FieldInfo ) ? _FieldInfo.GetValue( Owner ) : _PropertyInfo.GetValue( Owner );
-				}
-				
-				if( value != prevValue )
-				{
-					if( IsDynamic )
-					{
-						_Value = value;
-						OnDynamicPropertyPortValueChanged( prevValue, value );
-					}
-					else
-					{
-						if( null != _FieldInfo )
-							_FieldInfo.SetValue( Owner, value );
-						else if( null != _PropertyInfo )
-							_PropertyInfo.SetValue( Owner, value );
-					}
+        public object _Value;
+        public object Value {
+            get {
+                if ( IsDynamic ) {
+                    return _Value;
+                } else {
+                    return (null != _FieldInfo) ? _FieldInfo.GetValue(Owner) : _PropertyInfo.GetValue(Owner);
+                }
+            }
+            set {
+                object prevValue;
+                if ( IsDynamic ) {
+                    prevValue = _Value;
+                } else {
+                    prevValue = (null != _FieldInfo) ? _FieldInfo.GetValue(Owner) : _PropertyInfo.GetValue(Owner);
+                }
 
-					RaisePropertyChanged( "Value" );
-				}
-			}
-		}
-		
-		public Type ValueType { get; private set; }
+                if ( value != prevValue ) {
+                    if ( IsDynamic ) {
+                        _Value = value;
+                        OnDynamicPropertyPortValueChanged(prevValue, value);
+                    } else {
+                        if ( null != _FieldInfo )
+                            _FieldInfo.SetValue(Owner, value);
+                        else if ( null != _PropertyInfo )
+                            _PropertyInfo.SetValue(Owner, value);
+                    }
 
-		#endregion // Properties
+                    RaisePropertyChanged("Value");
+                }
+            }
+        }
 
-		#region Constructors
+        public Type ValueType { get; private set; }
 
-		/// <summary>
-		/// Never call this constructor directly. Use GraphManager.CreateNodePropertyPort() method.
-		/// </summary>
-		public NodePropertyPort( Guid guid, Node node, bool isInput, Type valueType, object value, string name, bool hasEditor ) : 
-			base( guid, node, isInput )
-		{
-			Name = name;
-			HasEditor = hasEditor;
+        #endregion // Properties
 
-			Type nodeType = node.GetType();
-			_FieldInfo = nodeType.GetField( Name );
-			_PropertyInfo = nodeType.GetProperty( Name );
-			IsDynamic = ( null == _FieldInfo ) && ( null == _PropertyInfo );
+        #region Constructors
 
-			ValueType = valueType;
-			Value = value;
-		}
+        /// <summary>
+        /// Never call this constructor directly. Use GraphManager.CreateNodePropertyPort() method.
+        /// </summary>
+        public NodePropertyPort(Guid guid, Node node, bool isInput, Type valueType, object value, string name, bool hasEditor) :
+            base(guid, node, isInput) {
+            Name = name;
+            HasEditor = hasEditor;
 
-		#endregion // Constructors
+            Type nodeType = node.GetType();
+            _FieldInfo = nodeType.GetField(Name);
+            _PropertyInfo = nodeType.GetProperty(Name);
+            IsDynamic = (null == _FieldInfo) && (null == _PropertyInfo);
 
-		#region Overrides IXmlSerializable
+            ValueType = valueType;
+            Value = value;
+        }
 
-		public override void WriteXml( XmlWriter writer )
-		{
-			base.WriteXml( writer );
+        #endregion // Constructors
 
-			writer.WriteAttributeString( "ValueType", ValueType.AssemblyQualifiedName );
-			writer.WriteAttributeString( "HasEditor", HasEditor.ToString() );
+        #region Overrides IXmlSerializable
 
-			Type realValueType = ValueType;
-			if( null != Value )
-			{
-				realValueType = Value.GetType();
-			}
-			writer.WriteAttributeString( "RealValueType", realValueType.AssemblyQualifiedName );
+        public override void WriteXml(XmlWriter writer) {
+            base.WriteXml(writer);
 
-			var serializer = new XmlSerializer( realValueType );
-			serializer.Serialize( writer, Value );
-		}
+            writer.WriteAttributeString("ValueType", ValueType.AssemblyQualifiedName);
+            writer.WriteAttributeString("HasEditor", HasEditor.ToString());
 
-		public override void ReadXml( XmlReader reader )
-		{
-			base.ReadXml( reader );
+            Type realValueType = ValueType;
+            if ( null != Value ) {
+                realValueType = Value.GetType();
+            }
+            writer.WriteAttributeString("RealValueType", realValueType.AssemblyQualifiedName);
 
-			Type realValueType = Type.GetType( reader.GetAttribute( "RealValueType" ) );
-			
-			while( reader.Read() )
-			{
-				if( XmlNodeType.Element == reader.NodeType )
-				{
-					var serializer = new XmlSerializer( realValueType );
-					Value = serializer.Deserialize( reader );
-					break;
-				}
-			}
-		}
+            var serializer = new XmlSerializer(realValueType);
+            serializer.Serialize(writer, Value);
+        }
 
-		#endregion // Overrides IXmlSerializable
+        public override void ReadXml(XmlReader reader) {
+            base.ReadXml(reader);
 
-		#region Callbacks
+            Type realValueType = Type.GetType(reader.GetAttribute("RealValueType"));
 
-		public override void OnCreate()
-		{
-			base.OnCreate();
+            while ( reader.Read() ) {
+                if ( XmlNodeType.Element == reader.NodeType ) {
+                    var serializer = new XmlSerializer(realValueType);
+                    Value = serializer.Deserialize(reader);
+                    break;
+                }
+            }
+        }
 
-			CheckValidity();
-		}
+        #endregion // Overrides IXmlSerializable
 
-		public override void OnDeserialize()
-		{
-			base.OnDeserialize();
+        #region Callbacks
 
-			CheckValidity();
-		}
+        public override void OnCreate() {
+            base.OnCreate();
 
-		#endregion // Callbacks
+            CheckValidity();
+        }
 
-		#region Methods
+        public override void OnDeserialize() {
+            base.OnDeserialize();
 
-		public void CheckValidity()
-		{
-			if( null != Value )
-			{
-				if( !ValueType.IsAssignableFrom( Value.GetType() ) )
-				{
-					throw new ArgumentException( "Type of value is not same as typeOfvalue." );
-				}
-			}
+            CheckValidity();
+        }
 
-			if( !ValueType.IsClass && ( null == Value ) )
-			{
-				throw new ArgumentNullException( "If typeOfValue is not a class, you cannot specify value as null" );
-			}
+        #endregion // Callbacks
 
-			if( !IsDynamic )
-			{
-				Type nodeType = Owner.GetType();
-				_FieldInfo = nodeType.GetField( Name );
-				_PropertyInfo = nodeType.GetProperty( Name );
+        #region Methods
 
-				Type propType = ( null != _FieldInfo ) ? _FieldInfo.GetValue( Owner ).GetType() : _PropertyInfo.GetValue( Owner ).GetType();
-				if( propType != ValueType )
-				{
-					throw new ArgumentException( string.Format( "ValueType( {0} ) is invalid, becasue a type of property or field is {1}.",
-						ValueType.Name, propType.Name ) );
-				}
-			}
-		}
+        public void CheckValidity() {
+            if ( null != Value ) {
+                if ( !ValueType.IsAssignableFrom(Value.GetType()) ) {
+                    throw new ArgumentException("Type of value is not same as typeOfvalue.");
+                }
+            }
 
-		#endregion // Methods
-	}
+            if ( !ValueType.IsClass && (null == Value) ) {
+                throw new ArgumentNullException("If typeOfValue is not a class, you cannot specify value as null");
+            }
+
+            if ( !IsDynamic ) {
+                Type nodeType = Owner.GetType();
+                _FieldInfo = nodeType.GetField(Name);
+                _PropertyInfo = nodeType.GetProperty(Name);
+
+                Type propType = (null != _FieldInfo) ? _FieldInfo.GetValue(Owner).GetType() : _PropertyInfo.GetValue(Owner).GetType();
+                if ( propType != ValueType ) {
+                    throw new ArgumentException(string.Format("ValueType( {0} ) is invalid, becasue a type of property or field is {1}.",
+                        ValueType.Name, propType.Name));
+                }
+            }
+        }
+
+        #endregion // Methods
+    }
 }

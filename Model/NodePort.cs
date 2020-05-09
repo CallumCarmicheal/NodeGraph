@@ -3,10 +3,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Xml;
 
-namespace NodeGraph.Model
-{
-    public class NodePort : ModelBase
-    {
+namespace NodeGraph.Model {
+    public class NodePort : ModelBase {
         #region Fields
 
         public readonly bool IsInput;
@@ -20,13 +18,10 @@ namespace NodeGraph.Model
         public NodePortViewModel ViewModel { get; set; }
 
         private string _Name;
-        public string Name
-        {
+        public string Name {
             get { return _Name; }
-            set
-            {
-                if ( value != _Name )
-                {
+            set {
+                if ( value != _Name ) {
                     _Name = value;
                     RaisePropertyChanged("Name");
                 }
@@ -34,13 +29,10 @@ namespace NodeGraph.Model
         }
 
         private bool _AllowMultipleInput;
-        public bool AllowMultipleInput
-        {
+        public bool AllowMultipleInput {
             get { return _AllowMultipleInput; }
-            set
-            {
-                if ( value != _AllowMultipleInput )
-                {
+            set {
+                if ( value != _AllowMultipleInput ) {
                     _AllowMultipleInput = value;
                     RaisePropertyChanged("AllowMultipleInput");
                 }
@@ -48,13 +40,10 @@ namespace NodeGraph.Model
         }
 
         private bool _AllowMultipleOutput;
-        public bool AllowMultipleOutput
-        {
+        public bool AllowMultipleOutput {
             get { return _AllowMultipleOutput; }
-            set
-            {
-                if ( value != _AllowMultipleOutput )
-                {
+            set {
+                if ( value != _AllowMultipleOutput ) {
                     _AllowMultipleOutput = value;
                     RaisePropertyChanged("AllowMultipleOutput");
                 }
@@ -62,13 +51,10 @@ namespace NodeGraph.Model
         }
 
         private string _DisplayName;
-        public string DisplayName
-        {
+        public string DisplayName {
             get { return _DisplayName; }
-            set
-            {
-                if ( value != _DisplayName )
-                {
+            set {
+                if ( value != _DisplayName ) {
                     _DisplayName = value;
                     RaisePropertyChanged("DisplayName");
                 }
@@ -76,13 +62,10 @@ namespace NodeGraph.Model
         }
 
         private ObservableCollection<Connector> _Connectors = new ObservableCollection<Connector>();
-        public ObservableCollection<Connector> Connectors
-        {
+        public ObservableCollection<Connector> Connectors {
             get { return _Connectors; }
-            set
-            {
-                if ( value != _Connectors )
-                {
+            set {
+                if ( value != _Connectors ) {
                     _Connectors = value;
                     RaisePropertyChanged("Connectors");
                 }
@@ -90,13 +73,10 @@ namespace NodeGraph.Model
         }
 
         private bool _IsPortEnabled = true;
-        public bool IsPortEnabled
-        {
+        public bool IsPortEnabled {
             get { return _IsPortEnabled; }
-            set
-            {
-                if ( value != _IsPortEnabled )
-                {
+            set {
+                if ( value != _IsPortEnabled ) {
                     _IsPortEnabled = value;
                     RaisePropertyChanged("IsPortEnabled");
                 }
@@ -104,13 +84,10 @@ namespace NodeGraph.Model
         }
 
         private bool _IsEnabled = true;
-        public bool IsEnabled
-        {
+        public bool IsEnabled {
             get { return _IsEnabled; }
-            set
-            {
-                if ( value != _IsEnabled )
-                {
+            set {
+                if ( value != _IsEnabled ) {
                     _IsEnabled = value;
                     RaisePropertyChanged("IsEnabled");
                 }
@@ -126,8 +103,7 @@ namespace NodeGraph.Model
         /// <summary>
         /// Never call this constructor directly. Use GraphManager.CreateNodeFlowPort() or GraphManager.CreateNodePropertyPort() method.
         /// </summary>
-        protected NodePort( Guid guid, Node node, bool isInput ) : base(guid)
-        {
+        protected NodePort(Guid guid, Node node, bool isInput) : base(guid) {
             Owner = node;
             IsInput = isInput;
         }
@@ -136,16 +112,14 @@ namespace NodeGraph.Model
 
         #region Destructor
 
-        ~NodePort()
-        {
+        ~NodePort() {
         }
 
         #endregion // Destructor
 
         #region Methods
 
-        public virtual bool IsConnectable( NodePort otherPort, out string error )
-        {
+        public virtual bool IsConnectable(NodePort otherPort, out string error) {
             error = "";
             return true;
         }
@@ -154,8 +128,7 @@ namespace NodeGraph.Model
 
         #region Callbacks
 
-        public virtual void OnCreate()
-        {
+        public virtual void OnCreate() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("NodePort.OnCreate()");
 
@@ -164,32 +137,27 @@ namespace NodeGraph.Model
             RaisePropertyChanged("Model");
         }
 
-        public virtual void OnPreDestroy()
-        {
+        public virtual void OnPreDestroy() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("NodePort.OnPreDestroy()");
         }
 
-        public virtual void OnPostDestroy()
-        {
+        public virtual void OnPostDestroy() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("NodePort.OnPostDestroy()");
         }
 
-        public virtual void OnConnect( Connector connector )
-        {
+        public virtual void OnConnect(Connector connector) {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("NodePort.OnConnect()");
         }
 
-        public virtual void OnDisconnect( Connector connector )
-        {
+        public virtual void OnDisconnect(Connector connector) {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("NodePort.OnDisconnect()");
         }
 
-        public virtual void OnDeserialize()
-        {
+        public virtual void OnDeserialize() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("NodePort.OnDeserialize()");
 
@@ -202,8 +170,7 @@ namespace NodeGraph.Model
 
         #region Overrides IXmlSerializable
 
-        public override void WriteXml( XmlWriter writer )
-        {
+        public override void WriteXml(XmlWriter writer) {
             base.WriteXml(writer);
 
             //{ Begin Creation info : You need not deserialize this block in ReadXml().
@@ -221,8 +188,7 @@ namespace NodeGraph.Model
             writer.WriteAttributeString("IsEnabled", IsEnabled.ToString());
         }
 
-        public override void ReadXml( XmlReader reader )
-        {
+        public override void ReadXml(XmlReader reader) {
             base.ReadXml(reader);
 
             Name = reader.GetAttribute("Name");

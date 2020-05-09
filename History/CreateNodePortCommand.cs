@@ -5,10 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NodeGraph.History
-{
-    public class CreateNodePortCommand : NodeGraphCommand
-    {
+namespace NodeGraph.History {
+    public class CreateNodePortCommand : NodeGraphCommand {
         #region Additional Parameters
 
         public Guid NodeGuid { get; private set; }
@@ -19,23 +17,20 @@ namespace NodeGraph.History
 
         #region Constructor
 
-        public CreateNodePortCommand( NodeGraphManager ngm, string name, object undoParams, object redoParams ) : base(ngm, name, undoParams, redoParams)
-        {
+        public CreateNodePortCommand(NodeGraphManager ngm, string name, object undoParams, object redoParams) : base(ngm, name, undoParams, redoParams) {
         }
 
         #endregion // Constructor
 
         #region Overrides NodeGraphCommand
 
-        public override void Undo()
-        {
+        public override void Undo() {
             Guid guid = (Guid)UndoParams;
 
             NodeGraphManager.DestroyNodePort(guid);
         }
 
-        public override void Redo()
-        {
+        public override void Redo() {
             NodeGraphManager.DeserializeNodePort(RedoParams as string);
         }
 

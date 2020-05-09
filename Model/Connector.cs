@@ -2,23 +2,18 @@
 using System;
 using System.Xml;
 
-namespace NodeGraph.Model
-{
+namespace NodeGraph.Model {
     [Connector()]
-    public class Connector : ModelBase
-    {
+    public class Connector : ModelBase {
         #region Properties
 
         public FlowChart FlowChart { get; private set; }
 
         protected ConnectorViewModel _ViewModel;
-        public ConnectorViewModel ViewModel
-        {
+        public ConnectorViewModel ViewModel {
             get { return _ViewModel; }
-            set
-            {
-                if ( value != _ViewModel )
-                {
+            set {
+                if ( value != _ViewModel ) {
                     _ViewModel = value;
                     RaisePropertyChanged("ViewModel");
                 }
@@ -26,13 +21,10 @@ namespace NodeGraph.Model
         }
 
         protected NodePort _StartPort;
-        public NodePort StartPort
-        {
+        public NodePort StartPort {
             get { return _StartPort; }
-            set
-            {
-                if ( value != _StartPort )
-                {
+            set {
+                if ( value != _StartPort ) {
                     _StartPort = value;
                     RaisePropertyChanged("StartPort");
                 }
@@ -40,13 +32,10 @@ namespace NodeGraph.Model
         }
 
         protected NodePort _EndPort;
-        public NodePort EndPort
-        {
+        public NodePort EndPort {
             get { return _EndPort; }
-            set
-            {
-                if ( value != _EndPort )
-                {
+            set {
+                if ( value != _EndPort ) {
                     _EndPort = value;
                     RaisePropertyChanged("EndPort");
                 }
@@ -62,16 +51,14 @@ namespace NodeGraph.Model
         /// <summary>
         /// Never call this constructor directly. Use GraphManager.CreateConnector() method.
         /// </summary>
-        protected internal Connector()
-        {
+        protected internal Connector() {
 
         }
 
         /// <summary>
         /// Never call this constructor directly. Use GraphManager.CreateConnector() method.
         /// </summary>
-        public Connector( NodeGraphManager npm, Guid guid, FlowChart flowChart ) : base(guid)
-        {
+        public Connector(NodeGraphManager npm, Guid guid, FlowChart flowChart) : base(guid) {
             NodeGraphManager = npm;
             FlowChart = flowChart;
         }
@@ -80,17 +67,15 @@ namespace NodeGraph.Model
 
         #region Methods
 
-        public bool IsConnectedPort( NodePort port )
-        {
-            return ( StartPort == port ) || ( EndPort == port );
+        public bool IsConnectedPort(NodePort port) {
+            return (StartPort == port) || (EndPort == port);
         }
 
         #endregion // Methods
 
         #region Callbacks
 
-        public virtual void OnCreate()
-        {
+        public virtual void OnCreate() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("Connector.OnCreate()");
             IsInitialized = true;
@@ -98,25 +83,21 @@ namespace NodeGraph.Model
             RaisePropertyChanged("Model");
         }
 
-        public virtual void OnPreExecute()
-        {
+        public virtual void OnPreExecute() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("Connector.OnPreExecute()");
         }
 
-        public virtual void OnExecute()
-        {
+        public virtual void OnExecute() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("Connector.OnExecute()");
         }
 
-        public virtual void OnPostExecute()
-        {
+        public virtual void OnPostExecute() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("Connector.OnPostExecute()");
 
-            if ( null != EndPort )
-            {
+            if ( null != EndPort ) {
                 Node node = EndPort.Owner;
                 node.OnPreExecute(this);
                 node.OnExecute(this);
@@ -124,32 +105,27 @@ namespace NodeGraph.Model
             }
         }
 
-        public virtual void OnPreDestroy()
-        {
+        public virtual void OnPreDestroy() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("Connector.OnPreDestroy()");
         }
 
-        public virtual void OnPostDestroy()
-        {
+        public virtual void OnPostDestroy() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("Connector.OnPostDestroy()");
         }
 
-        public virtual void OnConnect( NodePort port )
-        {
+        public virtual void OnConnect(NodePort port) {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("Connector.OnConnect()");
         }
 
-        public virtual void OnDisconnect( NodePort port )
-        {
+        public virtual void OnDisconnect(NodePort port) {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("Connector.OnDisconnect()");
         }
 
-        public virtual void OnDeserialize()
-        {
+        public virtual void OnDeserialize() {
             if ( NodeGraphManager.OutputDebugInfo )
                 System.Diagnostics.Debug.WriteLine("Connector.OnDeserialize()");
 
@@ -164,8 +140,7 @@ namespace NodeGraph.Model
 
         #region Overrides IXmlSerializable
 
-        public override void WriteXml( XmlWriter writer )
-        {
+        public override void WriteXml(XmlWriter writer) {
             base.WriteXml(writer);
 
             //{ Begin Creation info : You need not deserialize this block in ReadXml().
@@ -180,8 +155,7 @@ namespace NodeGraph.Model
                 writer.WriteAttributeString("EndPort", EndPort.Guid.ToString());
         }
 
-        public override void ReadXml( XmlReader reader )
-        {
+        public override void ReadXml(XmlReader reader) {
             base.ReadXml(reader);
 
             StartPort = NodeGraphManager.FindNodePort(Guid.Parse(reader.GetAttribute("StartPort")));

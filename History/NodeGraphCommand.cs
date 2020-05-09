@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NodeGraph.History
-{
+namespace NodeGraph.History {
     /// <summary>
     /// Command for history stack.
     /// </summary>
-    public abstract class NodeGraphCommand
-    {
+    public abstract class NodeGraphCommand {
         #region Properties
 
         /// <summary>
@@ -48,8 +46,7 @@ namespace NodeGraph.History
 
         #region Constructor
 
-        public NodeGraphCommand( NodeGraphManager manager, string name, object undoParams, object redoParams )
-        {
+        public NodeGraphCommand(NodeGraphManager manager, string name, object undoParams, object redoParams) {
             NodeGraphManager = manager;
             Name = name;
             UndoParams = undoParams;

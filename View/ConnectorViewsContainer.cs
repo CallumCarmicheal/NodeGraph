@@ -5,12 +5,9 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace NodeGraph.View
-{
-    public class ConnectorViewsContainer : ItemsControl
-    {
-        protected override void PrepareContainerForItemOverride( DependencyObject element, object item )
-        {
+namespace NodeGraph.View {
+    public class ConnectorViewsContainer : ItemsControl {
+        protected override void PrepareContainerForItemOverride(DependencyObject element, object item) {
             base.PrepareContainerForItemOverride(element, item);
 
             var attrs = item.GetType().GetCustomAttributes(typeof(ConnectorViewModelAttribute), false) as ConnectorViewModelAttribute[];
@@ -19,14 +16,12 @@ namespace NodeGraph.View
 
             FrameworkElement fe = element as FrameworkElement;
 
-            ResourceDictionary resourceDictionary = new ResourceDictionary
-            {
+            ResourceDictionary resourceDictionary = new ResourceDictionary {
                 Source = new Uri("/NodeGraph;component/Themes/generic.xaml", UriKind.RelativeOrAbsolute)
             };
 
             Style style = resourceDictionary[attrs[0].ViewStyleName] as Style;
-            if ( null == style )
-            {
+            if ( null == style ) {
                 style = Application.Current.TryFindResource(attrs[0].ViewStyleName) as Style;
             }
             fe.Style = style;
@@ -35,8 +30,7 @@ namespace NodeGraph.View
                 throw new Exception(String.Format("{0} does not exist", attrs[0].ViewStyleName));
         }
 
-        protected override DependencyObject GetContainerForItemOverride()
-        {
+        protected override DependencyObject GetContainerForItemOverride() {
             return new ConnectorView(null);
         }
     }

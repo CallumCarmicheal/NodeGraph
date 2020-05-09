@@ -9,10 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace NodeGraph.ViewModel
-{
-    public class FlowChartViewModel : ViewModelBase
-    {
+namespace NodeGraph.ViewModel {
+    public class FlowChartViewModel : ViewModelBase {
         #region Fields
 
         public FlowChartView View;
@@ -22,13 +20,10 @@ namespace NodeGraph.ViewModel
         #region Properties
 
         private FlowChart _Model;
-        public FlowChart Model
-        {
+        public FlowChart Model {
             get { return _Model; }
-            set
-            {
-                if ( value != _Model )
-                {
+            set {
+                if ( value != _Model ) {
                     _Model = value;
                     RaisePropertyChanged("Model");
                 }
@@ -36,39 +31,30 @@ namespace NodeGraph.ViewModel
         }
 
         protected ObservableCollection<NodeViewModel> _NodeViewModels = new ObservableCollection<NodeViewModel>();
-        public ObservableCollection<NodeViewModel> NodeViewModels
-        {
+        public ObservableCollection<NodeViewModel> NodeViewModels {
             get { return _NodeViewModels; }
-            set
-            {
-                if ( value != _NodeViewModels )
-                {
+            set {
+                if ( value != _NodeViewModels ) {
                     RaisePropertyChanged("NodeViewModels");
                 }
             }
         }
 
         protected ObservableCollection<ConnectorViewModel> _ConnectorViewModels = new ObservableCollection<ConnectorViewModel>();
-        public ObservableCollection<ConnectorViewModel> ConnectorViewModels
-        {
+        public ObservableCollection<ConnectorViewModel> ConnectorViewModels {
             get { return _ConnectorViewModels; }
-            set
-            {
-                if ( value != _ConnectorViewModels )
-                {
+            set {
+                if ( value != _ConnectorViewModels ) {
                     RaisePropertyChanged("ConnectorViewModels");
                 }
             }
         }
 
         private Visibility _SelectionVisibility = Visibility.Collapsed;
-        public Visibility SelectionVisibility
-        {
+        public Visibility SelectionVisibility {
             get { return _SelectionVisibility; }
-            set
-            {
-                if ( value != _SelectionVisibility )
-                {
+            set {
+                if ( value != _SelectionVisibility ) {
                     _SelectionVisibility = value;
                     RaisePropertyChanged("SelectionVisibility");
                 }
@@ -76,13 +62,10 @@ namespace NodeGraph.ViewModel
         }
 
         private double _SelectionStartX;
-        public double SelectionStartX
-        {
+        public double SelectionStartX {
             get { return _SelectionStartX; }
-            set
-            {
-                if ( value != _SelectionStartX )
-                {
+            set {
+                if ( value != _SelectionStartX ) {
                     _SelectionStartX = value;
                     RaisePropertyChanged("SelectionStartX");
                 }
@@ -90,13 +73,10 @@ namespace NodeGraph.ViewModel
         }
 
         private double _SelectionStartY;
-        public double SelectionStartY
-        {
+        public double SelectionStartY {
             get { return _SelectionStartY; }
-            set
-            {
-                if ( value != _SelectionStartY )
-                {
+            set {
+                if ( value != _SelectionStartY ) {
                     _SelectionStartY = value;
                     RaisePropertyChanged("SelectionStartY");
                 }
@@ -104,13 +84,10 @@ namespace NodeGraph.ViewModel
         }
 
         private double _SelectionWidth;
-        public double SelectionWidth
-        {
+        public double SelectionWidth {
             get { return _SelectionWidth; }
-            set
-            {
-                if ( value != _SelectionWidth )
-                {
+            set {
+                if ( value != _SelectionWidth ) {
                     _SelectionWidth = value;
                     RaisePropertyChanged("SelectionWidth");
                 }
@@ -118,13 +95,10 @@ namespace NodeGraph.ViewModel
         }
 
         private double _SelectionHeight;
-        public double SelectionHeight
-        {
+        public double SelectionHeight {
             get { return _SelectionHeight; }
-            set
-            {
-                if ( value != _SelectionHeight )
-                {
+            set {
+                if ( value != _SelectionHeight ) {
                     _SelectionHeight = value;
                     RaisePropertyChanged("SelectionHeight");
                 }
@@ -137,8 +111,7 @@ namespace NodeGraph.ViewModel
 
         #region Constructor
 
-        public FlowChartViewModel( FlowChart flowChart ) : base(flowChart)
-        {
+        public FlowChartViewModel(FlowChart flowChart) : base(flowChart) {
             Model = flowChart;
         }
 
@@ -146,8 +119,7 @@ namespace NodeGraph.ViewModel
 
         #region Events
 
-        protected override void ModelPropertyChanged( object sender, PropertyChangedEventArgs e )
-        {
+        protected override void ModelPropertyChanged(object sender, PropertyChangedEventArgs e) {
             base.ModelPropertyChanged(sender, e);
 
             RaisePropertyChanged(e.PropertyName);

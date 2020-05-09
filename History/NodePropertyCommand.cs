@@ -8,10 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace NodeGraph.History
-{
-    public class NodePropertyCommand : NodeGraphCommand
-    {
+namespace NodeGraph.History {
+    public class NodePropertyCommand : NodeGraphCommand {
         #region Additional information
 
         public Guid Guid { get; private set; }
@@ -21,9 +19,8 @@ namespace NodeGraph.History
 
         #region Constructor
 
-        public NodePropertyCommand( NodeGraphManager ngm, string name, Guid nodeGuid, string propertyName, object undoParams, object redoParams )
-            : base(ngm, name, undoParams, redoParams)
-        {
+        public NodePropertyCommand(NodeGraphManager ngm, string name, Guid nodeGuid, string propertyName, object undoParams, object redoParams)
+            : base(ngm, name, undoParams, redoParams) {
             Guid = nodeGuid;
             PropertyName = propertyName;
         }
@@ -32,40 +29,30 @@ namespace NodeGraph.History
 
         #region Overrides NodeGraphCommand
 
-        public override void Undo()
-        {
+        public override void Undo() {
             Node node = NodeGraphManager.FindNode(Guid);
-            if ( null == node )
-            {
+            if ( null == node ) {
                 throw new InvalidOperationException("Node does not exist.");
             }
 
-            if ( "IsSelected" == PropertyName )
-            {
+            if ( "IsSelected" == PropertyName ) {
                 UpdateSelection((bool)UndoParams);
-            }
-            else
-            {
+            } else {
                 Type type = node.GetType();
                 PropertyInfo propInfo = type.GetProperty(PropertyName);
                 propInfo.SetValue(node, UndoParams);
             }
         }
 
-        public override void Redo()
-        {
+        public override void Redo() {
             Node node = NodeGraphManager.FindNode(Guid);
-            if ( null == node )
-            {
+            if ( null == node ) {
                 throw new InvalidOperationException("Node does not exist.");
             }
 
-            if ( "IsSelected" == PropertyName )
-            {
+            if ( "IsSelected" == PropertyName ) {
                 UpdateSelection((bool)RedoParams);
-            }
-            else
-            {
+            } else {
                 Type type = node.GetType();
                 PropertyInfo propInfo = type.GetProperty(PropertyName);
                 propInfo.SetValue(node, RedoParams);
@@ -76,27 +63,21 @@ namespace NodeGraph.History
 
         #region Private Methods
 
-        private void UpdateSelection( bool isSelected )
-        {
+        private void UpdateSelection(bool isSelected) {
             Node node = NodeGraphManager.FindNode(Guid);
 
             ObservableCollection<Guid> selectionList = NodeGraphManager.GetSelectionList(node.Owner);
 
             node.ViewModel.IsSelected = isSelected;
 
-            if ( node.ViewModel.IsSelected )
-            {
+            if ( node.ViewModel.IsSelected ) {
                 System.Diagnostics.Debug.WriteLine("True");
-                if ( !selectionList.Contains(Guid) )
-                {
+                if ( !selectionList.Contains(Guid) ) {
                     selectionList.Add(Guid);
                 }
-            }
-            else
-            {
+            } else {
                 System.Diagnostics.Debug.WriteLine("False");
-                if ( selectionList.Contains(Guid) )
-                {
+                if ( selectionList.Contains(Guid) ) {
                     selectionList.Remove(Guid);
                 }
             }

@@ -4,16 +4,13 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace NodeGraph.ViewModel
-{
-    public class ViewModelBase : INotifyPropertyChanged
-    {
+namespace NodeGraph.ViewModel {
+    public class ViewModelBase : INotifyPropertyChanged {
         #region Overrides InotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void RaisePropertyChanged( string propertyName )
-        {
+        public void RaisePropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
@@ -21,8 +18,7 @@ namespace NodeGraph.ViewModel
 
         #region Constructor
 
-        public ViewModelBase( ModelBase model )
-        {
+        public ViewModelBase(ModelBase model) {
             model.PropertyChanged += ModelPropertyChanged;
         }
 
@@ -30,8 +26,7 @@ namespace NodeGraph.ViewModel
 
         #region Model PropertyChanged
 
-        protected virtual void ModelPropertyChanged( object sender, PropertyChangedEventArgs e )
-        {
+        protected virtual void ModelPropertyChanged(object sender, PropertyChangedEventArgs e) {
 
         }
 

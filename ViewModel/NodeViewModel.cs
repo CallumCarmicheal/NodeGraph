@@ -11,11 +11,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace NodeGraph.ViewModel
-{
+namespace NodeGraph.ViewModel {
     [NodeViewModel()]
-    public class NodeViewModel : ViewModelBase
-    {
+    public class NodeViewModel : ViewModelBase {
         #region Fields
 
         public NodeView View { get; set; }
@@ -29,37 +27,29 @@ namespace NodeGraph.ViewModel
         public NodeGraphManager NodeGraphManager { get; internal set; }
 
         private Node _Model;
-        public Node Model
-        {
+        public Node Model {
             get { return _Model; }
-            set
-            {
-                if ( value != _Model )
-                {
+            set {
+                if ( value != _Model ) {
                     _Model = value;
                     RaisePropertyChanged("Model");
                 }
             }
         }
 
-        public Visibility InputFlowPortsVisibility
-        {
-            get { return ( 0 < _InputFlowPortViewModels.Count ) ? Visibility.Visible : Visibility.Collapsed; }
+        public Visibility InputFlowPortsVisibility {
+            get { return (0 < _InputFlowPortViewModels.Count) ? Visibility.Visible : Visibility.Collapsed; }
         }
 
-        public Visibility OutputFlowPortsVisibility
-        {
-            get { return ( 0 < _OutputFlowPortViewModels.Count ) ? Visibility.Visible : Visibility.Collapsed; }
+        public Visibility OutputFlowPortsVisibility {
+            get { return (0 < _OutputFlowPortViewModels.Count) ? Visibility.Visible : Visibility.Collapsed; }
         }
 
         private ObservableCollection<NodeFlowPortViewModel> _InputFlowPortViewModels = new ObservableCollection<NodeFlowPortViewModel>();
-        public ObservableCollection<NodeFlowPortViewModel> InputFlowPortViewModels
-        {
+        public ObservableCollection<NodeFlowPortViewModel> InputFlowPortViewModels {
             get { return _InputFlowPortViewModels; }
-            set
-            {
-                if ( value != _InputFlowPortViewModels )
-                {
+            set {
+                if ( value != _InputFlowPortViewModels ) {
                     _InputFlowPortViewModels = value;
                     RaisePropertyChanged("InputFlowPortViewModels");
                 }
@@ -67,13 +57,10 @@ namespace NodeGraph.ViewModel
         }
 
         private ObservableCollection<NodeFlowPortViewModel> _OutputFlowPortViewModels = new ObservableCollection<NodeFlowPortViewModel>();
-        public ObservableCollection<NodeFlowPortViewModel> OutputFlowPortViewModels
-        {
+        public ObservableCollection<NodeFlowPortViewModel> OutputFlowPortViewModels {
             get { return _OutputFlowPortViewModels; }
-            set
-            {
-                if ( value != _OutputFlowPortViewModels )
-                {
+            set {
+                if ( value != _OutputFlowPortViewModels ) {
                     _OutputFlowPortViewModels = value;
                     RaisePropertyChanged("OutputFlowPortViewModels");
                 }
@@ -81,13 +68,10 @@ namespace NodeGraph.ViewModel
         }
 
         private bool _IsSelected;
-        public bool IsSelected
-        {
+        public bool IsSelected {
             get { return _IsSelected; }
-            set
-            {
-                if ( value != _IsSelected )
-                {
+            set {
+                if ( value != _IsSelected ) {
                     _IsSelected = value;
                     RaisePropertyChanged("IsSelected");
                 }
@@ -98,24 +82,19 @@ namespace NodeGraph.ViewModel
 
         #region NodePropertyPorts
 
-        public Visibility InputPropertyPortsVisibility
-        {
-            get { return ( 0 < _InputPropertyPortViewModels.Count ) ? Visibility.Visible : Visibility.Collapsed; }
+        public Visibility InputPropertyPortsVisibility {
+            get { return (0 < _InputPropertyPortViewModels.Count) ? Visibility.Visible : Visibility.Collapsed; }
         }
 
-        public Visibility OutputPropertyPortsVisibility
-        {
-            get { return ( 0 < _OutputPropertyPortViewModels.Count ) ? Visibility.Visible : Visibility.Collapsed; }
+        public Visibility OutputPropertyPortsVisibility {
+            get { return (0 < _OutputPropertyPortViewModels.Count) ? Visibility.Visible : Visibility.Collapsed; }
         }
 
         private ObservableCollection<NodePropertyPortViewModel> _InputPropertyPortViewModels = new ObservableCollection<NodePropertyPortViewModel>();
-        public ObservableCollection<NodePropertyPortViewModel> InputPropertyPortViewModels
-        {
+        public ObservableCollection<NodePropertyPortViewModel> InputPropertyPortViewModels {
             get { return _InputPropertyPortViewModels; }
-            set
-            {
-                if ( value != _InputPropertyPortViewModels )
-                {
+            set {
+                if ( value != _InputPropertyPortViewModels ) {
                     _InputPropertyPortViewModels = value;
                     RaisePropertyChanged("InputPropertyPortViewModels");
                 }
@@ -123,13 +102,10 @@ namespace NodeGraph.ViewModel
         }
 
         private ObservableCollection<NodePropertyPortViewModel> _OutputPropertyPortViewModels = new ObservableCollection<NodePropertyPortViewModel>();
-        public ObservableCollection<NodePropertyPortViewModel> OutputPropertyPortViewModels
-        {
+        public ObservableCollection<NodePropertyPortViewModel> OutputPropertyPortViewModels {
             get { return _OutputPropertyPortViewModels; }
-            set
-            {
-                if ( value != _OutputPropertyPortViewModels )
-                {
+            set {
+                if ( value != _OutputPropertyPortViewModels ) {
                     _OutputPropertyPortViewModels = value;
                     RaisePropertyChanged("OutputPropertyPortViewModels");
                 }
@@ -140,8 +116,7 @@ namespace NodeGraph.ViewModel
 
         #region Constructors
 
-        public NodeViewModel( Node node ) : base(node)
-        {
+        public NodeViewModel(Node node) : base(node) {
             Model = node ?? throw new ArgumentException("Node can not be null in NodeViewModel constructor");
         }
 
@@ -149,8 +124,7 @@ namespace NodeGraph.ViewModel
 
         #region Events
 
-        protected override void ModelPropertyChanged( object sender, PropertyChangedEventArgs e )
-        {
+        protected override void ModelPropertyChanged(object sender, PropertyChangedEventArgs e) {
             base.ModelPropertyChanged(sender, e);
 
             RaisePropertyChanged(e.PropertyName);

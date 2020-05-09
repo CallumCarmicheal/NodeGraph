@@ -2,10 +2,8 @@
 using NodeGraph.View;
 using System.Windows.Media;
 
-namespace NodeGraph.History
-{
-    public class ZoomAndPanCommand : NodeGraphCommand
-    {
+namespace NodeGraph.History {
+    public class ZoomAndPanCommand : NodeGraphCommand {
         #region Additional Parameters
 
         public FlowChart FlowChart { get; private set; }
@@ -14,9 +12,8 @@ namespace NodeGraph.History
 
         #region Constructor
 
-        public ZoomAndPanCommand( NodeGraphManager ngm, string name, FlowChart flowChart, object undoParams, object redoParams )
-            : base(ngm, name, undoParams, redoParams)
-        {
+        public ZoomAndPanCommand(NodeGraphManager ngm, string name, FlowChart flowChart, object undoParams, object redoParams)
+            : base(ngm, name, undoParams, redoParams) {
             FlowChart = flowChart;
         }
 
@@ -24,8 +21,7 @@ namespace NodeGraph.History
 
         #region Overrides NodeGraphCommand
 
-        public override void Undo()
-        {
+        public override void Undo() {
             Matrix matrix = (Matrix)UndoParams;
 
             FlowChartView view = FlowChart.ViewModel.View;
@@ -35,8 +31,7 @@ namespace NodeGraph.History
             view.ZoomAndPan.Scale = matrix.M11;
         }
 
-        public override void Redo()
-        {
+        public override void Redo() {
             Matrix matrix = (Matrix)RedoParams;
 
             FlowChartView view = FlowChart.ViewModel.View;

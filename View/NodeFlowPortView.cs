@@ -1,11 +1,8 @@
-﻿namespace NodeGraph.View
-{
-    public class NodeFlowPortView : NodePortView
-    {
+﻿namespace NodeGraph.View {
+    public class NodeFlowPortView : NodePortView {
         #region Constructor
 
-        public NodeFlowPortView( bool isInput ) : base(isInput)
-        {
+        public NodeFlowPortView(bool isInput) : base(isInput) {
             //
         }
 

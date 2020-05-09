@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NodeGraph.History
-{
-    public class DestroyNodePortCommand : NodeGraphCommand
-    {
+namespace NodeGraph.History {
+    public class DestroyNodePortCommand : NodeGraphCommand {
         #region Constructor
 
-        public DestroyNodePortCommand( NodeGraphManager ngm, string name, object undoParams, object redoParams ) : base(ngm, name, undoParams, redoParams)
-        {
+        public DestroyNodePortCommand(NodeGraphManager ngm, string name, object undoParams, object redoParams) : base(ngm, name, undoParams, redoParams) {
 
         }
 
@@ -20,13 +17,11 @@ namespace NodeGraph.History
 
         #region Overrides NodeGraphCommand
 
-        public override void Undo()
-        {
+        public override void Undo() {
             NodeGraphManager.DeserializeNodePort(UndoParams as string);
         }
 
-        public override void Redo()
-        {
+        public override void Redo() {
             Guid guid = (Guid)RedoParams;
 
             NodeGraphManager.DestroyNodePort(guid);

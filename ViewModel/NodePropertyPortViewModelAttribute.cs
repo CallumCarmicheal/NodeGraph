@@ -5,12 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NodeGraph.ViewModel
-{
-	[AttributeUsage( AttributeTargets.Class )]
-	public class NodePropertyPortViewModelAttribute : Attribute
-	{
-		public string ViewStyleName = "DefaultNodePropertyPortViewStyle";
-		public Type ViewType = typeof( NodePropertyPortView );
-	}
+namespace NodeGraph.ViewModel {
+    [AttributeUsage(AttributeTargets.Class)]
+    public class NodePropertyPortViewModelAttribute : Attribute {
+        public string ViewStyleName = "DefaultNodePropertyPortViewStyle";
+        public Type ViewType = typeof(NodePropertyPortView);
+    }
 }
