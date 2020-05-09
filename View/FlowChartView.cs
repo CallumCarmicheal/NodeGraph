@@ -58,6 +58,7 @@ namespace NodeGraph.View {
             get { return (ObservableCollection<string>)GetValue(LogsProperty); }
             set { SetValue(LogsProperty, value); }
         }
+
         public static readonly DependencyProperty LogsProperty =
             DependencyProperty.Register("Logs", typeof(ObservableCollection<string>), typeof(FlowChartView), new PropertyMetadata(new ObservableCollection<string>()));
 
@@ -127,8 +128,11 @@ namespace NodeGraph.View {
             return model;
         }
 
-        public void AddLog(string log) {
+        public void AddLog(string log, int timeout = 0) {
             Logs.Add(log);
+
+            if (timeout > 0) 
+                System.Threading.Tasks.Task.Delay(2000).ContinueWith(_ => Dispatcher.Invoke(() => Logs.Remove(log)));
         }
 
         public void RemoveLog(string log) {

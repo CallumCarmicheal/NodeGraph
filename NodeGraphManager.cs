@@ -1634,8 +1634,12 @@ namespace NodeGraph {
         #region Logs
 
         public void AddScreenLog(FlowChart flowChart, string log) {
+            AddScreenLog(flowChart, log, 0);
+        }
+
+        public void AddScreenLog(FlowChart flowChart, string log, int timeout) {
             FlowChartView view = flowChart.ViewModel.View;
-            view.AddLog(log);
+            view.AddLog(log, timeout);
         }
 
         public void RemoveScreenLog(FlowChart flowChart, string log) {

@@ -74,9 +74,7 @@ namespace NodeGraph.View {
             DependencyProperty.Register("ExecutionStateImage", typeof(BitmapImage), typeof(NodeView),
                 new PropertyMetadata(null));
 
-
-        private NodeGraphManager _nodeGraphManager;
-        public NodeGraphManager NodeGraphManager { get => _nodeGraphManager; internal set => _nodeGraphManager = value; }
+        public NodeGraphManager NodeGraphManager { get; internal set; }
 
         #endregion // Properties
 
