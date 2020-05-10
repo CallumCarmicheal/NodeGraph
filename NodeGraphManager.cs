@@ -33,6 +33,12 @@ namespace NodeGraph {
 
         #endregion // Fields
 
+        #region Properties
+
+        public NodeGraphStyling Styling { get; private set; } = new NodeGraphStyling();
+
+        #endregion // Properties
+
         #region FlowChart
 
         /// <summary>
