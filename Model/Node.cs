@@ -42,8 +42,8 @@ namespace NodeGraph.Model {
             }
         }
 
-        protected SolidColorBrush _HeaderBackgroundColor = Brushes.Black;
-        public SolidColorBrush HeaderBackgroundColor {
+        protected Brush _HeaderBackgroundColor = Brushes.Black;
+        public Brush HeaderBackgroundColor {
             get { return _HeaderBackgroundColor; }
             set {
                 if (value != _HeaderBackgroundColor) {
@@ -54,8 +54,8 @@ namespace NodeGraph.Model {
             }
         }
 
-        protected SolidColorBrush _HeaderFontColor = Brushes.White;
-        public SolidColorBrush HeaderFontColor {
+        protected Brush _HeaderFontColor = Brushes.White;
+        public Brush HeaderFontColor {
             get { return _HeaderFontColor; }
             set {
                 if (value != _HeaderFontColor) {
