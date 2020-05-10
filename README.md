@@ -1,3 +1,16 @@
+# CallumCarmicheal / NodeGraph
+This is a partial rewrite of a project created by lifeisforu, 
+The library created by lifeisforu is great but has many limitations one of which is that many of the properties are tied to DependancyProperties which essentially make them static. I am going throughout the code and removing all static variables / DependancyProperties where applicable, This will allow the application to be used in a UserControl that is initailized multiple times without accidently sharing information between both of the graphs.
+
+This rewrite is still a work in progress, There is an example application being developed alongside the changes:
+https://github.com/CallumCarmicheal/NodeGraphTestApplication
+
+Thanks to lifeisforu for making the original project, It's something i've been looking for but not found one that was easily modifable like this one. 
+
+## Project goals
+
+I plan on adding extensibility where required to allow for NodeGraph to be integrated into a visual scripting environment.
+
 # NodeGraph
 한국분은 [An introduction for WPF NodeGraph( Korean )](https://github.com/lifeisforu/NodeGraph/wiki/An-introduction-for-WPF-NodeGraph(-Koeran-)) 를 참고하세요.
 
