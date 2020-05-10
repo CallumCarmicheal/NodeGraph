@@ -310,7 +310,6 @@ namespace NodeGraph.View {
                 double v = 8.0 / scale;
                 ViewModel.CornerRadius = new CornerRadius(v);
                 ViewModel.TopHeaderCornerRadius = new CornerRadius(v,v,0,0);
-
             } else {
                 ViewModel.CornerRadius = NodeGraphManager.Styling.NodeCornerRadius.ScaleDown(scale);
                 ViewModel.TopHeaderCornerRadius = NodeGraphManager.Styling.NodeHeaderCornerRadius.ScaleDown(scale);
