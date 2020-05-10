@@ -1381,6 +1381,34 @@ namespace NodeGraph {
             return writer;
         }
 
+        public string SerializeToString() {
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.IndentChars = "\t";
+            settings.NewLineChars = "\n";
+            settings.NewLineHandling = NewLineHandling.Replace;
+            settings.NewLineOnAttributes = false;
+            using (StringWriter stringWriter = new StringWriter()) 
+            using (XmlWriter writer = XmlWriter.Create(stringWriter, settings)) {
+                writer.WriteStartDocument();
+                {
+                    writer.WriteStartElement("NodeGraphManager");
+                    foreach (var pair in FlowCharts) {
+                        writer.WriteStartElement("FlowChart");
+                        pair.Value.WriteXml(writer);
+                        writer.WriteEndElement();
+                    }
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndDocument();
+
+                writer.Flush();
+                writer.Close();
+
+                return stringWriter.ToString();
+            }
+        }
+
         public void Serialize(string filePath) {
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -1404,6 +1432,32 @@ namespace NodeGraph {
                 writer.Flush();
                 writer.Close();
             }
+        }
+
+        public bool DeserialzeFromString(string xml) {
+            List<FlowChart> loadedFlowCharts = new List<FlowChart>();
+
+            using (var sr = new StringReader(xml))
+            using (XmlReader reader = XmlReader.Create(sr)) {
+                while (reader.Read()) {
+                    if (XmlNodeType.Element == reader.NodeType) {
+                        if ("FlowChart" == reader.Name) {
+                            Guid guid = Guid.Parse(reader.GetAttribute("Guid"));
+                            Type type = Type.GetType(reader.GetAttribute("Type"));
+
+                            FlowChart flowChart = CreateFlowChart(true, guid, type);
+                            flowChart.ReadXml(reader);
+                            loadedFlowCharts.Add(flowChart);
+                        }
+                    }
+                }
+            }
+
+            foreach (var flowChart in loadedFlowCharts) {
+                flowChart.OnDeserialize();
+            }
+
+            return true;
         }
 
         public bool Deserialize(string filePath) {
