@@ -72,6 +72,7 @@
     <Compile Include="Converters\FloatToStringConverter.cs" />
     <Compile Include="Converters\LongToStringConverter.cs" />
     <Compile Include="Converters\ShortToStringConverter.cs" />
+    <Compile Include="GlobalExtensions.cs" />
     <Compile Include="History\CreateConnectorCommand.cs" />
     <Compile Include="History\CreateNodeCommand.cs" />
     <Compile Include="History\CreateNodePortCommand.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Model\NodePortAttribute.cs" />
     <Compile Include="Model\NodePropertyPort.cs" />
     <Compile Include="Model\NodePropertyPortAttribute.cs" />
+    <Compile Include="NodeGraphStyling.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -122,6 +124,7 @@
     <Compile Include="ViewModel\NodeViewModelAttribute.cs" />
     <Compile Include="ViewModel\RouterNodeViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="ViewModel\ViewModelSimpleBase.cs" />
     <Compile Include="View\ConnectorView.cs" />
     <Compile Include="View\ConnectorViewsContainer.cs" />
     <Compile Include="View\FlowChartView.cs" />
@@ -132,7 +135,6 @@
     <Compile Include="View\NodePropertyPortViewsContainer.cs" />
     <Compile Include="View\NodeView.cs" />
     <Compile Include="View\NodeViewsContainer.cs" />
-    <Compile Include="View\ViewModels\NodeViewViewModel.cs" />
     <Compile Include="View\ViewUtil.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
