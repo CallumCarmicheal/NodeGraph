@@ -54,13 +54,15 @@ namespace NodeGraph.View {
             get { return _PartDragAndSelectionCanvas; }
         }
 
+
+        private ObservableCollection<string> _logs = new ObservableCollection<string>();
         public ObservableCollection<string> Logs {
-            get { return (ObservableCollection<string>)GetValue(LogsProperty); }
-            set { SetValue(LogsProperty, value); }
+            get => _logs;
+            set => _logs = value;
         }
 
-        public static readonly DependencyProperty LogsProperty =
-            DependencyProperty.Register("Logs", typeof(ObservableCollection<string>), typeof(FlowChartView), new PropertyMetadata(new ObservableCollection<string>()));
+        //public static readonly DependencyProperty LogsProperty =
+        //    DependencyProperty.Register("Logs", typeof(ObservableCollection<string>), typeof(FlowChartView), new PropertyMetadata(new ObservableCollection<string>()));
 
         public NodeGraphManager NodeGraphManager { get => ViewModel.NodeGraphManager; }
 

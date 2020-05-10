@@ -68,7 +68,7 @@ namespace NodeGraph.ViewModel {
             }
         }
 
-        private bool _IsSelected;
+        private bool _IsSelected = false;
         public bool IsSelected {
             get { return _IsSelected; }
             set {
@@ -136,7 +136,7 @@ namespace NodeGraph.ViewModel {
 
         #region DependancyProperty Extracted
 
-        protected bool _HasConnection;
+        protected bool _HasConnection = false;
         public bool HasConnection {
             get { return _HasConnection; }
             set {
@@ -146,7 +146,7 @@ namespace NodeGraph.ViewModel {
         }
 
 
-        protected Thickness _SelectionThickness;
+        protected Thickness _SelectionThickness = new Thickness(2.0);
         public Thickness SelectionThickness {
             get { return _SelectionThickness; }
             set {
@@ -156,17 +156,29 @@ namespace NodeGraph.ViewModel {
         }
 
 
-        protected double _CornerRadius;
-        public double CornerRadius {
+        protected CornerRadius _CornerRadius = new CornerRadius(8, 8, 8, 8);
+        public CornerRadius CornerRadius {
             get { return _CornerRadius; }
             set {
-                if (value != _CornerRadius) _CornerRadius = value;
+                if (value != _CornerRadius) 
+                    _CornerRadius = value;
+
                 RaisePropertyChanged("CornerRadius");
             }
         }
 
+        CornerRadius _topHeaderCornerRadius = new CornerRadius(8, 8, 0, 0);
+        public CornerRadius TopHeaderCornerRadius {
+            get { return _topHeaderCornerRadius; }
+            set {
+                if (value != _topHeaderCornerRadius)
+                    _topHeaderCornerRadius = value;
+                RaisePropertyChanged("TopHeaderCornerRadius");
+            }
+        }
 
-        protected BitmapImage _ExecutionStateImage;
+
+        protected BitmapImage _ExecutionStateImage = null;
         public BitmapImage ExecutionStateImage {
             get { return _ExecutionStateImage; }
             set {
@@ -175,5 +187,7 @@ namespace NodeGraph.ViewModel {
             }
         }
         #endregion
+
+
     }
 }

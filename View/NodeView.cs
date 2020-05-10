@@ -4,6 +4,8 @@ using PropertyTools.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -35,14 +37,25 @@ namespace NodeGraph.View {
             }
         }
 
-        public NodeGraphManager NodeGraphManager { get; internal set; }
+
+        private NodeGraphManager ngm = null;
+        public NodeGraphManager NodeGraphManager { 
+            get => ngm;
+            internal set {
+                if (ngm != null)
+                    ngm.Styling.PropertyChanged -= NodeGraphManager_Styling_Changed;
+                
+                ngm = value;
+                ngm.Styling.PropertyChanged += NodeGraphManager_Styling_Changed;
+
+                NodeGraphManager_Changed();
+            }
+        }
 
 
-        // View properties
 
-        public Thickness SelectionThickness { get => ViewModel.SelectionThickness; set => ViewModel.SelectionThickness = value; }
-        public double CornerRadius { get => ViewModel.CornerRadius; set => ViewModel.CornerRadius = value; }
-        public double CornerRadiusProperty { get => CornerRadius; set => CornerRadius = value; }
+
+
         #endregion // Properties
 
         #region Constructors
@@ -109,14 +122,15 @@ namespace NodeGraph.View {
             SynchronizeProperties();
         }
 
+        private bool _updatingViewModel = false;
+
         protected virtual void SynchronizeProperties() {
-            if (null == ViewModel) {
+            if (null == ViewModel) 
                 return;
-            }
+            if (_updatingViewModel)
+                return;
 
-            //IsSelected = ViewModel.IsSelected;
-
-            ViewModel.PropertyChanged -= ViewModelPropertyChanged;
+            _updatingViewModel = true;
 
             ViewModel.HasConnection = (0 < ViewModel.InputFlowPortViewModels.Count) ||
                 (0 < ViewModel.OutputFlowPortViewModels.Count) ||
@@ -125,7 +139,7 @@ namespace NodeGraph.View {
 
             ViewModel.ExecutionStateImage = _ExecutionStateImages[(int)ViewModel.Model.ExecutionState];
 
-            ViewModel.PropertyChanged += ViewModelPropertyChanged;
+            _updatingViewModel = false;
         }
 
         protected virtual void ViewModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -274,7 +288,7 @@ namespace NodeGraph.View {
             base.OnMouseMove(e);
 
             if (NodeGraphManager.IsNodeDragging && (NodeGraphManager.MouseLeftDownNode == ViewModel.Model) &&
-                !ViewModel.IsSelected) {
+                    !ViewModel.IsSelected) {
                 Node node = ViewModel.Model;
                 FlowChart flowChart = node.Owner;
                 NodeGraphManager.TrySelection(flowChart, node, false, false, false);
@@ -286,33 +300,43 @@ namespace NodeGraph.View {
         #region RenderTrasnform
 
         public void OnCanvasRenderTransformChanged() {
-            if (VisualParent != null) {
-                Matrix matrix = (VisualParent as Canvas).RenderTransform.Value;
-                double scale = matrix.M11;
+            Matrix matrix = (VisualParent as Canvas).RenderTransform.Value;
+            double scale = matrix.M11;
 
-                SelectionThickness = new Thickness(2.0 / scale);
-                CornerRadius = 8.0 / scale;
+            ViewModel.SelectionThickness = new Thickness(2.0 / scale);
+
+            if (NodeGraphManager == null) {
+                // Load default until NGM is set
+                double v = 8.0 / scale;
+                ViewModel.CornerRadius = new CornerRadius(v);
+                ViewModel.TopHeaderCornerRadius = new CornerRadius(v,v,0,0);
+
             } else {
-#if(DEBUG)
-                // This happens when ever you recreate a nodegraphmanager on a view that is already initailized
-                //
-                //MessageBox.Show("NodeGraph failed to render transformed\n" +
-                //    "Path: NodeGraph.View.NodeView.cs @ OnCanvasRenderTransformChanged" +
-                //    "Reason: VisualParent == null");
-#endif
+                ViewModel.CornerRadius = NodeGraphManager.Styling.NodeCornerRadius.ScaleDown(scale);
+                ViewModel.TopHeaderCornerRadius = NodeGraphManager.Styling.NodeHeaderCornerRadius.ScaleDown(scale);
             }
         }
 
         protected override void OnVisualParentChanged(DependencyObject oldParent) {
             base.OnVisualParentChanged(oldParent);
 
-            if (VisualParent != null) {
+            if (VisualParent != null) 
                 OnCanvasRenderTransformChanged();
+        }
+
+        private void NodeGraphManager_Styling_Changed(object sender, PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+            case "NodeCornerRadius":
+            case "NodeHeaderCornerRadius":
+                OnCanvasRenderTransformChanged();
+                break;
             }
+        }
+
+        private void NodeGraphManager_Changed() {
+            OnCanvasRenderTransformChanged();
         }
 
         #endregion // RenderTransform
     }
-
-    
 }
