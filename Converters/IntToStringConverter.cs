@@ -14,6 +14,9 @@ namespace NodeGraph.Converters {
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            if (string.IsNullOrWhiteSpace(value as string)) 
+                return 0;
+
             return (int)double.Parse(value as string);
         }
     }
