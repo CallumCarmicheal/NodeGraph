@@ -117,6 +117,9 @@ namespace NodeGraph {
         #endregion // FlowChart
 
         #region Node
+        public delegate void NodeCreatedEvent(object sender, NodeCreatedEventArgs args);
+        public event NodeCreatedEvent NodeCreated;
+
 
         /// <summary>
         /// Create Node with NodeViewModel.
@@ -224,10 +227,18 @@ namespace NodeGraph {
                 node.OnCreate();
             }
 
+            //----- event.
+
+            NodeCreated?.Invoke(this, new NodeCreatedEventArgs { Node = node });
+
             //----- return.
 
             return node;
         }
+
+        public delegate void NodesDestroyedEvent(object sender);
+
+        public event NodesDestroyedEvent NodesDestroyed;
 
         public void DestroyNode(Guid guid) {
             Node node;
@@ -293,6 +304,8 @@ namespace NodeGraph {
 
                 Nodes.Remove(guid);
             }
+
+            NodesDestroyed?.Invoke(this);
         }
 
         public Node FindNode(Guid guid) {
@@ -1741,6 +1754,11 @@ namespace NodeGraph {
         public ModelType ModelType { get; set; }
         public System.Windows.Controls.ContextMenu ContextMenu { get; internal set; }
     }
+
+    public class NodeCreatedEventArgs {
+        public Node Node { get; internal set; }
+    }
+
 
     public class NodeGraphDragEventArgs {
         public Point ViewSpaceMouseLocation { get; set; }
